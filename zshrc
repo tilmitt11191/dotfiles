@@ -14,6 +14,7 @@ fi
 
 # Customize to your needs...
 FLAG_COMMON=true
+FLAG_PREZTO=true
 FLAG_UBUNTU=false
 FLAG_VM=false
 FLAG_PYTHON=false
@@ -44,10 +45,18 @@ if [ $"{FLAG_COMMON}" ]; then
 	
 	alias ls~'ls -G'
 	alias ll='ls -lhG'
+	alias lla='ls -alhG'
 	alias mkdir='mkdir -p'
 	alias vi='vim'
-
+	unalias rm
 fi
+
+
+if [ $"{FLAG_PREZTO}" ];then
+	echo "####conf prezto"
+	setopt CLOBBER
+fi
+
 
 
 if [ $"{FLAG_UBUNTU}" ];then
