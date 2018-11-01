@@ -19,6 +19,10 @@ FLAG_VM=false
 FLAG_PYTHON=false
 FLAG_RUBY=false
 
+if [ hostname = backuptower ]; then
+	FLAG_UBUNTU=true
+fi
+
 if [ `hostname` = "ubuntusetuptest" ]; then
 	FLAG_UBUNTU=true
 	FLAG_VM=true
