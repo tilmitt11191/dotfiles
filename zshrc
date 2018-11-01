@@ -63,7 +63,7 @@ fi
 if [ $"{FLAG_PYTHON}" ];then
 	echo "####conf python"
 	export PYENV_ROOT="$HOME/.pyenv"
-	export PATH="$PYENV_ROOT/bin:$PATH"
+	export PATH="$PYENV_ROOT/versions/anaconda3-5.0.1/bin/:$PYENV_ROOT/bin:$PATH"
 	eval "$(pyenv init -)"
 fi
 
