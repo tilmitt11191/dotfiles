@@ -16,10 +16,14 @@ fi
 FLAG_COMMON=true
 FLAG_UBUNTU=false
 FLAG_VM=false
+FLAG_PYTHON=false
+FLAG_RUBY=false
 
 if [ `hostname` = "ubuntusetuptest" ]; then
 	FLAG_UBUNTU=true
 	FLAG_VM=true
+	FLAG_PYTHON=true
+	FLAG_RUBY=true
 fi
 
 
@@ -27,15 +31,39 @@ fi
 ####
 
 if [ $"{FLAG_COMMON}" ]; then
-	echo "####set common"
+	echo "####conf common"
+	HISTFILE=~/.zsh_history
+	HISTSIZE=1000000
+	SAVEHIST=1000000
+
 	PATH=$HOME/bin:$PATH
+	
+	alias ls~'ls -G'
+	alias ll='ls -lhG'
+	alias mkdir='mkdir -p'
+	alias vi='vim'
+
 fi
 
 
 if [ $"{FLAG_UBUNTU}" ];then
-	echo "####set ubuntu"
+	echo "####conf ubuntu"
 fi
 
+
+if [ $"{FLAG_VM}" ];then
+	echo "####conf VM"
+fi
+
+
+if [ $"{FLAG_PYTHON}" ];then
+	echo "####conf python"
+fi
+
+
+if [ $"{FLAG_RUBY}" ];then
+	echo "####conf ruby"
+fi
 
 : <<'#__CO__'
 if [ $"{}" ];then
