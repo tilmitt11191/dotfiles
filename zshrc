@@ -17,7 +17,7 @@ FLAG_COMMON=true
 FLAG_UBUNTU=false
 FLAG_VM=false
 
-if [ `hostname` == "ubuntusetuptest" ] then;
+if [ `hostname` = "ubuntusetuptest" ]; then
 	FLAG_UBUNTU=true
 	FLAG_VM=true
 fi
@@ -26,5 +26,21 @@ fi
 
 ####
 
-if [ $"{FLAG_COMMON}"] then;
-	
+if [ $"{FLAG_COMMON}" ]; then
+	echo "####set common"
+	PATH=$HOME/bin:$PATH
+fi
+
+
+if [ $"{FLAG_UBUNTU}" ];then
+	echo "####set ubuntu"
+fi
+
+
+: <<'#__CO__'
+if [ $"{}" ];then
+	echo "####"
+fi
+#__CO__
+
+
