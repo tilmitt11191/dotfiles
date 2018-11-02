@@ -1,5 +1,0 @@
-*.o
-pcap.bundle
-mkmf.log
-Makefile
-pkg/*
