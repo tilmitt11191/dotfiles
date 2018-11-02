@@ -23,7 +23,7 @@ FLAG_PYTHON=""
 FLAG_RUBY=""
 
 
-if [ hostname = PC]; then
+if [ hostname = PC ]; then
 	FLAG_CYGWIN=true
 fi
 
