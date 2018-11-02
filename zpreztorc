@@ -228,6 +228,11 @@ FLAG_COMMON=true
 FLAG_UBUNTU=false
 FLAG_HISPEC=""
 
+if [ $HOST = "backuptower" ]; then
+	FLAG_UBUNTU=true
+	FLAG_HISPEC=true
+fi
+
 if [ $HOST = "ubuntusetuptest" ]; then
 	FLAG_UBUNTU=true
 	FLAG_HISPEC=true
