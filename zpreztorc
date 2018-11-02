@@ -233,6 +233,7 @@ FLAG_PYTHON=""
 FLAG_RUBY=""
 
 if [ $HOST = "PC" ]; then
+	echo "##PC setup"
 	FLAG_CYGWIN=true
 	FLAG_HISPEC=true
 	FLAG_PYTHON=true
