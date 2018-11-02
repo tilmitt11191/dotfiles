@@ -26,6 +26,7 @@ FLAG_RUBY=""
 if [ $HOST = PC ]; then
 	echo "##PC setup"
 	FLAG_CYGWIN=true
+	FLAG_PYTHON=true
 fi
 
 if [ $HOST = backuptower ]; then
