@@ -21,7 +21,7 @@ FLAG_VM=""
 FLAG_PYTHON=""
 FLAG_RUBY=""
 
-if [ hostname = backuptower ]; then
+if [ hostname = "backuptower" ]; then
 	FLAG_UBUNTU=true
 fi
 
