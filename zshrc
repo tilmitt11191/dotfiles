@@ -24,7 +24,7 @@ FLAG_RUBY=""
 
 
 if [ $HOST = PC ]; then
-	echo "##cygwin setup"
+	echo "##PC setup"
 	FLAG_CYGWIN=true
 	chmod +rwx $HOME/.zprezto
 fi
