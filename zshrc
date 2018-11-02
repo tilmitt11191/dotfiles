@@ -27,6 +27,7 @@ if [ $HOST = PC ]; then
 	echo "##PC setup"
 	FLAG_CYGWIN=true
 	FLAG_PYTHON=true
+	FLAG_RUBY=true
 fi
 
 if [ $HOST = backuptower ]; then
@@ -90,7 +91,7 @@ if [ $FLAG_PYTHON ];then
 	eval "$(pyenv init -)"
 	alias activate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/activate"
 	alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
-	source $PYENV_ROOT/versions/anaconda/bin/activate py3.7
+	#source $PYENV_ROOT/versions/anaconda/bin/activate py3.7
 fi
 
 
