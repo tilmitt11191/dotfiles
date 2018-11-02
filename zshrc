@@ -13,12 +13,13 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+echo "####conf my .zshrc"
 FLAG_COMMON=true
 FLAG_PREZTO=true
-FLAG_UBUNTU=false
-FLAG_VM=false
-FLAG_PYTHON=false
-FLAG_RUBY=false
+FLAG_UBUNTU=""
+FLAG_VM=""
+FLAG_PYTHON=""
+FLAG_RUBY=""
 
 if [ hostname = backuptower ]; then
 	FLAG_UBUNTU=true
@@ -36,7 +37,7 @@ fi
 ####
 
 if [ $"{FLAG_COMMON}" ]; then
-	echo "####conf common"
+	echo "##conf common"
 	HISTFILE=~/.zsh_history
 	HISTSIZE=1000000
 	SAVEHIST=1000000
@@ -48,42 +49,46 @@ if [ $"{FLAG_COMMON}" ]; then
 	alias lla='ls -alhG'
 	alias mkdir='mkdir -p'
 	alias vi='vim'
+	alias st=subl
 	unalias rm
 fi
 
 
 if [ $"{FLAG_PREZTO}" ];then
-	echo "####conf prezto"
+	echo "##conf prezto"
 	setopt CLOBBER
 fi
 
 
 
 if [ $"{FLAG_UBUNTU}" ];then
-	echo "####conf ubuntu"
+	echo "##conf ubuntu"
 fi
 
 
 if [ $"{FLAG_VM}" ];then
-	echo "####conf VM"
+	echo "##conf VM"
 fi
 
 
 if [ $"{FLAG_PYTHON}" ];then
-	echo "####conf python"
+	echo "##conf python"
 	export PYENV_ROOT="$HOME/.pyenv"
-	export PATH="$PYENV_ROOT/versions/anaconda3-5.0.1/bin/:$PYENV_ROOT/bin:$PATH"
+	export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
 	eval "$(pyenv init -)"
+	alias activate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/activate"
+	alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
+	source $PYENV_ROOT/versions/anaconda/bin/activate py3.7
 fi
 
 
 if [ $"{FLAG_RUBY}" ];then
-	echo "####conf ruby"
+	echo "##conf ruby"
 fi
 
 : <<'#__CO__'
-if [ $"{}" ];then
-	echo "####"
+if [ $ ];then
+	echo "##"
 fi
 #__CO__
 
