@@ -23,12 +23,14 @@ FLAG_PYTHON=""
 FLAG_RUBY=""
 
 
-if [ hostname = PC ]; then
+if [ `hostname` = PC ]; then
 	FLAG_CYGWIN=true
 fi
 
-if [ hostname = backuptower ]; then
+if [ `hostname` = backuptower ]; then
+	echo "backuptower"
 	FLAG_UBUNTU=true
+	FLAG_PYTHON=true
 fi
 
 if [ `hostname` = "ubuntusetuptest" ]; then
@@ -60,7 +62,7 @@ fi
 
 if [ $FLAG_PREZTO ];then
 	echo "##conf prezto"
-	unalias rm
+	[ `alias | grep rm=` ] && unalias rm
 	setopt CLOBBER
 fi
 
