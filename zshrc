@@ -52,7 +52,7 @@ if [ $FLAG_COMMON ]; then
 
 	PATH=$HOME/bin:$PATH
 	
-	alias ls~'ls -G'
+	alias ls='ls -G'
 	alias ll='ls -lhG'
 	alias lla='ls -alhG'
 	alias mkdir='mkdir -p'
