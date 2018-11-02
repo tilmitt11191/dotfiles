@@ -23,18 +23,19 @@ FLAG_PYTHON=""
 FLAG_RUBY=""
 
 
-if [ `hostname` = PC ]; then
+if [ $HOST = PC ]; then
+	echo "##cygwin setup"
 	FLAG_CYGWIN=true
 	chmod +rwx $HOME/.zprezto
 fi
 
-if [ `hostname` = backuptower ]; then
+if [ $HOST = backuptower ]; then
 	echo "backuptower"
 	FLAG_UBUNTU=true
 	FLAG_PYTHON=true
 fi
 
-if [ `hostname` = "ubuntusetuptest" ]; then
+if [ $HOST = "ubuntusetuptest" ]; then
 	FLAG_UBUNTU=true
 	FLAG_VM=true
 	FLAG_PYTHON=true
