@@ -26,7 +26,6 @@ FLAG_RUBY=""
 if [ $HOST = PC ]; then
 	echo "##PC setup"
 	FLAG_CYGWIN=true
-	chmod +rwx $HOME/.zprezto
 fi
 
 if [ $HOST = backuptower ]; then

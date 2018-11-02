@@ -233,7 +233,6 @@ FLAG_PYTHON=""
 FLAG_RUBY=""
 
 if [ $HOST = "PC" ]; then
-	echo "##PC setup"
 	FLAG_CYGWIN=true
 	FLAG_HISPEC=true
 	FLAG_PYTHON=true
@@ -251,6 +250,12 @@ fi
 
 
 echo "####conf my .zpreztorc"
+
+if [ $FLAG_CYGWIN ]; then
+	echo "##conf cygwin"
+	chmod +rwx $HOME/.zprezto
+fi
+
 if [ $FLAG_COMMON ]; then
 	echo "##conf common"
 	zstyle ':prezto:module:prompt' theme 'minimal'
@@ -264,3 +269,9 @@ if [ $FLAG_HISPEC ]; then
 	echo "##conf hispec"
 	zstyle ':prezto:module:prompt' theme 'powerline'
 fi
+
+: <<'#__CO__'
+if [ $ ]; then
+	echo "##"
+fi
+#__CO__
