@@ -251,12 +251,12 @@ fi
 
 
 echo "####conf my .zpreztorc"
-if [ $"{FLAG_COMMON}" ]; then
+if [ $FLAG_COMMON ]; then
 	echo "##conf common"
 	zstyle ':prezto:module:prompt' theme 'minimal'
 fi
 
-if [ $"{FLAG_UBUNTU}" ]; then
+if [ $FLAG_UBUNTU ]; then
 	echo "##conf ubuntu"
 fi
 
