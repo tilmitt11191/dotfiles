@@ -17,9 +17,14 @@ echo "####conf my .zshrc"
 FLAG_COMMON=true
 FLAG_PREZTO=true
 FLAG_UBUNTU=""
+FLAG_CYGWIN=""
 FLAG_VM=""
 FLAG_PYTHON=""
 FLAG_RUBY=""
+
+if [ hostname = PC]; then
+	FLAG_CYGWIN=true
+fi
 
 if [ hostname = backuptower ]; then
 	FLAG_UBUNTU=true
@@ -36,7 +41,7 @@ fi
 
 ####
 
-if [ $"{FLAG_COMMON}" ]; then
+if [ $FLAG_COMMON ]; then
 	echo "##conf common"
 	HISTFILE=~/.zsh_history
 	HISTSIZE=1000000
@@ -49,29 +54,31 @@ if [ $"{FLAG_COMMON}" ]; then
 	alias lla='ls -alhG'
 	alias mkdir='mkdir -p'
 	alias vi='vim'
-	alias st=subl
-	unalias rm
 fi
 
 
-if [ $"{FLAG_PREZTO}" ];then
+if [ $FLAG_PREZTO ];then
 	echo "##conf prezto"
+	unalias rm
 	setopt CLOBBER
 fi
 
+if [ $FLAG_UBUNTU ];then
+	echo "##conf cygwin"
+fi
 
-
-if [ $"{FLAG_UBUNTU}" ];then
+if [ $FLAG_UBUNTU ];then
 	echo "##conf ubuntu"
+	[ subl ] && alias st=subl
 fi
 
 
-if [ $"{FLAG_VM}" ];then
+if [ $FLAG_VM ];then
 	echo "##conf VM"
 fi
 
 
-if [ $"{FLAG_PYTHON}" ];then
+if [ $FLAG_PYTHON ];then
 	echo "##conf python"
 	export PYENV_ROOT="$HOME/.pyenv"
 	export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
@@ -82,7 +89,7 @@ if [ $"{FLAG_PYTHON}" ];then
 fi
 
 
-if [ $"{FLAG_RUBY}" ];then
+if [ $FLAG_RUBY ];then
 	echo "##conf ruby"
 fi
 
