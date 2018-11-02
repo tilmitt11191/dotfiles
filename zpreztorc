@@ -225,8 +225,17 @@ zstyle ':prezto:module:editor' key-bindings 'emacs'
 
 ####my confs
 FLAG_COMMON=true
-FLAG_UBUNTU=false
-FLAG_HISPEC=""
+FLAG_PREZTO=true
+FLAG_UBUNTU=""
+FLAG_CYGWIN=""
+FLAG_VM=""
+FLAG_PYTHON=""
+FLAG_RUBY=""
+
+if [ $HOST = "PC" ]; then
+	FLAG_CYGWIN=true
+	FLAG_HISPEC=true
+fi
 
 if [ $HOST = "backuptower" ]; then
 	FLAG_UBUNTU=true
