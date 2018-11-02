@@ -235,6 +235,7 @@ FLAG_RUBY=""
 if [ $HOST = "PC" ]; then
 	FLAG_CYGWIN=true
 	FLAG_HISPEC=true
+	FLAG_PYTHON=true
 fi
 
 if [ $HOST = "backuptower" ]; then
