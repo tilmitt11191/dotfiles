@@ -234,18 +234,18 @@ FLAG_RUBY=""
 
 if [ $HOST = "PC" ]; then
 	FLAG_CYGWIN=true
-	FLAG_HISPEC=true
+	FLAG_HIGHSPEC=true
 	FLAG_PYTHON=true
 fi
 
 if [ $HOST = "backuptower" ]; then
 	FLAG_UBUNTU=true
-	FLAG_HISPEC=true
+	FLAG_HIGHSPEC=true
 fi
 
 if [ $HOST = "ubuntusetuptest" ]; then
 	FLAG_UBUNTU=true
-	FLAG_HISPEC=true
+	FLAG_HIGHSPEC=true
 fi
 
 
@@ -265,8 +265,8 @@ if [ $FLAG_UBUNTU ]; then
 	echo "##conf ubuntu"
 fi
 
-if [ $FLAG_HISPEC ]; then
-	echo "##conf hispec"
+if [ $FLAG_HIGHSPEC ]; then
+	echo "##conf HIGHSPEC"
 	zstyle ':prezto:module:prompt' theme 'powerline'
 fi
 

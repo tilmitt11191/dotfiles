@@ -21,13 +21,15 @@ FLAG_CYGWIN=""
 FLAG_VM=""
 FLAG_PYTHON=""
 FLAG_RUBY=""
-
+FLAG_HIGHSPEC=""
 
 if [ $HOST = PC ]; then
 	echo "##PC setup"
 	FLAG_CYGWIN=true
 	FLAG_PYTHON=true
-	FLAG_RUBY=true
+	FLAG_RUBY=""
+	FLAG_PREZTO=true
+	FLAG_HIGHSPEC=true
 fi
 
 if [ $HOST = backuptower ]; then
@@ -69,7 +71,7 @@ if [ $FLAG_PREZTO ];then
 	setopt CLOBBER
 fi
 
-if [ $FLAG_UBUNTU ];then
+if [ $FLAG_CYGWIN ];then
 	echo "##conf cygwin"
 fi
 
@@ -97,6 +99,10 @@ fi
 
 if [ $FLAG_RUBY ];then
 	echo "##conf ruby"
+fi
+
+if [ $FLAG_HIGHSPEC ];then
+	echo "##conf highspec"
 fi
 
 : <<'#__CO__'
