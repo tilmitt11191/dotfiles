@@ -261,16 +261,10 @@ if [ $FLAG_CYGWIN ]; then
 	chmod +rwx $HOME/.zprezto
 fi
 
-if [ $FLAG_COMMON ]; then
-	echo "##conf common"
-	[ ! $PREZTO_THEME ] && PREZTO_THEME="damoekri"
-fi
-
 if [ $FLAG_UBUNTU ]; then
 	echo "##conf ubuntu"
 fi
 
-: <<'#__CO__'
 if [ $FLAG_HIGHSPEC ]; then
 	echo "##conf HIGHSPEC"
 	if [ ! $PREZTO_THEME ] && [ $FLAG_PYTHON ]; then
@@ -279,7 +273,11 @@ if [ $FLAG_HIGHSPEC ]; then
 		PREZTO_THEME="sorin"
 	fi
 fi
-#__CO__
+
+if [ $FLAG_COMMON ]; then
+	echo "##conf common"
+	[ ! $PREZTO_THEME ] && PREZTO_THEME="damoekri"
+fi
 
 if [ $PREZTO_THEME ]; then
 	echo "set theme $PREZTO_THEME"
