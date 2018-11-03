@@ -1,5 +1,4 @@
 
-echo "welcome to $HOST!!"
 #
 # Executes commands at the start of an interactive session.
 #
@@ -93,7 +92,7 @@ if [ $FLAG_PYTHON ];then
 	eval "$(pyenv init -)"
 	alias activate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/activate"
 	alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
-	#source $PYENV_ROOT/versions/anaconda/bin/activate py3.7
+	source $PYENV_ROOT/versions/anaconda/bin/activate my_default
 fi
 
 
@@ -104,6 +103,8 @@ fi
 if [ $FLAG_HIGHSPEC ];then
 	echo "##conf highspec"
 fi
+
+echo "welcome to $HOST!!"
 
 : <<'#__CO__'
 if [ $ ];then
