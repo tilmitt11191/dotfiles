@@ -61,6 +61,9 @@ if [ $FLAG_COMMON ]; then
 	alias lla='ls -alhG'
 	alias mkdir='mkdir -p'
 	alias vi='vim'
+
+	autoload -Uz compinit
+	compinit
 fi
 
 
