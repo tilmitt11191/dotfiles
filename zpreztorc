@@ -268,7 +268,7 @@ fi
 if [ $FLAG_HIGHSPEC ]; then
 	echo "##conf HIGHSPEC"
 	if [ ! $PREZTO_THEME ] && [ $FLAG_PYTHON ]; then
-		PREZTO_THEME="powerline blue"
+		PREZTO_THEME="powerline \"blue\""
 	elif [ ! $PREZTO_THEME ];then
 		PREZTO_THEME="sorin"
 	fi
