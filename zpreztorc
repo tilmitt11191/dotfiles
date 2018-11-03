@@ -247,11 +247,15 @@ if [ $HOST = "backuptower" ]; then
 	FLAG_UBUNTU=true
 	FLAG_PYTHON=true
 	FLAG_HIGHSPEC=true
+	PREZTO_THEME="powerline blue"
 fi
 
 if [ $HOST = "ubuntusetuptest" ]; then
 	FLAG_UBUNTU=true
+	FLAG_PYTHON=true
 	FLAG_HIGHSPEC=true
+	#PREZTO_THEME="steeef"
+	PREZTO_THEME="pure"
 fi
 
 
@@ -283,6 +287,7 @@ if [ $PREZTO_THEME ]; then
 	echo "set theme $PREZTO_THEME"
 	zstyle ':prezto:module:prompt' theme "$PREZTO_THEME"
 else
+	echo "set theme $PREZTO_THEME"
 	zstyle ':prezto:module:prompt' theme "sorin"
 fi
 

@@ -3,6 +3,7 @@
 	[
 		"sh",
 		"zpreztorc",
-		"zshrc"
+		"zshrc",
+		".zpreztorc"
 	]
 }
