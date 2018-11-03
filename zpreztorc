@@ -245,6 +245,7 @@ fi
 
 if [ $HOST = "backuptower" ]; then
 	FLAG_UBUNTU=true
+	FLAG_PYTHON=true
 	FLAG_HIGHSPEC=true
 fi
 
