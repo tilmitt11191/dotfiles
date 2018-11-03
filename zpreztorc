@@ -240,14 +240,15 @@ if [ $HOST = "PC" ]; then
 	FLAG_CYGWIN=true
 	FLAG_HIGHSPEC=true
 	FLAG_PYTHON=true
-	PREZTO_THEME="powerline blue"
+	#PREZTO_THEME="powerline blue"
+	PREZTO_THEME="pure"
 fi
 
 if [ $HOST = "backuptower" ]; then
 	FLAG_UBUNTU=true
 	FLAG_PYTHON=true
 	FLAG_HIGHSPEC=true
-	PREZTO_THEME="powerline blue"
+	PREZTO_THEME="pure"
 fi
 
 if [ $HOST = "ubuntusetuptest" ]; then
