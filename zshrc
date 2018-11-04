@@ -15,29 +15,38 @@ fi
 echo "####conf my .zshrc"
 FLAG_COMMON=true
 FLAG_PREZTO=true
-FLAG_UBUNTU=""
+FLAG_LINUX=true
 FLAG_CYGWIN=""
+FLAG_UBUNTU=""
 FLAG_VM=""
 FLAG_PYTHON=""
 FLAG_RUBY=""
 FLAG_HIGHSPEC=""
 
-if [ $HOST = PC ]; then
+#case $HOST in
+#	PC*) echo "##this is Cygwin" && IS_CYGWIN=true;;
+#	backuptower*) echo "##this is Linux" && IS_LINUX=true;;
+#	*) echo "##this is neither Cygwin nor Linux. exit 1" && exit 1;;
+#esac
+
+if [ $HOST = PC -a "$(uname -a | grep Cygwin)" ]; then
 	echo "##PC setup"
+	FLAG_PREZTO=true
 	FLAG_CYGWIN=true
 	FLAG_PYTHON=true
 	FLAG_RUBY=""
-	FLAG_PREZTO=true
-	FLAG_HIGHSPEC=true
+	FLAG_HIGHSPEC=""
 fi
 
 if [ $HOST = backuptower ]; then
 	echo "backuptower"
+	FLAG_PREZTO=true
 	FLAG_UBUNTU=true
 	FLAG_PYTHON=true
 fi
 
 if [ $HOST = "ubuntusetuptest" ]; then
+	FLAG_PREZTO=true
 	FLAG_UBUNTU=true
 	FLAG_VM=true
 	FLAG_PYTHON=true
@@ -62,6 +71,8 @@ if [ $FLAG_COMMON ]; then
 	alias mkdir='mkdir -p'
 	alias vi='vim'
 
+	bindkey "^R" history-incremental-search-backward
+
 	autoload -Uz compinit
 	compinit
 fi
@@ -71,6 +82,7 @@ if [ $FLAG_PREZTO ];then
 	echo "##conf prezto"
 	[ `alias | grep rm=` ] && unalias rm
 	setopt CLOBBER
+
 fi
 
 if [ $FLAG_CYGWIN ];then

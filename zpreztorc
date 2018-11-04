@@ -241,7 +241,8 @@ if [ $HOST = "PC" ]; then
 	FLAG_HIGHSPEC=true
 	FLAG_PYTHON=true
 	#PREZTO_THEME="powerline blue"
-	PREZTO_THEME="pure"
+	#PREZTO_THEME="pure"
+	PREZTO_THEME="sorin"
 fi
 
 if [ $HOST = "backuptower" ]; then
@@ -258,6 +259,8 @@ if [ $HOST = "ubuntusetuptest" ]; then
 	#PREZTO_THEME="steeef"
 	PREZTO_THEME="pure"
 fi
+
+
 
 
 echo "####conf my .zpreztorc"
@@ -279,17 +282,22 @@ if [ $FLAG_HIGHSPEC ]; then
 	fi
 fi
 
-if [ $FLAG_COMMON ]; then
-	echo "##conf common"
-	[ ! $PREZTO_THEME ] && PREZTO_THEME="damoekri"
-fi
-
 if [ $PREZTO_THEME ]; then
 	echo "set theme $PREZTO_THEME"
 	zstyle ':prezto:module:prompt' theme "$PREZTO_THEME"
 else
 	echo "set theme $PREZTO_THEME"
 	zstyle ':prezto:module:prompt' theme "sorin"
+fi
+
+if [ $FLAG_COMMON ]; then
+	echo "##conf common"
+	[ ! $PREZTO_THEME ] && PREZTO_THEME="damoekri"
+	#zstyle ':prezto:module:terminal' auto-title 'yes'
+	zstyle ':prezto:module:terminal' auto-title 'always'
+	zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
+	zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
+	zstyle ':prezto:module:terminal:multiplexer-title' format '%s'
 fi
 
 
