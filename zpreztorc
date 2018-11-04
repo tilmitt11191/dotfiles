@@ -235,6 +235,36 @@ FLAG_PYTHON=""
 FLAG_RUBY=""
 PREZTO_THEME=""
 
+case $HOST in
+	PC*) echo "##PC setup"
+		if [ "$(uname -a | grep Cygwin)" ];then
+			echo "##this is Cygwin"
+			FLAG_CYGWIN=true
+		elif [ "$(uname -a | grep Linux)" ];then
+			echo "##this is Linux"
+			FLAG_LINUX=true
+		fi
+		FLAG_PREZTO=true
+		FLAG_PYTHON=true
+		FLAG_RUBY=""
+		FLAG_HIGHSPEC=true
+		;;
+	backuptower*) echo "##backuptower setup"
+		FLAG_PREZTO=true
+		FLAG_UBUNTU=true
+		FLAG_PYTHON=true
+		;;
+	ubuntusetuptest*) echo "##ubuntusetuptest setup"
+		FLAG_PREZTO=true
+		FLAG_UBUNTU=true
+		FLAG_VM=true
+		FLAG_PYTHON=true
+		FLAG_RUBY=true
+		;;
+	*) echo "##not registerd host. apply COMMON settings"
+		FLAG_COMMON=true
+		;;
+esac
 
 if [ $HOST = PC -a "$(uname -a | grep Cygwin)" ]; then
 	FLAG_CYGWIN=true

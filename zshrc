@@ -8,7 +8,7 @@
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+	source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
 # Customize to your needs...
@@ -53,32 +53,6 @@ case $HOST in
 		FLAG_COMMON=true
 		;;
 esac
-
-: <<'#__CO__'
-if [ $HOST = PC -a "$(uname -a | grep Cygwin)" ]; then
-	echo "##PC setup"
-	FLAG_PREZTO=true
-	FLAG_CYGWIN=true
-	FLAG_PYTHON=true
-	FLAG_RUBY=""
-	FLAG_HIGHSPEC=""
-fi
-
-if [ $HOST = backuptower ]; then
-	echo "backuptower"
-	FLAG_PREZTO=true
-	FLAG_UBUNTU=true
-	FLAG_PYTHON=true
-fi
-
-if [ $HOST = "ubuntusetuptest" ]; then
-	FLAG_PREZTO=true
-	FLAG_UBUNTU=true
-	FLAG_VM=true
-	FLAG_PYTHON=true
-	FLAG_RUBY=true
-fi
-#__CO__
 
 
 
