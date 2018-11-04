@@ -236,13 +236,15 @@ FLAG_RUBY=""
 PREZTO_THEME=""
 
 
-if [ $HOST = "PC" ]; then
+if [ $HOST = PC -a "$(uname -a | grep Cygwin)" ]; then
 	FLAG_CYGWIN=true
 	FLAG_HIGHSPEC=true
 	FLAG_PYTHON=true
 	#PREZTO_THEME="powerline blue"
 	#PREZTO_THEME="pure"
-	PREZTO_THEME="sorin"
+	#PREZTO_THEME="sorin"
+	#PREZTO_THEME="powerline"
+	PREZTO_THEME="adam2"
 fi
 
 if [ $HOST = "backuptower" ]; then

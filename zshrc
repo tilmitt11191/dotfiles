@@ -82,7 +82,7 @@ if [ $FLAG_PREZTO ];then
 	echo "##conf prezto"
 	[ `alias | grep rm=` ] && unalias rm
 	setopt CLOBBER
-
+	unsetopt alwaystoend
 fi
 
 if [ $FLAG_CYGWIN ];then
