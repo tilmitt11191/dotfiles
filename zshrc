@@ -71,7 +71,8 @@ if [ $FLAG_COMMON ]; then
 	alias mkdir='mkdir -p'
 	alias vi='vim'
 
-	bindkey "^R" history-incremental-search-backward
+	bindkey -e
+	#bindkey "^R" history-incremental-search-backward
 
 	autoload -Uz compinit
 	compinit
