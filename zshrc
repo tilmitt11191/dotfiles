@@ -41,6 +41,7 @@ case $HOST in
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
 		FLAG_PYTHON=true
+		FLAG_HIGHSPEC=true
 		;;
 	ubuntusetuptest*) echo "##ubuntusetuptest setup"
 		FLAG_PREZTO=true
