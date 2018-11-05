@@ -14,14 +14,18 @@ fi
 # Customize to your needs...
 echo "####conf my .zshrc"
 FLAG_COMMON=true
+FLAG_HIGHSPEC=""
 FLAG_PREZTO=true
+FLAG_PECO=true
 FLAG_LINUX=true
 FLAG_CYGWIN=""
 FLAG_UBUNTU=""
 FLAG_VM=""
+FLAG_TMUX=true
 FLAG_PYTHON=""
 FLAG_RUBY=""
-FLAG_HIGHSPEC=""
+FLAG_GOLANG=true
+
 
 case $HOST in
 	PC*) echo "##PC setup"
@@ -80,12 +84,29 @@ if [ $FLAG_COMMON ]; then
 	compinit
 fi
 
-
 if [ $FLAG_PREZTO ];then
 	echo "##conf prezto"
 	[ `alias | grep rm=` ] && unalias rm
 	setopt CLOBBER
 	unsetopt alwaystoend
+fi
+
+if [ $FLAG_PECO ];then
+	echo "##conf peco"
+	function peco-src () {
+		local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
+		if [ -n "$selected_dir" ]; then
+			BUFFER="cd ${selected_dir}"
+			zle accept-line
+		fi
+		zle clear-screen
+	}
+	zle -N peco-src
+	bindkey '^]' peco-src
+fi
+
+if [ $FLAG_TMUX ];then
+	echo "##conf tmux"
 fi
 
 if [ $FLAG_CYGWIN ];then
@@ -116,6 +137,15 @@ fi
 
 if [ $FLAG_RUBY ];then
 	echo "##conf ruby"
+fi
+
+if [ $FLAG_GOLANG ];then
+	echo "##conf golang"
+	# for go lang
+	if [ -x "`which go`" ]; then
+		export GOPATH=$HOME/go
+		export PATH="$GOPATH/bin:$PATH"
+	fi
 fi
 
 if [ $FLAG_HIGHSPEC ];then

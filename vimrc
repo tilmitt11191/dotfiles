@@ -21,15 +21,13 @@ syntax enable
 if hostname() == "ubuntu128" || hostname() == "ubuntuMain2"
 	colorscheme twilight
 	highlight Normal ctermbg=none
+elseif hostname() == "backuptower"
+	colorscheme twilight
+	highlight Normal ctermbg=none
 elseif hostname() == "ubuntuSim"
 	colorscheme twilight
 	highlight Normal ctermbg=none
 elseif hostname() == "macos.local"
-	"colorscheme molokai
-	"colorscheme base16-railscasts
-	"colorscheme railscasts
-	"colorscheme elflord
-	"colorscheme jellybeans
 	colorscheme twilight
 	highlight Normal ctermbg=none
 elseif hostname() == "PC"
