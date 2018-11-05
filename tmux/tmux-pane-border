@@ -35,6 +35,27 @@ if [[ $1 = "ssh" ]]; then
     done
   fi
   ssh_hostname=" ssh:$user@$host "
+  git_info=""
+  directory=""
+else
+  if git_status=$(cd $3 && git status 2>/dev/null ); then
+    git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
+    case $git_status in
+      *Changes\ not\ staged* ) state="#[bg=colour013,fg=black] ± #[fg=default]" ;;
+      *Changes\ to\ be\ committed* ) state="#[bg=blue,fg=black] + #[default]" ;; 
+      * ) state="#[bg=green,fg=black] ✔ #[default]" ;;
+    esac
+    if [[ $git_branch = "master" ]]; then
+      git_info="#[underscore]#[bg=black,fg=blue] ⭠ ${git_branch} #[default]${state}"
+    else
+      git_info="#[underscore]#[bg=black,fg=colour014] ⭠ ${git_branch} #[default]${state}"
+    fi
+  else
+    git_info=""
+  fi
+  ssh_hostname=""
+  directory="$3"
 fi
 
-echo $ssh_hostname
+echo "#[bg=colour013,fg=black]$ssh_hostname#[default]#[bg=black,fg=cyan]#[underscore]$directory#[default]$git_info"
+
