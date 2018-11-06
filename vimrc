@@ -18,8 +18,9 @@ endif
 ""color
 syntax enable
 
-if hostname() == "ubuntu128" || hostname() == "ubuntuMain2"
-	colorscheme twilight
+if hostname() == "ubuntu128" || hostname() == "ubuntuMain2" || hostname() == "bakuptower"
+	""colorscheme twilight
+	colorscheme monokai
 	highlight Normal ctermbg=none
 elseif hostname() == "backuptower"
 	colorscheme twilight
@@ -59,7 +60,7 @@ endif
 
 ""corsor
 set number
-if hostname() == "ubuntu128" || hostname() == "ubuntuMain2"
+if hostname() == "ubuntu128" || hostname() == "ubuntuMain2" || hostname() == "backuptower"
 	hi Normal ctermfg=252 ctermbg=none
 	hi LineNr ctermbg=none ctermfg=darkcyan
 	hi clear CursorLine
