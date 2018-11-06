@@ -153,7 +153,7 @@ if [ $FLAG_PYTHON ];then
 	eval "$(pyenv init -)"
 	alias activate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/activate"
 	alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
-	source $PYENV_ROOT/versions/anaconda/bin/activate py3.7
+	activate-anaconda py3.6 || activate-anaconda py3.7
 fi
 
 
