@@ -19,8 +19,8 @@ endif
 syntax enable
 
 if hostname() == "ubuntu128" || hostname() == "ubuntuMain2" || hostname() == "bakuptower"
-	""colorscheme twilight
-	colorscheme monokai
+	colorscheme twilight
+	"colorscheme monokai
 	highlight Normal ctermbg=none
 elseif hostname() == "backuptower"
 	colorscheme twilight
@@ -33,11 +33,13 @@ elseif hostname() == "macos.local"
 	highlight Normal ctermbg=none
 elseif hostname() == "PC"
 	"colorscheme base16-railscasts
-	colorscheme molokai
+	"colorscheme molokai
+	colorscheme twilight
 elseif hostname() == "mba-win"
 	colorscheme molokai
 elseif hostname() == "www2271.sakura.ne.jp"
-	colorscheme molokai
+	"colorscheme molokai
+	colorscheme twilight
 	highlight Normal ctermbg=none
 endif	
 	"colorscheme hybrid
