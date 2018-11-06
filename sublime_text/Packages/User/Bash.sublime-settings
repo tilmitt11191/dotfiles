@@ -4,6 +4,7 @@
 		"sh",
 		"zpreztorc",
 		"zshrc",
-		".zpreztorc"
+		".zpreztorc",
+		"conf"
 	]
 }

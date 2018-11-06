@@ -1,0 +1,20 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"All Autocomplete",
+		"Boxy Theme",
+		"Japanize",
+		"OmniMarkupPreviewer",
+		"Package Control",
+		"Python Flake8 Lint",
+		"Python PEP8 Autoformat",
+		"rsub",
+		"SideBarEnhancements",
+		"SimpleClone",
+		"Theme - Asphalt"
+	]
+}
