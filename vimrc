@@ -32,8 +32,8 @@ elseif hostname() == "macos.local"
 	colorscheme twilight
 	highlight Normal ctermbg=none
 elseif hostname() == "PC"
-	colorscheme base16-railscasts
-	"colorscheme molokai
+	"colorscheme base16-railscasts
+	colorscheme molokai
 elseif hostname() == "mba-win"
 	colorscheme molokai
 elseif hostname() == "www2271.sakura.ne.jp"
@@ -79,10 +79,15 @@ elseif hostname() == "macos.local"
 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 elseif hostname() == "PC" || hostname() == "mba-win"
-	hi LineNr ctermbg=0 ctermfg=blue
-	hi CursorLineNr ctermbg=4 ctermfg=8
+
+	hi Normal ctermfg=252 ctermbg=none
+	hi LineNr ctermbg=none ctermfg=darkcyan
+	hi clear CursorLine
+	hi CursorLineNr ctermbg=4 ctermfg=0
+	hi clear CursorLine
 	set cursorline
-	"hi clear CursorLine
+	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 elseif hostname() == "www2271.sakura.ne.jp" || hostname() == "Gemini"
 	hi Normal ctermfg=252 ctermbg=none
 	hi LineNr ctermbg=none ctermfg=darkcyan
