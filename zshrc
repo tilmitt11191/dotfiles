@@ -26,12 +26,14 @@ FLAG_PYTHON=""
 FLAG_RUBY=""
 FLAG_GOLANG=true
 
-
 case $HOST in
 	PC*) echo "##PC setup"
 		if [ "$(uname -a | grep Cygwin)" ];then
-			echo "##this is Cygwin"
+			echo "##this is  Cygwin"
 			FLAG_CYGWIN=true
+			function st() {
+			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe `cygpath -aw $*` &
+			}
 		elif [ "$(uname -a | grep Linux)" ];then
 			echo "##this is Linux"
 			FLAG_LINUX=true

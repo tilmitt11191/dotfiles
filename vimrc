@@ -1,4 +1,4 @@
-"echo hostname()
+
 
 ""general
 set tabstop=2
@@ -35,6 +35,7 @@ elseif hostname() == "PC"
 	"colorscheme base16-railscasts
 	"colorscheme molokai
 	colorscheme twilight
+	highlight Normal ctermbg=none
 elseif hostname() == "mba-win"
 	colorscheme molokai
 elseif hostname() == "www2271.sakura.ne.jp"
@@ -60,7 +61,7 @@ endif
 	":colorscheme jellybeans
 
 
-""corsor
+""cursor
 set number
 if hostname() == "ubuntu128" || hostname() == "ubuntuMain2" || hostname() == "backuptower"
 	hi Normal ctermfg=252 ctermbg=none
@@ -87,7 +88,6 @@ elseif hostname() == "PC" || hostname() == "mba-win"
 	hi clear CursorLine
 	hi CursorLineNr ctermbg=4 ctermfg=0
 	hi clear CursorLine
-	set cursorline
 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 elseif hostname() == "www2271.sakura.ne.jp" || hostname() == "Gemini"
@@ -113,14 +113,4 @@ endif
  "       colorscheme twilight
  "       highlight Normal ctermbg=none
 
-""corsor
-"set number
- "       hi Normal ctermfg=252 ctermbg=none
-  "      hi LineNr ctermbg=none ctermfg=darkcyan
-  "      hi clear CursorLine
-  "      hi CursorLineNr ctermbg=4 ctermfg=0
-  "      hi clear CursorLine
-  "      set cursorline
-  "      let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-  "      let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 
