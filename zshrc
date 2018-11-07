@@ -34,6 +34,7 @@ case $HOST in
 			function st() {
 			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe `cygpath -aw $*` &
 			}
+			#export PATH=/cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/bin:$PATH
 		elif [ "$(uname -a | grep Linux)" ];then
 			echo "##this is Linux"
 			FLAG_LINUX=true
