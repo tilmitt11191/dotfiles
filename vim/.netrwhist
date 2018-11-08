@@ -1,6 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_cnt =5
 let g:netrw_dirhist_1='/Users/tilmitt11/bin'
 let g:netrw_dirhist_2='/etc/mysql/mysql.conf.d'
 let g:netrw_dirhist_3='/home/alladmin/data/kakaku/input'
 let g:netrw_dirhist_4='/etc/profile.d'
+let g:netrw_dirhist_5='/cygdrive/c/Users/tilmi/home/.zprezto'

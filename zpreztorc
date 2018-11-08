@@ -1,5 +1,107 @@
 
 
+####my confs
+FLAG_COMMON=true
+FLAG_PREZTO=true
+FLAG_UBUNTU=""
+IS_CYGWIN=""
+FLAG_VM=""
+FLAG_PYTHON=""
+FLAG_RUBY=""
+PREZTO_THEME=""
+
+unameOut="$(uname -s)"
+IS_CYGWIN=""
+IS_LINUX=""
+case "${unameOut}" in
+	CYGWIN*) IS_CYGWIN=true;;
+	Linux*) IS_LINUX=true;;
+	*) echo "##this is neither Cygwin nor Linux. exit 1" && exit 1;;
+esac
+
+
+case $HOST in
+	PC*) echo "##PC setup"
+		if [ $IS_CYGWIN ];then
+			echo "##this is Cygwin"
+			IS_CYGWIN=true
+		elif [ $IS_LINUX ];then
+			echo "##this is Linux"
+			FLAG_LINUX=true
+		fi
+		FLAG_PREZTO=true
+		FLAG_PYTHON=true
+		FLAG_RUBY=""
+		FLAG_HIGHSPEC=true
+		#PREZTO_THEME="powerline"
+		#PREZTO_THEME="adam2"
+		PREZTO_THEME="fade"
+		;;
+	backuptower*) echo "##backuptower setup"
+		FLAG_PREZTO=true
+		FLAG_UBUNTU=true
+		FLAG_PYTHON=true
+		FLAG_HIGHSPEC=true
+		PREZTO_THEME="powerline"
+		;;
+	ubuntusetuptest*) echo "##ubuntusetuptest setup"
+		FLAG_PREZTO=true
+		FLAG_UBUNTU=true
+		FLAG_VM=true
+		FLAG_PYTHON=true
+		FLAG_RUBY=true
+		#PREZTO_THEME="steeef"
+		PREZTO_THEME="pure"
+		;;
+	*) echo "##not registerd host. apply COMMON settings"
+		FLAG_COMMON=true
+		;;
+esac
+
+
+echo "####conf my .zpreztorc"
+if [ $IS_CYGWIN ]; then
+	echo "##conf cygwin"
+	chmod +rwx $HOME/.zprezto
+fi
+
+if [ $FLAG_UBUNTU ]; then
+	echo "##conf ubuntu"
+fi
+
+if [ $FLAG_HIGHSPEC ]; then
+	echo "##conf HIGHSPEC"
+	if [ ! $PREZTO_THEME ]; then
+		([ $FLAG_PYTHON ] && PREZTO_THEME="powerline") || PREZTO_THEME="sorin"
+	fi
+fi
+
+if [ $PREZTO_THEME ]; then
+	echo "set theme $PREZTO_THEME"
+	zstyle ':prezto:module:prompt' theme "$PREZTO_THEME"
+else
+	echo "set theme $PREZTO_THEME"
+	zstyle ':prezto:module:prompt' theme "sorin"
+fi
+
+if [ $FLAG_COMMON ]; then
+	echo "##conf common"
+	[ ! $PREZTO_THEME ] && PREZTO_THEME="damoekri"
+	#zstyle ':prezto:module:terminal' auto-title 'yes'
+	zstyle ':prezto:module:terminal' auto-title 'always'
+	zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
+	zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
+	zstyle ':prezto:module:terminal:multiplexer-title' format '%s'
+fi
+
+
+: <<'#__CO__'
+if [ $ ]; then
+	echo "##"
+fi
+#__CO__
+
+
 #
 # Sets Prezto options.
 #
@@ -225,111 +327,3 @@ zstyle ':prezto:module:editor' key-bindings 'vi'
 # behavior.
 # zstyle ':prezto:module:utility' safe-ops 'yes'
 
-####my confs
-FLAG_COMMON=true
-FLAG_PREZTO=true
-FLAG_UBUNTU=""
-FLAG_CYGWIN=""
-FLAG_VM=""
-FLAG_PYTHON=""
-FLAG_RUBY=""
-PREZTO_THEME=""
-
-case $HOST in
-	PC*) echo "##PC setup"
-		if [ "$(uname -a | grep Cygwin)" ];then
-			echo "##this is Cygwin"
-			FLAG_CYGWIN=true
-		elif [ "$(uname -a | grep Linux)" ];then
-			echo "##this is Linux"
-			FLAG_LINUX=true
-		fi
-		FLAG_PREZTO=true
-		FLAG_PYTHON=true
-		FLAG_RUBY=""
-		FLAG_HIGHSPEC=true
-		;;
-	backuptower*) echo "##backuptower setup"
-		FLAG_PREZTO=true
-		FLAG_UBUNTU=true
-		FLAG_PYTHON=true
-		FLAG_HIGHSPEC=true
-		PREZTO_THEME="powerline"
-		;;
-	ubuntusetuptest*) echo "##ubuntusetuptest setup"
-		FLAG_PREZTO=true
-		FLAG_UBUNTU=true
-		FLAG_VM=true
-		FLAG_PYTHON=true
-		FLAG_RUBY=true
-		;;
-	*) echo "##not registerd host. apply COMMON settings"
-		FLAG_COMMON=true
-		;;
-esac
-
-if [ $HOST = PC -a "$(uname -a | grep Cygwin)" ]; then
-	FLAG_CYGWIN=true
-	FLAG_HIGHSPEC=true
-	FLAG_PYTHON=true
-	#PREZTO_THEME="powerline blue"
-	#PREZTO_THEME="pure"
-	#PREZTO_THEME="sorin"
-	#PREZTO_THEME="powerline"
-	PREZTO_THEME="adam2"
-fi
-
-if [ $HOST = "ubuntusetuptest" ]; then
-	FLAG_UBUNTU=true
-	FLAG_PYTHON=true
-	FLAG_HIGHSPEC=true
-	#PREZTO_THEME="steeef"
-	PREZTO_THEME="pure"
-fi
-
-
-
-
-echo "####conf my .zpreztorc"
-if [ $FLAG_CYGWIN ]; then
-	echo "##conf cygwin"
-	chmod +rwx $HOME/.zprezto
-fi
-
-if [ $FLAG_UBUNTU ]; then
-	echo "##conf ubuntu"
-fi
-
-if [ $FLAG_HIGHSPEC ]; then
-	echo "##conf HIGHSPEC"
-	if [ ! $PREZTO_THEME ] && [ $FLAG_PYTHON ]; then
-		PREZTO_THEME="powerline \"blue\""
-	elif [ ! $PREZTO_THEME ];then
-		PREZTO_THEME="sorin"
-	fi
-fi
-
-if [ $PREZTO_THEME ]; then
-	echo "set theme $PREZTO_THEME"
-	zstyle ':prezto:module:prompt' theme "$PREZTO_THEME"
-else
-	echo "set theme $PREZTO_THEME"
-	zstyle ':prezto:module:prompt' theme "sorin"
-fi
-
-if [ $FLAG_COMMON ]; then
-	echo "##conf common"
-	[ ! $PREZTO_THEME ] && PREZTO_THEME="damoekri"
-	#zstyle ':prezto:module:terminal' auto-title 'yes'
-	zstyle ':prezto:module:terminal' auto-title 'always'
-	zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
-	zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
-	zstyle ':prezto:module:terminal:multiplexer-title' format '%s'
-fi
-
-
-: <<'#__CO__'
-if [ $ ]; then
-	echo "##"
-fi
-#__CO__
