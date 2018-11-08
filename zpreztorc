@@ -42,7 +42,8 @@ case $HOST in
 		FLAG_UBUNTU=true
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=true
-		PREZTO_THEME="powerline"
+		#PREZTO_THEME="powerline"
+		PRETO_THEME="adam2"
 		;;
 	ubuntusetuptest*) echo "##ubuntusetuptest setup"
 		FLAG_PREZTO=true
