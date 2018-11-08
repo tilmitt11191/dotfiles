@@ -64,6 +64,12 @@ case $HOST in
 		FLAG_PYTHON=true
 		FLAG_RUBY=true
 		;;
+	ubuntu-erico*) echo "##ubuntu-erico setup"
+		FLAG_PREZTO=true
+		FLAG_UBUNTU=true
+		FLAG_VM=true
+		FLAG_PYTHON=true
+		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
 		;;
@@ -162,6 +168,7 @@ if [ $FLAG_PYTHON ];then
 	export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
 	eval "$(pyenv init -)"
 
+	alias activate-anaconda="source $HOME/.pyenv/versions/anaconda/bin/activate"
 	#alias activate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/activate"
 	#alias activate-anaconda="export PATH=$PYENV_ROOT/versions/anaconda/envs/$1:$PATH && source $PYENV_ROOT/versions/anaconda/bin/activate $1"
 	#alias activate-anaconda="echo alials $1 && echo alias2 $1"
