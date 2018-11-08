@@ -56,6 +56,7 @@ case $HOST in
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
+		PREZTO_THEME="pure"
 		;;
 esac
 
@@ -82,7 +83,8 @@ if [ $PREZTO_THEME ]; then
 	zstyle ':prezto:module:prompt' theme "$PREZTO_THEME"
 else
 	echo "set theme $PREZTO_THEME"
-	zstyle ':prezto:module:prompt' theme "sorin"
+	#zstyle ':prezto:module:prompt' theme "sorin"
+	zstyle ':prezto:module:prompt' theme "pure"
 fi
 
 if [ $FLAG_COMMON ]; then
