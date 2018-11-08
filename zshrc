@@ -64,7 +64,7 @@ case $HOST in
 		FLAG_PYTHON=true
 		FLAG_RUBY=true
 		;;
-	ubuntu-erico*) echo "##ubuntu-erico setup"
+	ubuntu-pcap || ubuntu-erico*) echo "##ubuntu-pcap or ubuntu-erico setup"
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
 		FLAG_VM=true
