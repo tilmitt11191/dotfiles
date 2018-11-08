@@ -17,27 +17,34 @@ FLAG_COMMON=true
 FLAG_HIGHSPEC=""
 FLAG_PREZTO=true
 FLAG_PECO=true
-FLAG_LINUX=true
-FLAG_CYGWIN=""
+IS_CYGWIN=""
 FLAG_UBUNTU=""
 FLAG_VM=""
 FLAG_TMUX=true
 FLAG_PYTHON=""
 FLAG_RUBY=""
 FLAG_GOLANG=true
+unameOut="$(uname -s)"
+IS_CYGWIN=""
+IS_LINUX=""
+case "${unameOut}" in
+	CYGWIN*) echo "##this is Cygwin" && IS_CYGWIN=true;;
+	Linux*) echo "##this is Linux" && IS_LINUX=true;;
+	*) echo "##this is neither Cygwin nor Linux. exit 1" && exit 1;;
+esac
+
 
 case $HOST in
 	PC*) echo "##PC setup"
-		if [ "$(uname -a | grep Cygwin)" ];then
+		if [ $IS_CYGWIN ];then
 			echo "##this is  Cygwin"
-			FLAG_CYGWIN=true
+			IS_CYGWIN=true
 			function st() {
 			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe `cygpath -aw $*` &
 			}
-			#export PATH=/cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/bin:$PATH
-		elif [ "$(uname -a | grep Linux)" ];then
+			source /cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/path.zsh.inc
+		elif [ $IS_LINUX ];then
 			echo "##this is Linux"
-			FLAG_LINUX=true
 		fi
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
@@ -111,30 +118,30 @@ fi
 if [ $FLAG_TMUX ];then
 	echo "##conf tmux"
 	function precmd() {
-  if [ ! -z $TMUX ]; then
-    tmux refresh-client -S
-  else
-    dir="%F{cyan}%K{black} %~ %k%f"
-    if git_status=$(git status 2>/dev/null ); then
-      git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
-       case $git_status in
-        *Changes\ not\ staged* ) state=$'%{\e[30;48;5;013m%}%F{black} ± %f%k' ;;
-        *Changes\ to\ be\ committed* ) state="%K{blue}%F{black} + %k%f" ;;
-        * ) state="%K{green}%F{black} ✔ %f%k" ;;
-      esac
-      if [[ $git_branch = "master" ]]; then
-        git_info="%K{black}%F{blue}⭠ ${git_branch}%f%k ${state}"
-      else
-        git_info="%K{black}⭠ ${git_branch}%f ${state}"
-      fi
-    else
-      git_info=""
-    fi
-  fi
+	  if [ ! -z $TMUX ]; then
+	    tmux refresh-client -S
+	  else
+	    dir="%F{cyan}%K{black} %~ %k%f"
+	    if git_status=$(git status 2>/dev/null ); then
+	      git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
+	       case $git_status in
+	        *Changes\ not\ staged* ) state=$'%{\e[30;48;5;013m%}%F{black} ± %f%k' ;;
+	        *Changes\ to\ be\ committed* ) state="%K{blue}%F{black} + %k%f" ;;
+	        * ) state="%K{green}%F{black} ✔ %f%k" ;;
+	      esac
+	      if [[ $git_branch = "master" ]]; then
+	        git_info="%K{black}%F{blue}⭠ ${git_branch}%f%k ${state}"
+	      else
+	        git_info="%K{black}⭠ ${git_branch}%f ${state}"
+	      fi
+	    else
+	      git_info=""
+	    fi
+	  fi
 	}
 fi
 
-if [ $FLAG_CYGWIN ];then
+if [ $IS_CYGWIN ];then
 	echo "##conf cygwin"
 fi
 
@@ -154,9 +161,12 @@ if [ $FLAG_PYTHON ];then
 	export PYENV_ROOT="$HOME/.pyenv"
 	export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
 	eval "$(pyenv init -)"
-	alias activate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/activate"
+
+	#alias activate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/activate"
+	#alias activate-anaconda="export PATH=$PYENV_ROOT/versions/anaconda/envs/$1:$PATH && source $PYENV_ROOT/versions/anaconda/bin/activate $1"
+	#alias activate-anaconda="echo alials $1 && echo alias2 $1"
 	alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
-	activate-anaconda py3.6 > /dev/null 2>&1 || activate-anaconda py3.7 > /dev/null 2>&1
+	#source $PYENV_ROOT/versions/anaconda/bin/activate py3.6 > /dev/null 2>&1 || source $PYENV_ROOT/versions/anaconda/bin/activate py3.7 > /dev/null 2>&1
 fi
 
 
