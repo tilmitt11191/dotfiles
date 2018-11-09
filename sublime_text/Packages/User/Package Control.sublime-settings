@@ -5,10 +5,8 @@
 	],
 	"installed_packages":
 	[
-		"All Autocomplete",
 		"Boxy Theme",
 		"Japanize",
-		"OmniMarkupPreviewer",
 		"Package Control",
 		"Python Flake8 Lint",
 		"Python PEP8 Autoformat",

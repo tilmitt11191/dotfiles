@@ -5,6 +5,7 @@
 		"zpreztorc",
 		"zshrc",
 		".zpreztorc",
-		"conf"
+		"conf",
+		"Dockerfile"
 	]
 }
