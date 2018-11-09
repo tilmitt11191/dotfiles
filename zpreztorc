@@ -45,7 +45,7 @@ case $HOST in
 		#PREZTO_THEME="powerline"
 		PRETO_THEME="adam2"
 		;;
-	ubuntusetuptest*) echo "##ubuntusetuptest setup"
+	ubuntusetuptest || ubuntu-erico*) echo "##ubuntusetuptest or ubuntu-rico setup"
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
 		FLAG_VM=true
