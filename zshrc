@@ -69,6 +69,7 @@ case $HOST in
 		FLAG_UBUNTU=true
 		FLAG_VM=true
 		FLAG_PYTHON=true
+		FLAG_RUBY=true
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
@@ -176,6 +177,8 @@ fi
 
 if [ $FLAG_RUBY ];then
 	echo "##conf ruby"
+	export PATH="$HOME/.rbenv/bin:$PATH"
+	eval "$(rbenv init -)"
 fi
 
 if [ $FLAG_GOLANG ];then
