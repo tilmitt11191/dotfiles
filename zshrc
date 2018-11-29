@@ -26,16 +26,18 @@ FLAG_RUBY=""
 FLAG_GOLANG=true
 unameOut="$(uname -s)"
 IS_CYGWIN=""
+IS_MAC=""
 IS_LINUX=""
 case "${unameOut}" in
 	CYGWIN*) echo "##this is Cygwin" && IS_CYGWIN=true;;
+	Darwin*) echo "##this is macos" && IS_MAC=true;;
 	Linux*) echo "##this is Linux" && IS_LINUX=true;;
 	*) echo "##this is neither Cygwin nor Linux. exit 1" && exit 1;;
 esac
 
 
 case $HOST in
-	PC*) echo "##PC setup"
+	PC) echo "##PC setup"
 		if [ $IS_CYGWIN ];then
 			echo "##this is  Cygwin"
 			IS_CYGWIN=true
@@ -51,20 +53,23 @@ case $HOST in
 		FLAG_RUBY=""
 		FLAG_HIGHSPEC=true
 		;;
-	backuptower*) echo "##backuptower setup"
+	backuptower) echo "##backuptower setup"
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=true
 		;;
-	ubuntusetuptest*) echo "##ubuntusetuptest setup"
+	macos.local) echo "##macos.local setup"
+		FLAG_PREZTO=true
+		;;
+	ubuntusetuptest) echo "##ubuntusetuptest setup"
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
 		FLAG_VM=true
 		FLAG_PYTHON=true
 		FLAG_RUBY=true
 		;;
-	ubuntu-pcap || ubuntu-erico*) echo "##ubuntu-pcap or ubuntu-erico setup"
+	ubuntu-pcap | ubuntu-erico*) echo "##ubuntu-pcap or ubuntu-erico setup"
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
 		FLAG_VM=true
