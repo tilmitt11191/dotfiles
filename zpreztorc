@@ -3,11 +3,8 @@
 ####my confs
 FLAG_COMMON=true
 FLAG_PREZTO=true
-FLAG_UBUNTU=""
 IS_CYGWIN=""
-FLAG_VM=""
 FLAG_PYTHON=""
-FLAG_RUBY=""
 PREZTO_THEME=""
 
 unameOut="$(uname -s)"
@@ -31,7 +28,6 @@ case $HOST in
 		fi
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
-		FLAG_RUBY=""
 		FLAG_HIGHSPEC=true
 		#PREZTO_THEME="powerline"
 		#PREZTO_THEME="adam2"
@@ -39,18 +35,17 @@ case $HOST in
 		;;
 	backuptower*) echo "##backuptower setup"
 		FLAG_PREZTO=true
-		FLAG_UBUNTU=true
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=true
 		#PREZTO_THEME="powerline"
 		PRETO_THEME="adam2"
 		;;
+	ubuntumain*) echo "ubuntumain setup"
+		PREZTO_THEME="fade"
+		;;
 	ubuntusetuptest || ubuntu-erico*) echo "##ubuntusetuptest or ubuntu-rico setup"
 		FLAG_PREZTO=true
-		FLAG_UBUNTU=true
-		FLAG_VM=true
 		FLAG_PYTHON=true
-		FLAG_RUBY=true
 		#PREZTO_THEME="steeef"
 		PREZTO_THEME="pure"
 		;;
@@ -67,10 +62,6 @@ if [ $IS_CYGWIN ]; then
 	chmod +rwx $HOME/.zprezto
 fi
 
-if [ $FLAG_UBUNTU ]; then
-	echo "##conf ubuntu"
-fi
-
 if [ $FLAG_HIGHSPEC ]; then
 	echo "##conf HIGHSPEC"
 	if [ ! $PREZTO_THEME ]; then
@@ -82,21 +73,18 @@ if [ $PREZTO_THEME ]; then
 	echo "set theme $PREZTO_THEME"
 	zstyle ':prezto:module:prompt' theme "$PREZTO_THEME"
 else
-	echo "set theme $PREZTO_THEME"
-	#zstyle ':prezto:module:prompt' theme "sorin"
+	echo "no theme specificated. set theme pure"
 	zstyle ':prezto:module:prompt' theme "pure"
 fi
 
 if [ $FLAG_COMMON ]; then
 	echo "##conf common"
-	[ ! $PREZTO_THEME ] && PREZTO_THEME="damoekri"
 	#zstyle ':prezto:module:terminal' auto-title 'yes'
 	zstyle ':prezto:module:terminal' auto-title 'always'
 	zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
 	zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
 	zstyle ':prezto:module:terminal:multiplexer-title' format '%s'
 fi
-
 
 : <<'#__CO__'
 if [ $ ]; then
@@ -164,7 +152,8 @@ zstyle ':prezto:load' pmodule \
 #
 
 # Set the key mapping style to 'emacs' or 'vi'.
-zstyle ':prezto:module:editor' key-bindings 'vi'
+#zstyle ':prezto:module:editor' key-bindings 'vi'
+zstyle ':prezto:module:editor' key-bindings 'emacs'
 
 # Auto convert .... to ../..
 # zstyle ':prezto:module:editor' dot-expansion 'yes'
