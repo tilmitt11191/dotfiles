@@ -62,6 +62,13 @@ case $HOST in
 	macos.local) echo "##macos.local setup"
 		FLAG_PREZTO=true
 		;;
+	ubuntumain*) echo "##ubuntumain setup"
+		FLAG_PREZTO=true
+		FLAG_UBUNTU=true
+		FLAG_VM=true
+		FLAG_PYTHON=true
+		FLAG_RUBY=true
+		;;
 	ubuntusetuptest) echo "##ubuntusetuptest setup"
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
@@ -98,6 +105,8 @@ if [ $FLAG_COMMON ]; then
 	alias lla='ls -alhG'
 	alias mkdir='mkdir -p'
 	alias vi='vim'
+
+	stty stop undef
 
 	bindkey -e
 	#bindkey "^R" history-incremental-search-backward
@@ -208,3 +217,9 @@ fi
 #__CO__
 
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/alladmin/lib/google-cloud-sdk/path.zsh.inc' ]; then . '/home/alladmin/lib/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/alladmin/lib/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/alladmin/lib/google-cloud-sdk/completion.zsh.inc'; fi
