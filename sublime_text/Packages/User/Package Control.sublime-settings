@@ -10,12 +10,15 @@
 		"Japanize",
 		"Package Control",
 		"Python 3",
+		"Python Flake8 Lint",
 		"Python PEP8 Autoformat",
 		"rsub",
 		"SideBarEnhancements",
 		"SimpleClone",
 		"SublimeLinter",
+		"SublimeLinter-flake8",
 		"SublimeLinter-pep8",
+		"SublimeREPL",
 		"Theme - Asphalt",
 		"Unittest (python)"
 	]
