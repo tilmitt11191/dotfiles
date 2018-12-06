@@ -31,8 +31,8 @@ case $HOST in
 		FLAG_HIGHSPEC=true
 		#PREZTO_THEME="powerline"
 		#PREZTO_THEME="adam2"
-		#PREZTO_THEME="fade"
-		PREZTO_THEME="sorin"
+		PREZTO_THEME="fade"
+		#PREZTO_THEME="sorin"
 		;;
 	backuptower*) echo "##backuptower setup"
 		FLAG_PREZTO=true

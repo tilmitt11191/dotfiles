@@ -122,16 +122,18 @@ fi
 
 if [ $FLAG_PYTHON ];then
 	echo "##conf python"
-	export PYENV_ROOT="$HOME/.pyenv"
-	export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
-	eval "$(pyenv init -)"
-	#if [ $IS_CYGWIN ];then
-	#	alias 'python'="$HOME/bin/winpty/build/winpty.exe python"
-	#	alias 'ipython'="$HOME/bin/winpty/build/winpty.exe ipython"
-	#fi
-	alias activate-anaconda="source $HOME/.pyenv/versions/anaconda/bin/activate"
-	alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
-	activate-anaconda mypy > /dev/null 2>&1 || activate-anaconda py3.6 > /dev/null 2>&1 || activate-anaconda py3.7 > /dev/null 2>&1
+	if [ $IS_CYGWIN ];then
+		#	alias 'python'="$HOME/bin/winpty/build/winpty.exe python"
+		#	alias 'ipython'="$HOME/bin/winpty/build/winpty.exe ipython"
+		:
+	else
+		export PYENV_ROOT="$HOME/.pyenv"
+		export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
+		eval "$(pyenv init -)"
+		alias activate-anaconda="source $HOME/.pyenv/versions/anaconda/bin/activate"
+		alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
+		activate-anaconda mypy > /dev/null 2>&1 || activate-anaconda py3.6 > /dev/null 2>&1 || activate-anaconda py3.7 > /dev/null 2>&1
+	fi
 fi
 
 
