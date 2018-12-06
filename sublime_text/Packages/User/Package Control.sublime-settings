@@ -6,15 +6,13 @@
 	"installed_packages":
 	[
 		"Boxy Theme",
+		"IPython Notebook",
 		"Japanize",
 		"Package Control",
 		"Python 3",
-		"Python Flake8 Lint",
-		"Python PEP8 Autoformat",
 		"rsub",
 		"SideBarEnhancements",
 		"SimpleClone",
-		"SummitLinter",
 		"Theme - Asphalt"
 	]
 }

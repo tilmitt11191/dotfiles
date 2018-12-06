@@ -29,9 +29,9 @@ case $HOST in
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=true
-		#PREZTO_THEME="powerline"
+		PREZTO_THEME="powerline"
 		#PREZTO_THEME="adam2"
-		PREZTO_THEME="fade"
+		#PREZTO_THEME="fade"
 		;;
 	backuptower*) echo "##backuptower setup"
 		FLAG_PREZTO=true
