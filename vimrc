@@ -34,13 +34,16 @@ elseif hostname() == "macos.local"
 elseif hostname() == "PC"
 	"colorscheme base16-railscasts
 	"colorscheme molokai
+	"colorscheme hybrid
 	colorscheme twilight
+	"colorscheme jellybeans
 	highlight Normal ctermbg=none
 elseif hostname() == "mba-win"
 	colorscheme molokai
 elseif hostname() == "www2271.sakura.ne.jp"
 	"colorscheme molokai
-	colorscheme twilight
+	"colorscheme twilight
+	colorscheme hybrid
 	highlight Normal ctermbg=none
 endif	
 	"colorscheme hybrid
@@ -82,14 +85,12 @@ elseif hostname() == "macos.local"
 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 elseif hostname() == "PC" || hostname() == "mba-win"
-
 	hi Normal ctermfg=252 ctermbg=none
 	hi LineNr ctermbg=none ctermfg=darkcyan
-	hi clear CursorLine
 	hi CursorLineNr ctermbg=4 ctermfg=0
 	hi clear CursorLine
-	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+	"let &t_EI = "\<Esc>]50;iCursorShape=0\x7"
+	"let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 elseif hostname() == "www2271.sakura.ne.jp" || hostname() == "Gemini"
 	hi Normal ctermfg=252 ctermbg=none
 	hi LineNr ctermbg=none ctermfg=darkcyan
@@ -100,13 +101,6 @@ elseif hostname() == "www2271.sakura.ne.jp" || hostname() == "Gemini"
 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 endif
-
-""general
-"set tabstop=2
-"set autoindent
-"set backspace=indent,eol,start
-"set title
-"set showmatch
 
 ""color
 "syntax enable

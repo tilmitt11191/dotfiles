@@ -1,0 +1,11 @@
+{
+    "cmd": ["c://Users/tilmi/Anaconda3/envs/mypy/python.exe", "-u", "$file"],
+    "selector": "source.python",
+    "file_regex": "file \"(...*?)\", line ([0-9]+)",
+    "env": {"LANG": "ja_JP.UTF-8"},
+
+    "windows":
+    {
+        "encoding": "cp932",
+    }
+}

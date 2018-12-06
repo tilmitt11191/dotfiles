@@ -1,1 +1,0 @@
-/home/alladmin/.dotfiles/vimrc

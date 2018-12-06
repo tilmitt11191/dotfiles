@@ -24,6 +24,7 @@ FLAG_TMUX=true
 FLAG_PYTHON=""
 FLAG_RUBY=""
 FLAG_GOLANG=true
+FLAG_GOOGLE_CLOUD_SDK=""
 unameOut="$(uname -s)"
 IS_CYGWIN=""
 IS_MAC=""
@@ -52,6 +53,7 @@ case $HOST in
 		FLAG_PYTHON=true
 		FLAG_RUBY=""
 		FLAG_HIGHSPEC=true
+		FLAG_GOOGLE_CLOUD_SDK=true
 		;;
 	backuptower) echo "##backuptower setup"
 		FLAG_PREZTO=true
@@ -68,6 +70,7 @@ case $HOST in
 		FLAG_VM=true
 		FLAG_PYTHON=true
 		FLAG_RUBY=true
+		FLAG_GOOGLE_CLOUD_SDK="true"
 		;;
 	ubuntusetuptest) echo "##ubuntusetuptest setup"
 		FLAG_PREZTO=true
@@ -82,6 +85,7 @@ case $HOST in
 		FLAG_VM=true
 		FLAG_PYTHON=true
 		FLAG_RUBY=true
+		FLAG_GOOGLE_CLOUD_SDK="true"
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
@@ -114,6 +118,22 @@ if [ $FLAG_COMMON ]; then
 	autoload -Uz compinit
 	compinit
 fi
+
+
+if [ $FLAG_PYTHON ];then
+	echo "##conf python"
+	export PYENV_ROOT="$HOME/.pyenv"
+	export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
+	eval "$(pyenv init -)"
+	#if [ $IS_CYGWIN ];then
+	#	alias 'python'="$HOME/bin/winpty/build/winpty.exe python"
+	#	alias 'ipython'="$HOME/bin/winpty/build/winpty.exe ipython"
+	#fi
+	alias activate-anaconda="source $HOME/.pyenv/versions/anaconda/bin/activate"
+	alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
+	activate-anaconda mypy > /dev/null 2>&1 || activate-anaconda py3.6 > /dev/null 2>&1 || activate-anaconda py3.7 > /dev/null 2>&1
+fi
+
 
 if [ $FLAG_PREZTO ];then
 	echo "##conf prezto"
@@ -177,18 +197,6 @@ if [ $FLAG_VM ];then
 fi
 
 
-if [ $FLAG_PYTHON ];then
-	echo "##conf python"
-	export PYENV_ROOT="$HOME/.pyenv"
-	export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
-	eval "$(pyenv init -)"
-
-	alias activate-anaconda="source $HOME/.pyenv/versions/anaconda/bin/activate"
-	alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
-	#source $PYENV_ROOT/versions/anaconda/bin/activate py3.6 > /dev/null 2>&1 || source $PYENV_ROOT/versions/anaconda/bin/activate py3.7 > /dev/null 2>&1
-fi
-
-
 if [ $FLAG_RUBY ];then
 	echo "##conf ruby"
 	export PATH="$HOME/.rbenv/bin:$PATH"
@@ -208,6 +216,14 @@ if [ $FLAG_HIGHSPEC ];then
 	echo "##conf highspec"
 fi
 
+if [ $FLAG_GOOGLE_CLOUD_SDK ];then
+	# The next line updates PATH for the Google Cloud SDK.
+	if [ -f '/home/alladmin/lib/google-cloud-sdk/path.zsh.inc' ]; then . '/home/alladmin/lib/google-cloud-sdk/path.zsh.inc'; fi
+
+	# The next line enables shell command completion for gcloud.
+	if [ -f '/home/alladmin/lib/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/alladmin/lib/google-cloud-sdk/completion.zsh.inc'; fi
+fi
+
 echo "welcome to $HOST!!"
 
 : <<'#__CO__'
@@ -218,8 +234,3 @@ fi
 
 
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/alladmin/lib/google-cloud-sdk/path.zsh.inc' ]; then . '/home/alladmin/lib/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/alladmin/lib/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/alladmin/lib/google-cloud-sdk/completion.zsh.inc'; fi
