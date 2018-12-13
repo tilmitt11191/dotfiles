@@ -1,17 +1,4 @@
 
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-	source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
-
-# Customize to your needs...
 echo "####conf my .zshrc"
 FLAG_COMMON=true
 FLAG_HIGHSPEC=""
@@ -46,6 +33,9 @@ case $HOST in
 			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe `cygpath -aw $*` &
 			}
 			source /cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/path.zsh.inc
+			alias python='/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/python.exe'
+			alias pip=' /cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/pip.exe'
+			#PATH="/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy:/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/:$PATH"
 		elif [ $IS_LINUX ];then
 			echo "##this is Linux"
 		fi
@@ -107,7 +97,6 @@ if [ $FLAG_COMMON ]; then
 	alias ls='ls -G'
 	alias ll='ls -lhG'
 	alias lla='ls -alhG'
-	alias mkdir='mkdir -p'
 	alias vi='vim'
 
 	stty stop undef
@@ -123,11 +112,11 @@ fi
 if [ $FLAG_PYTHON ];then
 	echo "##conf python"
 	export PYENV_ROOT="$HOME/.pyenv"
-	export ANAENVS="$PYENV_ROOT/versions/anaconda/envs"
 	if [ $IS_CYGWIN ];then
+		ANACONDA_ROOT="/cygdrive/c/Users/`whoami`/Anaconda3"
+		export PATH="$ANACONDA_ROOT:$ANACONDA_ROOT/Scripts:$PATH"
 		#	alias 'python'="$HOME/bin/winpty/build/winpty.exe python"
 		#	alias 'ipython'="$HOME/bin/winpty/build/winpty.exe ipython"
-		:
 	else
 		export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
 		eval "$(pyenv init -)"
@@ -140,6 +129,9 @@ fi
 
 if [ $FLAG_PREZTO ];then
 	echo "##conf prezto"
+	if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+		source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+	fi
 	[ `alias | grep rm=` ] && unalias rm
 	setopt CLOBBER
 	unsetopt alwaystoend

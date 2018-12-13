@@ -6,19 +6,21 @@
 	"installed_packages":
 	[
 		"Boxy Theme",
+		"Git",
+		"GitGutter",
 		"IPython Notebook",
 		"Japanize",
 		"Package Control",
 		"Python 3",
-		"Python Flake8 Lint",
 		"Python PEP8 Autoformat",
 		"rsub",
 		"SideBarEnhancements",
 		"SimpleClone",
 		"SublimeLinter",
-		"SublimeLinter-flake8",
 		"SublimeLinter-pep8",
+		"SublimeLinter-pyflakes",
 		"SublimeREPL",
+		"Terminal",
 		"Theme - Asphalt",
 		"Unittest (python)"
 	]

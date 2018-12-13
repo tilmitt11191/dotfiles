@@ -79,13 +79,13 @@
     "complexity": -1,
 
     // set desired max line length
-    "pep8_max_line_length": 1000,
+    "pep8_max_line_length": 79,
 
     // select errors and warnings (e.g. ["E", "W6"])
     "select": [],
     // skip errors and warnings (e.g. ["E303", "E4", "W"])
-    //"ignore": ["E402", "D206 ", "W191", "E101", "E223", "E224", "E242", "F821"],
-    "ignore": ["E265", "E501", "W191"],
+    "ignore": ["E121", "E123", "E126", "E226", "E24", "E704", "D203", "E265", "E501", "W191"],
+    //"ignore": [],
     // files to ignore, for example: ["*.mako", "test*.py"]
     "ignore_files": []
 }

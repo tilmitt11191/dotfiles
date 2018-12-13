@@ -1,0 +1,14 @@
+{
+    "lint_mode": "load_save",
+    "linters": {
+        "pydocstyle": {
+            "ignore": "D100,D101,D102,D103,D104,D105",
+        },
+        "pep8": {
+            "ignore": "E402, E501, W191"
+        },
+        "flake8": {
+            "args": ["--ignore=E501"],
+        }
+    }
+}

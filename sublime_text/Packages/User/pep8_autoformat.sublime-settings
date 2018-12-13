@@ -1,5 +1,5 @@
 {
 	// autoformat code on save
 	"autoformat_on_save": false,
-	"ignore": ["D206 ", "W191", "E101", "E223", "E224", "E242"]
+	"ignore": ["E121", "E123", "E126", "E226", "E24", "E704", "D203", "E265", "E501", "W191"]
 }
