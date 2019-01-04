@@ -7,6 +7,7 @@ FLAG_PECO=true
 IS_CYGWIN=""
 FLAG_UBUNTU=""
 FLAG_VM=""
+FLAG_SAKURA=""
 FLAG_TMUX=true
 FLAG_PYTHON=""
 FLAG_RUBY=""
@@ -77,6 +78,13 @@ case $HOST in
 		FLAG_PYTHON=true
 		FLAG_RUBY=true
 		FLAG_GOOGLE_CLOUD_SDK="true"
+		FLAG_COMMON=true
+		;;
+	www2271.sakura.ne.jp*) echo "##sakura setup"
+		FLAG_SAKURA=true
+		FLAG_PREZTO=true
+		FLAG_GOOGLE_CLOUD_SDK="true"
+		FLAG_COMMON=true
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
@@ -192,6 +200,10 @@ if [ $FLAG_VM ];then
 	echo "##conf VM"
 fi
 
+if [ $FLAG_SAKURA ];then
+	echo "##conf sakura"
+	export MAILCHECK=0
+fi
 
 if [ $FLAG_RUBY ];then
 	echo "##conf ruby"
@@ -214,10 +226,10 @@ fi
 
 if [ $FLAG_GOOGLE_CLOUD_SDK ];then
 	# The next line updates PATH for the Google Cloud SDK.
-	if [ -f '/home/alladmin/lib/google-cloud-sdk/path.zsh.inc' ]; then . '/home/alladmin/lib/google-cloud-sdk/path.zsh.inc'; fi
+	if [ -f '$HOME/lib/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/lib/google-cloud-sdk/path.zsh.inc'; fi
 
 	# The next line enables shell command completion for gcloud.
-	if [ -f '/home/alladmin/lib/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/alladmin/lib/google-cloud-sdk/completion.zsh.inc'; fi
+	if [ -f '$HOME/lib/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/lib/google-cloud-sdk/completion.zsh.inc'; fi
 fi
 
 echo "welcome to $HOST!!"
