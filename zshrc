@@ -83,7 +83,7 @@ case $HOST in
 	www2271.sakura.ne.jp*) echo "##sakura setup"
 		FLAG_SAKURA=true
 		FLAG_PREZTO=true
-		FLAG_GOOGLE_CLOUD_SDK="true"
+		FLAG_GOOGLE_CLOUD_SDK=true
 		FLAG_COMMON=true
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
@@ -203,6 +203,11 @@ fi
 if [ $FLAG_SAKURA ];then
 	echo "##conf sakura"
 	export MAILCHECK=0
+	export PATH="$HOME/lib/google-cloud-sdk/bin/:$PATH"
+	export PATH="$HOME/lib/python/bin:$PATH"
+	export PYTHONPATH="$HOME/lib/python/lib/python3.6/site-packages"
+	export LD_LIBRARY_PATH="$HOME/lib/python/lib"
+
 fi
 
 if [ $FLAG_RUBY ];then
@@ -225,6 +230,7 @@ if [ $FLAG_HIGHSPEC ];then
 fi
 
 if [ $FLAG_GOOGLE_CLOUD_SDK ];then
+	echo "##setup google clud sdk"
 	# The next line updates PATH for the Google Cloud SDK.
 	if [ -f '$HOME/lib/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/lib/google-cloud-sdk/path.zsh.inc'; fi
 

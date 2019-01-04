@@ -13,6 +13,7 @@ IS_LINUX=""
 case "${unameOut}" in
 	CYGWIN*) IS_CYGWIN=true;;
 	Linux*) IS_LINUX=true;;
+	FreeBSD*) IS_LINUX=true;;
 	*) echo "##this is neither Cygwin nor Linux. exit 1" && exit 1;;
 esac
 
@@ -44,11 +45,18 @@ case $HOST in
 	ubuntumain*) echo "ubuntumain setup"
 		PREZTO_THEME="fade"
 		;;
-	ubuntusetuptest || ubuntu-erico*) echo "##ubuntusetuptest or ubuntu-rico setup"
+	ubuntusetuptest | ubuntu-erico*) echo "##ubuntusetuptest or ubuntu-rico setup"
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		#PREZTO_THEME="steeef"
 		PREZTO_THEME="pure"
+		;;
+	www2271.sakura.ne.jp*) echo "##sakura setup"
+		FLAG_PREZTO=true
+		FLAG_PYTHON=true
+		#PREZTO_THEME=powerline
+		#PRETO_THEME="adam2"
+		PREZTO_THEME="steeef"
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
