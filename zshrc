@@ -71,7 +71,7 @@ case $HOST in
 		FLAG_PYTHON=true
 		FLAG_RUBY=true
 		;;
-	ubuntu-pcap | ubuntu-erico*) echo "##ubuntu-pcap or ubuntu-erico setup"
+	ubuntu-pcap) echo "##ubuntu-pcap setup"
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
 		FLAG_VM=true
@@ -79,6 +79,23 @@ case $HOST in
 		FLAG_RUBY=true
 		FLAG_GOOGLE_CLOUD_SDK="true"
 		FLAG_COMMON=true
+		;;
+	ubuntu-erico*) echo "##ubuntu-erico setup"
+		FLAG_PREZTO=true
+		FLAG_UBUNTU=true
+		FLAG_VM=true
+		FLAG_PYTHON=""
+		FLAG_RUBY=true
+		FLAG_GOOGLE_CLOUD_SDK="true"
+		FLAG_COMMON=true
+		export PYENV_ROOT="$HOME/.pyenv"
+		export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
+		eval "$(pyenv init -)"
+		alias activate-anaconda="source $HOME/.pyenv/versions/anaconda/bin/activate"
+		alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
+		activate-anaconda py3.6
+		activate-anaconda py2.7
+		PATH=$PATH:`chromedriver-path`
 		;;
 	www2271.sakura.ne.jp*) echo "##sakura setup"
 		FLAG_SAKURA=true
