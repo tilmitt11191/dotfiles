@@ -89,13 +89,13 @@ case $HOST in
 		FLAG_RUBY=true
 		FLAG_GOOGLE_CLOUD_SDK="true"
 		FLAG_COMMON=true
-		export PYENV_ROOT="$HOME/.pyenv"
-		export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
-		eval "$(pyenv init -)"
-		alias activate-anaconda="source $HOME/.pyenv/versions/anaconda/bin/activate"
-		alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
-		activate-anaconda py3.6
-		activate-anaconda py2.7
+		#export PYENV_ROOT="$HOME/.pyenv"
+		#export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
+		#eval "$(pyenv init -)"
+		echo "activate py3.6"
+		source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
+		echo "activate py2.7"
+		source $HOME/.pyenv/versions/anaconda/bin/activate py2.7
 		PATH=$PATH:`chromedriver-path`
 		;;
 	www2271.sakura.ne.jp*) echo "##sakura setup"

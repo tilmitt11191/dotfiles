@@ -45,10 +45,14 @@ case $HOST in
 	ubuntumain*) echo "ubuntumain setup"
 		PREZTO_THEME="fade"
 		;;
-	ubuntusetuptest | ubuntu-erico*) echo "##ubuntusetuptest or ubuntu-rico setup"
+	ubuntusetuptest*) echo "##ubuntusetuptest"
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		#PREZTO_THEME="steeef"
+		PREZTO_THEME="pure"
+		;;
+	ubuntu-erico*) echo "##ubuntu-erico setup"
+		FLAG_PREZTO=true
 		PREZTO_THEME="pure"
 		;;
 	www2271.sakura.ne.jp*) echo "##sakura setup"
