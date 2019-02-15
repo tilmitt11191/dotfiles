@@ -1,10 +1,15 @@
 {
-    "lint_mode": "load_save",
+    "lint_mode": "background",
+    "paths": {
+        "linux": [],
+        "osx": [],
+        "windows": ["C:\\Users\\tilmi\\Anaconda3\\envs\\mypy\\",]
+    },
     "linters": {
         "pydocstyle": {
             "ignore": "D100,D101,D102,D103,D104,D105",
         },
-        "pep8": {
+        "pylint": {
             "ignore": "E402, E501, W191"
         },
         "flake8": {
