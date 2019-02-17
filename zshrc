@@ -35,8 +35,20 @@ case $HOST in
 			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe `cygpath -aw $*` &
 			}
 			source /cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/path.zsh.inc
-			alias python='/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/python.exe'
-			alias pip=' /cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/pip.exe'
+			ANACONDA_ROOT="/cygdrive/c/Users/`whoami`/Anaconda3"
+			export PATH="$ANACONDA_ROOT:$ANACONDA_ROOT/bin:$ANACONDA_ROOT/Scripts:$PATH"
+			echo "activate py3.6"
+			export PATH="$ANACONDA_ROOT/envs/py3.6:$ANACONDA_ROOT/envs/py3.6/Scripts:$PATH"
+			#source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
+			echo "which python3: `which python3`"
+			echo "activate py2.7"
+			#source $HOME/.pyenv/versions/anaconda/bin/activate py2.7
+			export PATH="$ANACONDA_ROOT/envs/py2.7:$ANACONDA_ROOT/envs/py2.7/Scripts:$PATH"
+			echo "which python: `which python`"
+			FLAG_PYTHON=""
+
+			#alias python='/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/python.exe'
+			#alias pip=' /cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/pip.exe'
 			#PATH="/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy:/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/:$PATH"
 		elif [ $IS_LINUX ];then
 			echo "##this is Linux"
@@ -147,7 +159,7 @@ if [ $FLAG_PYTHON ];then
 	else
 		export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
 		eval "$(pyenv init -)"
-		alias activate-anaconda="source $HOME/.pyenv/versions/anaconda/bin/activate"
+		alias activate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/activate"
 		alias deactivate-anaconda="source $PYENV_ROOT/versions/anaconda/bin/deactivate"
 		activate-anaconda mypy > /dev/null 2>&1 || activate-anaconda py3.6 > /dev/null 2>&1 || activate-anaconda py3.7 > /dev/null 2>&1
 	fi
