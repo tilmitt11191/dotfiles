@@ -28,6 +28,11 @@ esac
 
 case $HOST in
 	PC) echo "##PC setup"
+		FLAG_PREZTO=true
+		FLAG_PYTHON=true
+		FLAG_RUBY=""
+		FLAG_HIGHSPEC=true
+		FLAG_GOOGLE_CLOUD_SDK=true
 		if [ $IS_CYGWIN ];then
 			echo "##this is  Cygwin"
 			IS_CYGWIN=true
@@ -36,28 +41,24 @@ case $HOST in
 			}
 			source /cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/path.zsh.inc
 			ANACONDA_ROOT="/cygdrive/c/Users/`whoami`/Anaconda3"
-			export PATH="$ANACONDA_ROOT:$ANACONDA_ROOT/bin:$ANACONDA_ROOT/Scripts:$PATH"
+			#export PATH="$ANACONDA_ROOT:$ANACONDA_ROOT/bin:$ANACONDA_ROOT/Scripts:$PATH"
 			echo "activate py3.6"
 			export PATH="$ANACONDA_ROOT/envs/py3.6:$ANACONDA_ROOT/envs/py3.6/Scripts:$PATH"
 			#source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
-			echo "which python3: `which python3`"
 			echo "activate py2.7"
 			#source $HOME/.pyenv/versions/anaconda/bin/activate py2.7
 			export PATH="$ANACONDA_ROOT/envs/py2.7:$ANACONDA_ROOT/envs/py2.7/Scripts:$PATH"
-			echo "which python: `which python`"
 			FLAG_PYTHON=""
 
 			#alias python='/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/python.exe'
 			#alias pip=' /cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/pip.exe'
 			#PATH="/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy:/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/:$PATH"
+			echo "which python3: `which python3`"
+			echo "which python: `which python`"
+			
 		elif [ $IS_LINUX ];then
 			echo "##this is Linux"
 		fi
-		FLAG_PREZTO=true
-		FLAG_PYTHON=true
-		FLAG_RUBY=""
-		FLAG_HIGHSPEC=true
-		FLAG_GOOGLE_CLOUD_SDK=true
 		;;
 	backuptower) echo "##backuptower setup"
 		FLAG_PREZTO=true
