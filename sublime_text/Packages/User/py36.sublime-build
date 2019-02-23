@@ -1,5 +1,5 @@
 {
-    "cmd": ["C://Users/tilmi/Anaconda3/envs/py3.6/python.exe", "-u", "$file"],
+    "cmd": ["c://Users/tilmi/Anaconda3/envs/py36/python.exe", "-u", "$file"],
     "selector": "source.python",
     "file_regex": "file \"(...*?)\", line ([0-9]+)",
     "env": {"LANG": "ja_JP.UTF-8"},

@@ -3,7 +3,7 @@
     "paths": {
         "linux": [],
         "osx": [],
-        "windows": ["C:\\Users\\tilmi\\Anaconda3\\envs\\mypy\\",]
+        "windows": ["C:\\Users\\tilmi\\Anaconda3\\envs\\py36\\",]
     },
     "linters": {
         "pydocstyle": {

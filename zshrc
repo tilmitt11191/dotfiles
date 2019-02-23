@@ -40,21 +40,24 @@ case $HOST in
 			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe `cygpath -aw $*` &
 			}
 			source /cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/path.zsh.inc
+			export PATH="$HOME/lib/intel_mkl:$PATH"
 			ANACONDA_ROOT="/cygdrive/c/Users/`whoami`/Anaconda3"
 			#export PATH="$ANACONDA_ROOT:$ANACONDA_ROOT/bin:$ANACONDA_ROOT/Scripts:$PATH"
-			echo "activate py3.6"
-			export PATH="$ANACONDA_ROOT/envs/py3.6:$ANACONDA_ROOT/envs/py3.6/Scripts:$PATH"
+			echo "activate py36"
+			export PATH="$ANACONDA_ROOT/envs/py36:$ANACONDA_ROOT/envs/py36/Scripts:$PATH"
 			#source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
-			echo "activate py2.7"
+			echo "activate py27"
 			#source $HOME/.pyenv/versions/anaconda/bin/activate py2.7
-			export PATH="$ANACONDA_ROOT/envs/py2.7:$ANACONDA_ROOT/envs/py2.7/Scripts:$PATH"
+			export PATH="$ANACONDA_ROOT/envs/py27:$ANACONDA_ROOT/envs/py27/Scripts:$PATH"
 			FLAG_PYTHON=""
 
 			#alias python='/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/python.exe'
 			#alias pip=' /cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/pip.exe'
 			#PATH="/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy:/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/:$PATH"
 			echo "which python3: `which python3`"
+			echo "which pip3: `which pip3`"
 			echo "which python: `which python`"
+			echo "which pip: `which pip`"
 			
 		elif [ $IS_LINUX ];then
 			echo "##this is Linux"
