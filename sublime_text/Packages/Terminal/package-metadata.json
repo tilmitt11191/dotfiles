@@ -1,1 +1,1 @@
-{"sublime_text": "*", "description": "Launch terminals from the current file or the root project folder", "url": "https://packagecontrol.io/packages/Terminal", "platforms": ["*"], "version": "1.18.0", "dependencies": []}
+{"platforms": ["*"], "url": "https://packagecontrol.io/packages/Terminal", "version": "1.19.0", "dependencies": [], "sublime_text": "*", "description": "Launch terminals from the current file or the root project folder"}

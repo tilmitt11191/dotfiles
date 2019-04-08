@@ -66,9 +66,15 @@ case $HOST in
 	backuptower) echo "##backuptower setup"
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
-		FLAG_PYTHON=true
+		FLAG_PYTHON=""
 		FLAG_RUBY=true
 		FLAG_HIGHSPEC=true
+		FLAG_GOOGLE_CLOUD_SDK=true
+		FLAG_COMMON=true
+		echo "activate py3.6"
+		source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
+		echo "activate py2.7"
+		source $HOME/.pyenv/versions/anaconda/bin/activate py2.7		
 		;;
 	macos.local) echo "##macos.local setup"
 		FLAG_PREZTO=true
@@ -103,7 +109,7 @@ case $HOST in
 		FLAG_VM=true
 		FLAG_PYTHON=""
 		FLAG_RUBY=true
-		FLAG_GOOGLE_CLOUD_SDK="true"
+		FLAG_GOOGLE_CLOUD_SDK=true
 		FLAG_COMMON=true
 		#export PYENV_ROOT="$HOME/.pyenv"
 		#export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
