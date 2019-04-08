@@ -23,7 +23,7 @@ if hostname() == "ubuntu128" || hostname() == "ubuntuMain2"
 	"colorscheme monokai
 	highlight Normal ctermbg=none
 elseif hostname() == "backuptower"
-	colorscheme hybrid
+	colorscheme molokai
 	highlight Normal ctermbg=none
 elseif hostname() == "ubuntuSim"
 	colorscheme twilight
