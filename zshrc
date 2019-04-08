@@ -72,9 +72,9 @@ case $HOST in
 		FLAG_GOOGLE_CLOUD_SDK=true
 		FLAG_COMMON=true
 		echo "activate py3.6"
-		source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
+		source $HOME/.pyenv/versions/anaconda/bin/activate py36
 		echo "activate py2.7"
-		source $HOME/.pyenv/versions/anaconda/bin/activate py2.7		
+		source $HOME/.pyenv/versions/anaconda/bin/activate py27		
 		;;
 	macos.local) echo "##macos.local setup"
 		FLAG_PREZTO=true
