@@ -18,7 +18,7 @@ endif
 ""color
 syntax enable
 
-if hostname() == "ubuntu128" || hostname() == "ubuntuMain2" || hostname() == "bakuptower"
+if hostname() == "ubuntu128" || hostname() == "ubuntuMain2"
 	colorscheme twilight
 	"colorscheme monokai
 	highlight Normal ctermbg=none
@@ -75,6 +75,7 @@ if hostname() == "ubuntu128" || hostname() == "ubuntuMain2"
 	set cursorline
 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+
 elseif hostname() == "macos.local"
 	set cursorline
 	hi LineNr ctermbg=none ctermfg=blue
@@ -91,6 +92,7 @@ elseif hostname() == "PC" || hostname() == "mba-win"
 	hi clear CursorLine
 	"let &t_EI = "\<Esc>]50;iCursorShape=0\x7"
 	"let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+
 elseif hostname() == "www2271.sakura.ne.jp" || hostname() == "backuptower"
 	hi Normal ctermfg=252 ctermbg=none
 	hi LineNr ctermbg=none ctermfg=darkcyan
