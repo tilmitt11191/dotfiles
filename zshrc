@@ -27,7 +27,7 @@ esac
 
 
 case $HOST in
-	PC) echo "##PC setup"
+	PC | workingtower) echo "##PC or workingtower setup"
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		FLAG_RUBY=""
