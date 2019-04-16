@@ -1,5 +1,5 @@
 
-echo #### zpreztorc
+echo "#### zpreztorc"
 ####my confs
 FLAG_COMMON=true
 FLAG_PREZTO=true
