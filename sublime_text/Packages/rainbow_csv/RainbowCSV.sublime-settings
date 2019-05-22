@@ -1,0 +1,35 @@
+{
+    // Disable Rainbow CSV for files bigger than the specified size. 
+    // This can be helpful to prevent poor performance and crashes with very large files.
+    // Manual separator selection will override this setting for the current file.
+    "rainbow_csv_max_file_size_bytes": 5000000,
+
+
+    // Enable content-based separator autodetection.
+    // Files with ".csv" and ".tsv" extensions are always highlighted no matter what is the value of this option.
+    "enable_rainbow_csv_autodetect": true,
+
+    // List of CSV dialects to autodetect.
+    // If "enable_rainbow_csv_autodetect" is set to false this setting is ignored
+    "rainbow_csv_autodetect_dialects": [["\t", "simple"], [",", "quoted"], [";", "quoted"]],
+
+    // Auto adjust rainbow colors for Packages/User/RainbowCSV.sublime-color-scheme
+    // Rainbow CSV will auto-generate color theme with high-contrast colors to make CSV columns more distinguishable.
+    // You can disable this setting and manually customize Rainbow CSV color scheme at Packages/User/RainbowCSV.sublime-color-scheme
+    // Do not customize Packages/User/RainbowCSV.sublime-color-scheme without disabling the setting, it will be rewritten by the plugin
+    "auto_adjust_rainbow_colors": true,
+
+
+    // RBQL backend language.
+    // Supported values: "Python", "JS"
+    // In order to use RBQL with JavaScript (JS) you need to have Node JS installed and added to your system path.
+    "rbql_backend_language": "Python",
+
+
+    // Format of RBQL result set tables.
+    // Supported values: "input", "tsv", "csv"
+    // * input: same format as the input table
+    // * tsv: tab separated values.
+    // * csv: is Excel-compatible and allows quoted commas.
+    "rbql_output_format": "input"
+}
