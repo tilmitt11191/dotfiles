@@ -68,13 +68,14 @@ case $HOST in
 		FLAG_UBUNTU=true
 		FLAG_PYTHON=""
 		FLAG_RUBY=true
-		FLAG_HIGHSPEC=true
+		#FLAG_HIGHSPEC=true
 		FLAG_GOOGLE_CLOUD_SDK=true
 		FLAG_COMMON=true
 		echo "activate py3.6"
 		source $HOME/.pyenv/versions/anaconda/bin/activate py36
 		echo "activate py2.7"
 		source $HOME/.pyenv/versions/anaconda/bin/activate py27		
+		PATH=$PATH:`chromedriver-path`
 		;;
 	macos.local) echo "##macos.local setup"
 		FLAG_PREZTO=true
