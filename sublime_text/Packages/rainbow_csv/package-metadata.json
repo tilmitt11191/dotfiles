@@ -1,0 +1,1 @@
+{"url": "https://github.com/mechatroner/sublime_rainbow_csv", "sublime_text": ">=3000", "description": ":rainbow: Highlight columns in CSV and TSV files and run queries in SQL-like language", "platforms": ["*"], "version": "1.2.1", "dependencies": []}
