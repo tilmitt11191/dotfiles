@@ -1,19 +1,34 @@
 nnoremap <F11> :<C-u>source $MYVIMRC<CR>
 let FLAG_USE_PACKAGE = "False"
 let FLAG_COMMON = "True"
-let BACKGROUND_COLOR = "NONE"
+let BACKGROUND_COLOR = "none" "none or black or light
 let COLORSCHEME = "False"
 
 
-if hostname() == "workingtower"
+if hostname() == "workingtower" || hostname() == "mba-win"
 	let FLAG_USE_PACKAGE = "True"
 
 elseif hostname() == "backuptower"
 	let FLAG_USE_PACKAGE = "True"
-	let COLORSCHEME = "default"
-	let BACKGROUND_COLOR = "none"
+	let COLORSCHEME = "railscasts"
+
+elseif hostname() == "macos.local"
+	let FLAG_USE_PACKAGE = "False"
+	let COLORSCHEME = "twilight"
+
+elseif hostname() == "www2271.sakura.ne.jp"
+	let FLAG_USE_PACKAGE = "False"
+	let COLORSCHEME = "hybrid"
+
 endif
-"default base16-railscasts.vim  hybrid.vim  jellybeans.vim  lucius.vim  molokai  railscasts.vim  twilight.vim
+"default base16-railscasts.vim  hybrid  jellybeans  lucius  molokai  railscasts  twilight
+
+
+
+
+
+
+
 
 if FLAG_USE_PACKAGE == "True"
 	set runtimepath+=$HOME/.vim
@@ -22,13 +37,21 @@ endif
 
 if COLORSCHEME != "False"
 	syntax enable
-	autocmd ColorScheme * highlight Normal ctermbg=black guibg=black guifg=black
+	execute "autocmd ColorScheme * highlight Normal ctermbg=".BACKGROUND_COLOR
 	execute "colorscheme ".COLORSCHEME
-	set background=light
+	if COLORSCHEME == "molokai"
+		hi Comment ctermfg=102
+		hi Visual  ctermbg=236
+	endif
 endif
 
 if FLAG_COMMON == "True"
 	set number
+	set tabstop=2
+	set autoindent
+	set backspace=indent,eol,start
+	set title
+	set showmatch
 
 	""cursor
 	set cursorline

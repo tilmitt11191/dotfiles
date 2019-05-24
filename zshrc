@@ -141,7 +141,8 @@ if [ $FLAG_COMMON ]; then
 	HISTFILE=~/.zsh_history
 	HISTSIZE=1000000
 	SAVEHIST=1000000
-
+	export TERM=xterm-256color
+	
 	PATH=$HOME/bin:$PATH
 	
 	alias ls='ls -G'
