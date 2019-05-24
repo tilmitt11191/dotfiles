@@ -3,14 +3,16 @@ let FLAG_USE_PACKAGE = "False"
 let FLAG_COMMON = "True"
 let BACKGROUND_COLOR = "none" "none or black or light
 let COLORSCHEME = "False"
-
+let FLAG_CURSORLINE = "False"
 
 if hostname() == "workingtower" || hostname() == "mba-win"
-	let FLAG_USE_PACKAGE = "True"
+	let FLAG_USE_PACKAGE = "False"
+	let COLORSCHEME = "railscasts"
 
 elseif hostname() == "backuptower"
 	let FLAG_USE_PACKAGE = "True"
 	let COLORSCHEME = "railscasts"
+	let FLAG_CURSORLINE = "True"
 
 elseif hostname() == "macos.local"
 	let FLAG_USE_PACKAGE = "False"
@@ -52,8 +54,9 @@ if FLAG_COMMON == "True"
 	set backspace=indent,eol,start
 	set title
 	set showmatch
+endif
 
-	""cursor
+if FLAG_CURSORLINE == "True"
 	set cursorline
 	hi LineNr ctermbg=none ctermfg=blue
 	hi CursorLine cterm=underline ctermfg=none ctermbg=none
@@ -61,5 +64,4 @@ if FLAG_COMMON == "True"
 	"hi clear CursorLine
 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-
 endif
