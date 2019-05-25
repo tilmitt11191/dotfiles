@@ -76,6 +76,8 @@ case $HOST in
 		echo "activate py2.7"
 		source $HOME/.pyenv/versions/anaconda/bin/activate py27		
 		PATH=$PATH:`chromedriver-path`
+		export PATH=/usr/local/cuda-9.0/bin${PATH:+:${PATH}}
+		export LD_LIBRARY_PATH=/usr/local/cuda-9.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 		;;
 	macos.local) echo "##macos.local setup"
 		FLAG_PREZTO=true

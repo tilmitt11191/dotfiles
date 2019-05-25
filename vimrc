@@ -12,7 +12,7 @@ if hostname() == "workingtower" || hostname() == "mba-win"
 elseif hostname() == "backuptower"
 	let FLAG_USE_PACKAGE = "True"
 	let COLORSCHEME = "railscasts"
-	let FLAG_CURSORLINE = "True"
+	let FLAG_CURSORLINE = "False"
 
 elseif hostname() == "macos.local"
 	let FLAG_USE_PACKAGE = "False"
