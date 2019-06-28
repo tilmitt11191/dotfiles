@@ -1,7 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_cnt =6
 let g:netrw_dirhist_1='/cygdrive/f/program/puyoque/erico_py/lib/template'
 let g:netrw_dirhist_2='/cygdrive/f/program/puyoque/erico_py/etc'
 let g:netrw_dirhist_3='/cygdrive/f/program/test/tensorFlow_test/samples/im2txt/im2txt'
 let g:netrw_dirhist_4='/cygdrive/f/program/test/tensorFlow_test/samples/im2txt/train2014'
 let g:netrw_dirhist_5='/home/ffffe/program/games/puyoque/erico_py/src/db'
+let g:netrw_dirhist_6='/etc/systemd/system'
