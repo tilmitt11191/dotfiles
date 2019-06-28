@@ -71,13 +71,17 @@ case $HOST in
 		#FLAG_HIGHSPEC=true
 		FLAG_GOOGLE_CLOUD_SDK=true
 		FLAG_COMMON=true
-		echo "activate py3.6"
-		source $HOME/.pyenv/versions/anaconda/bin/activate py36
+		echo "activate py3.7"
+		source $HOME/.pyenv/versions/anaconda/bin/activate py37
 		echo "activate py2.7"
 		source $HOME/.pyenv/versions/anaconda/bin/activate py27		
 		PATH=$PATH:`chromedriver-path`
-		export PATH=/usr/local/cuda-9.0/bin${PATH:+:${PATH}}
-		export LD_LIBRARY_PATH=/usr/local/cuda-9.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+		echo "which python3: `which python3`"
+		echo "which pip3: `which pip3`"
+		echo "which python: `which python`"
+		echo "which pip: `which pip`"
+		export PATH=/usr/local/cuda-10.0/bin${PATH:+:${PATH}}
+		export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 		;;
 	macos.local) echo "##macos.local setup"
 		FLAG_PREZTO=true
