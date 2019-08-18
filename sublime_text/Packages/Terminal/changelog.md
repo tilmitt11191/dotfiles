@@ -1,4 +1,16 @@
 # changelog
+## 1.22.0
+
+- Reverted "Fixed iTerm2 execution via @luisc09 in #207" due to causing breaking changes elsewhere
+
+## 1.21.0
+
+- Fixed iTerm2 execution via @luisc09 in #207
+
+## 1.20.0
+
+- Added support for specifying terminal on per-command basis via @PinataMostGrim in #206. Fixes #16 and #197
+
 ## 1.19.0
 
  - Added support for Hyper via @berkandirim in #205. Fixes #174

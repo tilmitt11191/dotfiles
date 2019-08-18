@@ -1,19 +1,18 @@
+// SublimeLinter Settings - User
 {
-    "lint_mode": "background",
     "paths": {
         "linux": [],
         "osx": [],
-        "windows": ["C:\\Users\\tilmi\\Anaconda3\\envs\\py36\\",]
+        "windows": ["c://Users/tilmi/Anaconda3/envs/py37/python.exe"]
     },
     "linters": {
-        "pydocstyle": {
-            "ignore": "D100,D101,D102,D103,D104,D105",
+       "flake8": {
+           "disable": false,
+           "args": [],
+           "excludes": [],
+           "env": {
+               "PATH": "c://Users/tilmi/Anaconda3/envs/py37/Scripts:$PATH"
+           },
         },
-        "pylint": {
-            "ignore": "E402, E501, W191"
-        },
-        "flake8": {
-            "args": ["--ignore=E501"],
-        }
-    }
+    },
 }
