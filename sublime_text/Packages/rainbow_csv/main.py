@@ -1,13 +1,12 @@
 import os
-import re
 import json
 from functools import partial
 
 import sublime_plugin
 import sublime
 
-import rainbow_csv.rainbow_utils as rainbow_utils
 import rainbow_csv.sublime_rbql as sublime_rbql
+import rainbow_csv.rbql.csv_utils as csv_utils
 
 
 table_index_path = None
@@ -20,12 +19,16 @@ custom_settings = None # Gets auto updated on every SETTINGS_FILE write
 # To debug this package just use python's own print() function - all output would be redirected to sublime text console. View -> Show Console
 
 
-# TODO implement CSVLint
-
 # TODO allow monocolumn tables. This could be complicated because we will need to make sure that F5 button would pass context check
 # Problem with output format in this case - we don't want to use comma because in 99% output would be single column and comma would make it quoted. the optimal way is "lazy" csv: no quoting when output is single column, otherwise regular csv
 
 # TODO consider implementing syntax with newlines-in-fields support. measure performance.
+
+# TODO CSVLint: warn about trailing spaces
+# TODO comments support
+
+# TODO support multi-character separators
+
 
 rainbow_scope_names = [
     'rainbow1',
@@ -68,6 +71,44 @@ policy_map = {'simple': 'Simple', 'quoted': 'Standard'}
 naughty_delims_map_inv = {v: k for k, v in naughty_delims_map.items()}
 legacy_syntax_names_inv = {v: k for k, v in legacy_syntax_names.items()}
 policy_map_inv = {v: k for k, v in policy_map.items()}
+
+
+def get_field_by_line_position(fields, query_pos):
+    if not len(fields):
+        return None
+    col_num = 0
+    cpos = len(fields[col_num])
+    while query_pos > cpos and col_num + 1 < len(fields):
+        col_num += 1
+        cpos = cpos + 1 + len(fields[col_num])
+    return col_num
+
+
+def generate_tab_statusline(tabstop_val, template_fields, max_output_len=None):
+    # If separator is not tab, tabstop_val must be set to 1
+    result = list()
+    space_deficit = 0
+    cur_len = 0
+    for nf in range(len(template_fields)):
+        available_space = (1 + len(template_fields[nf]) // tabstop_val) * tabstop_val
+        column_name = 'a{}'.format(nf + 1)
+        extra_len = available_space - len(column_name) - 1
+        if extra_len < 0:
+            space_deficit += abs(extra_len)
+            extra_len = 0
+        else:
+            regained = min(space_deficit, extra_len)
+            space_deficit -= regained
+            extra_len -= regained
+        space_filling = ' ' * (1 + extra_len)
+        if max_output_len is not None and cur_len + len(column_name) > max_output_len:
+            break
+        result.append(column_name)
+        result.append(space_filling)
+        cur_len += len(column_name) + len(space_filling)
+    if len(result):
+        result[-1] = ''
+    return result
 
 
 def init_user_data_paths():
@@ -289,7 +330,7 @@ def sample_lines(view):
 
 def get_document_header(view, delim, policy):
     header_line = get_line_text(view, 0)
-    return rainbow_utils.smart_split(header_line, delim, policy, False)[0]
+    return csv_utils.smart_split(header_line, delim, policy, False)[0]
 
 
 def is_plain_text(view):
@@ -320,7 +361,6 @@ def get_grammar_basename_from_dialect(delim, policy):
         return None
     if policy == 'quoted' and standard_delims.find(delim) == -1:
         return None
-    policy_map = {'simple': 'Simple', 'quoted': 'Standard'}
     return 'Rainbow CSV {} {}.sublime-syntax'.format(name_normalize(delim), policy_map[policy])
 
 
@@ -350,23 +390,7 @@ def get_dialect(settings):
     return get_dialect_from_grammar_basename(grammar_basename)
 
 
-def idempotent_enable_rainbow(view, delim, policy, wait_time):
-    if wait_time > 10000:
-        return
-    done_loading_cb = partial(idempotent_enable_rainbow, view, delim, policy, wait_time * 2)
-    if view.is_loading():
-        sublime.set_timeout(done_loading_cb, wait_time)
-    else:
-        cur_dialect = get_dialect(view.settings())
-        if cur_dialect is None:
-            return
-        cur_delim, cur_policy = cur_dialect
-        if cur_delim == delim and cur_policy == policy:
-            return
-        do_enable_rainbow(view, delim, policy)
-
-
-def do_enable_rainbow(view, delim, policy, store_settings=True):
+def do_enable_rainbow(view, delim, policy, store_settings):
     auto_adjust_rainbow_colors = get_setting(view, 'auto_adjust_rainbow_colors', True)
     if auto_adjust_rainbow_colors:
         adjust_color_scheme(view)
@@ -383,7 +407,7 @@ def do_enable_rainbow(view, delim, policy, store_settings=True):
         view.settings().set('rainbow_mode', True) # We use this as F5 key condition
     view.set_syntax_file('Packages/rainbow_csv/custom_grammars/{}'.format(grammar_basename))
     file_path = view.file_name()
-    if file_path is not None:
+    if file_path is not None and store_settings:
         save_rainbow_params(file_path, delim, policy)
 
 
@@ -409,21 +433,21 @@ def enable_generic_command(view, policy):
     if len(selection_text) != 1:
         sublime.error_message('Error. Exactly one separator character should be selected.')
         return
-    do_enable_rainbow(view, selection_text, policy)
+    do_enable_rainbow(view, selection_text, policy, store_settings=True)
 
 
 class EnableStandardCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+    def run(self, _edit):
         enable_generic_command(self.view, 'quoted')
 
 
 class EnableSimpleCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+    def run(self, _edit):
         enable_generic_command(self.view, 'simple')
 
 
 class DisableCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+    def run(self, _edit):
         do_disable_rainbow(self.view)
 
 
@@ -477,6 +501,22 @@ def prettify_language_name(language_id):
     return '?'
 
 
+def idempotent_enable_rainbow(view, delim, policy, wait_time):
+    if wait_time > 10000:
+        return
+    done_loading_cb = partial(idempotent_enable_rainbow, view, delim, policy, wait_time * 2)
+    if view.is_loading():
+        sublime.set_timeout(done_loading_cb, wait_time)
+    else:
+        cur_dialect = get_dialect(view.settings())
+        if cur_dialect is None:
+            return
+        cur_delim, cur_policy = cur_dialect
+        if cur_delim == delim and cur_policy == policy:
+            return
+        do_enable_rainbow(view, delim, policy, store_settings=True)
+
+
 def on_query_done(input_line):
     active_window = sublime.active_window()
     if not active_window:
@@ -499,12 +539,17 @@ def on_query_done(input_line):
     input_delim, input_policy = input_dialect
     backend_language = get_backend_language(active_view)
     output_format = get_setting(active_view, 'rbql_output_format', 'input')
+    encoding = get_setting(active_view, 'rbql_encoding', 'latin-1')
+    encoding = encoding.lower()
+    if encoding not in ['latin-1', 'utf-8']:
+        sublime.error_message('RBQL Error. Encoding "{}" is not supported'.format(encoding))
+        return
     format_map = {'input': (input_delim, input_policy), 'csv': (',', 'quoted'), 'tsv': ('\t', 'simple')}
     if output_format not in format_map:
         sublime.error_message('RBQL Error. "rbql_output_format" must be in [{}]'.format(', '.join(format_map.keys())))
         return
     output_delim, output_policy = format_map[output_format]
-    query_result = sublime_rbql.converged_execute(backend_language, file_path, input_line, input_delim, input_policy, output_delim, output_policy)
+    query_result = sublime_rbql.converged_execute(backend_language, file_path, input_line, input_delim, input_policy, output_delim, output_policy, encoding)
     error_type, error_details, warnings, dst_table_path = query_result
     if error_type is not None:
         sublime.error_message('Unable to execute RBQL query :(\nEdit your query and try again!\n\n\n\n\n=============================\nDetails:\n{}\n{}'.format(error_type, error_details))
@@ -538,7 +583,7 @@ def get_column_color(view, col_num):
 def show_names_for_line(view, delim, policy, line_region):
     point = line_region.a
     line_text = view.substr(line_region)
-    fields, warning = rainbow_utils.smart_split(line_text, delim, policy, True)
+    fields = csv_utils.smart_split(line_text, delim, policy, True)[0]
     tab_stop = view.settings().get('tab_size', 4) if delim == '\t' else 1
     layout_width_dip = view.layout_extent()[0]
     font_char_width_dip = view.em_width()
@@ -547,7 +592,7 @@ def show_names_for_line(view, delim, policy, line_region):
     max_status_width = layout_width_dip - dip_reserve
     max_available_chars = max_status_width // font_char_width_dip - char_reserve
 
-    status_labels = rainbow_utils.generate_tab_statusline(tab_stop, fields, max_available_chars)
+    status_labels = generate_tab_statusline(tab_stop, fields, max_available_chars)
     if not len(status_labels):
         return
     num_fields = len(status_labels) // 2
@@ -573,8 +618,120 @@ def show_column_names(view, delim, policy):
     show_names_for_line(view, delim, policy, info_line)
 
 
-class RunQueryCommand(sublime_plugin.TextCommand):
+def calc_column_sizes(view, delim, policy):
+    result = []
+    line_regions = view.lines(sublime.Region(0, view.size()))
+    for ln, lr in enumerate(line_regions):
+        line = view.substr(lr)
+        fields, warning = csv_utils.smart_split(line, delim, policy, True)
+        if warning:
+            return (None, ln)
+        for i in range(len(fields)):
+            if len(result) <= i:
+                result.append(0)
+            result[i] = max(result[i], len(fields[i].strip()))
+    return (result, None)
+
+
+class ShrinkCommand(sublime_plugin.TextCommand):
     def run(self, edit):
+        dialect = get_dialect(self.view.settings())
+        if not dialect:
+            sublime.error_message('Error. You need to select a separator first')
+            return
+        delim, policy = dialect
+        adjusted_lines = []
+        has_edit = False
+        line_regions = self.view.lines(sublime.Region(0, self.view.size()))
+        for ln, lr in enumerate(line_regions):
+            line = self.view.substr(lr)
+            fields, warning = csv_utils.smart_split(line, delim, policy, True)
+            if warning:
+                sublime.error_message('Unable to Shrink: line {} has formatting error: double quote chars are not consistent'.format(ln + 1))
+                return
+            for i in range(len(fields)):
+                adjusted = fields[i].strip()
+                if len(adjusted) != len(fields[i]):
+                    fields[i] = adjusted
+                    has_edit = True
+            adjusted_lines.append(delim.join(fields))
+        if not has_edit:
+            sublime.message_dialog('Table is already shrinked, skipping')
+            return
+        adjusted_content = '\n'.join(adjusted_lines)
+        self.view.replace(edit, sublime.Region(0, self.view.size()), adjusted_content)
+
+
+class AlignCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        dialect = get_dialect(self.view.settings())
+        if not dialect:
+            sublime.error_message('Error. You need to select a separator first')
+            return
+        delim, policy = dialect
+        column_sizes, failed_line_num = calc_column_sizes(self.view, delim, policy)
+        if failed_line_num is not None:
+            sublime.error_message('Unable to Align: line {} has formatting error: double quote chars are not consistent'.format(failed_line_num + 1))
+            return
+
+        adjusted_lines = []
+        has_edit = False
+        line_regions = self.view.lines(sublime.Region(0, self.view.size()))
+        for lr in line_regions:
+            line = self.view.substr(lr)
+            fields = csv_utils.smart_split(line, delim, policy, True)[0]
+            for i in range(len(fields)):
+                if i >= len(column_sizes):
+                    break
+                adjusted = fields[i].strip()
+                delta_len = column_sizes[i] - len(adjusted)
+                if delta_len >= 0: # Safeguard against async doc edit
+                    adjusted += ' ' * (delta_len + 1)
+                if fields[i] != adjusted:
+                    fields[i] = adjusted
+                    has_edit = True
+            adjusted_lines.append(delim.join(fields))
+        if not has_edit:
+            sublime.message_dialog('Table is already aligned, skipping')
+            return
+        adjusted_content = '\n'.join(adjusted_lines)
+        self.view.replace(edit, sublime.Region(0, self.view.size()), adjusted_content)
+
+
+def csv_lint(view, delim, policy):
+    num_fields = None
+    line_regions = view.lines(sublime.Region(0, view.size()))
+    for ln, lr in enumerate(line_regions):
+        line = view.substr(lr)
+        fields, warning = csv_utils.smart_split(line, delim, policy, True)
+        if warning:
+            sublime.error_message('CSVLint: line {} has formatting error: double quote chars are not consistent'.format(ln + 1))
+            return False
+        if num_fields is None:
+            num_fields = len(fields)
+        if num_fields != len(fields):
+            sublime.error_message('Number of fields is not consistent: e.g. line 1 has {} fields, and line {} has {} fields'.format(num_fields, ln + 1, len(fields)))
+            return False
+    return True
+
+
+class CsvLintCommand(sublime_plugin.TextCommand):
+    def run(self, _edit):
+        dialect = get_dialect(self.view.settings())
+        if not dialect:
+            sublime.error_message('Error. You need to select a separator first')
+            return
+        delim, policy = dialect
+        file_is_ok = csv_lint(self.view, delim, policy)
+        # TODO implement processing -> OK switch with sublime.set_timeout function
+        if file_is_ok:
+            self.view.set_status('csv_lint', 'CSVLint: OK')
+        else:
+            self.view.set_status('csv_lint', 'CSVLint: Error')
+
+
+class RunQueryCommand(sublime_plugin.TextCommand):
+    def run(self, _edit):
         dialect = get_dialect(self.view.settings())
         if not dialect:
             sublime.error_message('Error. You need to select a separator first')
@@ -584,23 +741,24 @@ class RunQueryCommand(sublime_plugin.TextCommand):
         previous_query = self.view.settings().get('rbql_previous_query', '')
         backend_language = get_backend_language(self.view)
         pretty_language_name = prettify_language_name(backend_language)
-        active_window.show_input_panel('Enter SQL-like RBQL query ({}):'.format(pretty_language_name), previous_query, on_query_done, None, on_query_cancel)
+        encoding = get_setting(self.view, 'rbql_encoding', 'latin-1')
+        active_window.show_input_panel('Enter SQL-like RBQL query ({}/{}):'.format(pretty_language_name, encoding), previous_query, on_query_done, None, on_query_cancel)
         self.view.settings().set('rbql_mode', True)
         show_column_names(self.view, delim, policy)
 
 
 class SetTableNameCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+    def run(self, _edit):
         active_window = sublime.active_window()
         active_window.show_input_panel('Set table name to use in RBQL JOIN queries:', '', on_set_table_name_done, None, None)
 
 
-def is_delimited_table(sampled_lines, delim, policy):
-    if len(sampled_lines) < 2:
+def is_delimited_table(sampled_lines, delim, policy, min_num_lines):
+    if len(sampled_lines) < min_num_lines:
         return False
     num_fields = None
     for sl in sampled_lines:
-        fields, warning = rainbow_utils.smart_split(sl, delim, policy, True)
+        fields, warning = csv_utils.smart_split(sl, delim, policy, True)
         if warning or len(fields) < 2:
             return False
         if num_fields is None:
@@ -610,14 +768,28 @@ def is_delimited_table(sampled_lines, delim, policy):
     return True
 
 
-def autodetect_content_based(view):
+def autodetect_content_based(view, autodetection_dialects, min_num_lines):
     sampled_lines = sample_lines(view)
-    autodetection_dialects_default = [('\t', 'simple'), (',', 'quoted'), (';', 'quoted')]
-    autodetection_dialects = get_setting(view, 'rainbow_csv_autodetect_dialects', autodetection_dialects_default)
     for delim, policy in autodetection_dialects:
-        if is_delimited_table(sampled_lines, delim, policy):
+        if is_delimited_table(sampled_lines, delim, policy, min_num_lines):
             return (delim, policy)
     return None
+
+
+def autodetect_frequency_based(view, autodetection_dialects):
+    region = sublime.Region(0, max(2000, view.size()))
+    sampled_text = view.substr(region)
+    best_dialect = (',', 'quoted')
+    best_dialect_frequency = 0
+    for dialect in autodetection_dialects:
+        delim = dialect[0]
+        if delim in [' ', '.']:
+            continue # Whitespace and dot have advantage over other separators in this algorithm, so we just skip them
+        frequency = sampled_text.count(delim)
+        if frequency > best_dialect_frequency:
+            best_dialect = dialect
+            best_dialect_frequency = frequency
+    return best_dialect
 
 
 def run_rainbow_init(view):
@@ -625,7 +797,6 @@ def run_rainbow_init(view):
         return
     init_user_data_paths()
 
-    #print('hello world!') # Debug print example
     max_file_size = get_setting(view, 'rainbow_csv_max_file_size_bytes', 5000000)
     if max_file_size is not None and view.size() > max_file_size:
         return
@@ -640,14 +811,28 @@ def run_rainbow_init(view):
             return
     if not is_plain_text(view):
         return
-    if get_setting(view, 'enable_rainbow_csv_autodetect', True):
-        csv_dialect = autodetect_content_based(view)
+    enable_autodetection = get_setting(view, 'enable_rainbow_csv_autodetect', True)
+    min_lines_to_check = 5
+    autodetection_dialects_default = [('\t', 'simple'), (',', 'quoted'), (';', 'quoted'), ('|', 'simple')]
+    autodetection_dialects = get_setting(view, 'rainbow_csv_autodetect_dialects', autodetection_dialects_default)
+    if enable_autodetection:
+        csv_dialect = autodetect_content_based(view, autodetection_dialects, min_lines_to_check)
         if csv_dialect is not None:
             delim, policy = csv_dialect
             do_enable_rainbow(view, delim, policy, store_settings=False)
             return
     if file_path is not None:
         if file_path.endswith('.csv'):
+            if enable_autodetection: 
+                csv_dialect = None
+                if get_file_line_count(view) <= min_lines_to_check:
+                    csv_dialect = autodetect_content_based(view, autodetection_dialects, 2)
+                if csv_dialect is None:
+                    csv_dialect = autodetect_frequency_based(view, autodetection_dialects)
+                if csv_dialect is not None:
+                    delim, policy = csv_dialect
+                    do_enable_rainbow(view, delim, policy, store_settings=False)
+                    return
             do_enable_rainbow(view, ',', 'quoted', store_settings=False)
         elif file_path.endswith('.tsv'):
             do_enable_rainbow(view, '\t', 'simple', store_settings=False)
@@ -684,12 +869,12 @@ class RainbowHoverListener(sublime_plugin.ViewEventListener):
                 return
             delim, policy = dialect
             # lnum and cnum are 0-based
-            lnum, cnum = self.view.rowcol(point)
+            cnum = self.view.rowcol(point)[1]
             line_text = self.view.substr(self.view.line(point))
-            hover_record, warning = rainbow_utils.smart_split(line_text, delim, policy, True)
-            field_num = rainbow_utils.get_field_by_line_position(hover_record, cnum)
+            hover_record, warning = csv_utils.smart_split(line_text, delim, policy, True)
+            field_num = get_field_by_line_position(hover_record, cnum)
             header = get_document_header(self.view, delim, policy)
-            ui_text = 'Col# {}'.format(field_num + 1)
+            ui_text = 'Col #{}'.format(field_num + 1)
             if field_num < len(header):
                 column_name = header[field_num]
                 max_header_len = 30
