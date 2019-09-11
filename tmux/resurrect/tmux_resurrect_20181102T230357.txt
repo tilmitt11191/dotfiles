@@ -1,5 +1,0 @@
-pane	backup	0	:zsh	1	:*	0	:/home/ffffe/.dotfiles	1	zsh	:bash /home/ffffe/.pyenv/libexec/pyenv-init -
-pane	manage	0	:zsh	1	:*	0	:/home/ffffe	1	zsh	:
-window	backup	0	1	:*	c01e,207x54,0,0,1
-window	manage	0	1	:*	ae5d,80x23,0,0,0
-state	backup	
