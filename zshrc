@@ -71,10 +71,13 @@ case $HOST in
 		#FLAG_HIGHSPEC=true
 		FLAG_GOOGLE_CLOUD_SDK=true
 		FLAG_COMMON=true
+		ANACONDA_ROOT="${HOME}/.pyenv/versions/anaconda"
 		echo "activate py3.7"
-		source $HOME/.pyenv/versions/anaconda/bin/activate py37
+		#source $HOME/.pyenv/versions/anaconda/bin/activate py37
+		export PATH="$ANACONDA_ROOT/envs/py37/bin:$ANACONDA_ROOT/envs/py37/Scripts:$PATH"
 		echo "activate py2.7"
-		source $HOME/.pyenv/versions/anaconda/bin/activate py27		
+		#source $HOME/.pyenv/versions/anaconda/bin/activate py27
+		export PATH="$ANACONDA_ROOT/envs/py27/bin:$ANACONDA_ROOT/envs/py27/Scripts:$PATH"
 		PATH=$PATH:`chromedriver-path`
 		echo "which python3: `which python3`"
 		echo "which pip3: `which pip3`"
