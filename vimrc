@@ -20,7 +20,7 @@ elseif hostname() == "macos.local"
 
 elseif hostname() == "www2271.sakura.ne.jp"
 	let FLAG_USE_PACKAGE = "False"
-	let COLORSCHEME = "hybrid"
+	let COLORSCHEME = "railscasts"
 
 endif
 "default base16-railscasts.vim  hybrid  jellybeans  lucius  molokai  railscasts  twilight
