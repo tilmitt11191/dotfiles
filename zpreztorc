@@ -60,7 +60,7 @@ case $HOST in
 		FLAG_PYTHON=true
 		#PREZTO_THEME=powerline
 		#PRETO_THEME="adam2"
-		PREZTO_THEME="steeef"
+		PREZTO_THEME="fade"
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
