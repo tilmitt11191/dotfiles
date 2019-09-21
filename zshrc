@@ -83,8 +83,8 @@ case $HOST in
 		echo "which pip3: `which pip3`"
 		echo "which python: `which python`"
 		echo "which pip: `which pip`"
-		export PATH=/usr/local/cuda-10.0/bin${PATH:+:${PATH}}
-		export LD_LIBRARY_PATH=/usr/local/cuda-10.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+		export PATH=/usr/local/cuda/bin:${PATH}}
+		export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}}
 		;;
 	macos.local) echo "##macos.local setup"
 		FLAG_PREZTO=true
