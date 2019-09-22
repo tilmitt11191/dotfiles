@@ -2,9 +2,10 @@
 
 /sublime_text/Packages/User/Package\ Control.cache/*
 /sublime_text/Packages/User/Package\ Control.last-run
+/sublime_text/Packages/HTML-CSS-JS\ Prettify
 /tmux/resurrect/
 /tmux/plugins/
 /vim/netrwhist
 /vim/dein/repos/github.com/Shougo/dein.vim/.git
+
 *.lock
-*package-lock.json
