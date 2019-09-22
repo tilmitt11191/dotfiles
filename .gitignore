@@ -6,3 +6,5 @@
 /tmux/plugins/
 /vim/netrwhist
 /vim/dein/repos/github.com/Shougo/dein.vim/.git
+*.lock
+*package-lock.json
