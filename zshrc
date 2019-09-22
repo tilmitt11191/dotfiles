@@ -41,10 +41,10 @@ case $HOST in
 			}
 			source /cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/path.zsh.inc
 			export PATH="$HOME/lib/intel_mkl:$PATH"
-			ANACONDA_ROOT="/cygdrive/c/Users/`whoami`/Anaconda3"
+			ANACONDA_ROOT="/cygdrive/c/Users/$(whoami)/Anaconda3"
 			#export PATH="$ANACONDA_ROOT:$ANACONDA_ROOT/bin:$ANACONDA_ROOT/Scripts:$PATH"
-			echo "activate py36"
-			export PATH="$ANACONDA_ROOT/envs/py36:$ANACONDA_ROOT/envs/py36/Scripts:$PATH"
+			echo "activate py37"
+			export PATH="$ANACONDA_ROOT/envs/py37:$ANACONDA_ROOT/envs/py37/Scripts:$PATH"
 			#source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
 			echo "activate py27"
 			#source $HOME/.pyenv/versions/anaconda/bin/activate py2.7
