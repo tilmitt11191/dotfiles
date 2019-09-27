@@ -135,6 +135,7 @@ case $HOST in
 		FLAG_PREZTO=true
 		FLAG_GOOGLE_CLOUD_SDK=true
 		FLAG_COMMON=true
+		export PATH="${HOME}/local/bain:${PATH}}"
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true

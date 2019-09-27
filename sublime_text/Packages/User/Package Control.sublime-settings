@@ -19,8 +19,7 @@
 		"SideBarEnhancements",
 		"SimpleClone",
 		"SublimeLinter",
-		"SublimeLinter-pep8",
-		"SublimeLinter-pyflakes",
+		"SublimeLinter-flake8",
 		"Terminal",
 		"Theme - Asphalt",
 		"Unittest (python)"
