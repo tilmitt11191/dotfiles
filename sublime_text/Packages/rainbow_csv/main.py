@@ -16,7 +16,10 @@ SETTINGS_FILE = 'RainbowCSV.sublime-settings'
 custom_settings = None # Gets auto updated on every SETTINGS_FILE write
 
 
+######## Test and Debug #########
+# To install this package in debug mode just copy it into "Sublime Text 3/Packages" folder as "rainbow_csv", e.g.: cp -r sublime_rainbow_csv "/mnt/c/Users/mecha/AppData/Roaming/Sublime Text 3/Packages/rainbow_csv"
 # To debug this package just use python's own print() function - all output would be redirected to sublime text console. View -> Show Console
+#################################
 
 
 # TODO allow monocolumn tables. This could be complicated because we will need to make sure that F5 button would pass context check
@@ -144,7 +147,7 @@ def hex_to_rgb(hex_value):
 
 
 def do_adjust_color_scheme(style):
-    color_scheme = dict() 
+    color_scheme = dict()
     color_scheme['globals'] = dict()
     color_scheme['rules'] = list()
 
@@ -209,7 +212,7 @@ def do_adjust_color_scheme(style):
         if key in style:
             color_scheme['globals'][key] = style[key]
 
-    for i, scope_name in enumerate(rainbow_scope_names): 
+    for i, scope_name in enumerate(rainbow_scope_names):
         color_scheme['rules'].append({'name': 'rainbow csv rainbow{}'.format(i + 1), 'scope': scope_name, 'foreground': rainbow_colors[i]})
 
     syntax_data = json.dumps(color_scheme, indent=4, sort_keys=True)
@@ -385,9 +388,12 @@ def get_dialect_from_grammar_basename(grammar_basename):
 def get_dialect(settings):
     syntax_name = settings.get('syntax')
     if not syntax_name:
-        return None
+        return ('monocolumn', 'monocolumn')
     grammar_basename = os.path.basename(syntax_name)
-    return get_dialect_from_grammar_basename(grammar_basename)
+    dialect = get_dialect_from_grammar_basename(grammar_basename)
+    if dialect is None:
+        return ('monocolumn', 'monocolumn')
+    return dialect
 
 
 def do_enable_rainbow(view, delim, policy, store_settings):
@@ -402,7 +408,7 @@ def do_enable_rainbow(view, delim, policy, store_settings):
             sublime.error_message('Error: Unable to use this character as a separator')
         return
     if view.settings().get('pre_rainbow_syntax', None) is None:
-        pre_rainbow_syntax = view.settings().get('syntax') 
+        pre_rainbow_syntax = view.settings().get('syntax')
         view.settings().set('pre_rainbow_syntax', pre_rainbow_syntax)
         view.settings().set('rainbow_mode', True) # We use this as F5 key condition
     view.set_syntax_file('Packages/rainbow_csv/custom_grammars/{}'.format(grammar_basename))
@@ -509,7 +515,7 @@ def idempotent_enable_rainbow(view, delim, policy, wait_time):
         sublime.set_timeout(done_loading_cb, wait_time)
     else:
         cur_dialect = get_dialect(view.settings())
-        if cur_dialect is None:
+        if cur_dialect[1] == 'monocolumn':
             return
         cur_delim, cur_policy = cur_dialect
         if cur_delim == delim and cur_policy == policy:
@@ -517,7 +523,7 @@ def idempotent_enable_rainbow(view, delim, policy, wait_time):
         do_enable_rainbow(view, delim, policy, store_settings=True)
 
 
-def on_query_done(input_line):
+def on_done_query_edit(input_line):
     active_window = sublime.active_window()
     if not active_window:
         return
@@ -529,17 +535,14 @@ def on_query_done(input_line):
     active_view.hide_popup()
     file_path = active_view.file_name()
     if not file_path:
-        # TODO create a temp file from unnamed buffer
+        # FIXME create a temp file from unnamed buffer
         sublime.error_message('RBQL Error. Unable to run query for this buffer')
         return
     input_dialect = get_dialect(active_view.settings())
-    if input_dialect is None:
-        sublime.error_message('Unexpected error: Rainbow syntax was just disabled?')
-        return
     input_delim, input_policy = input_dialect
     backend_language = get_backend_language(active_view)
     output_format = get_setting(active_view, 'rbql_output_format', 'input')
-    encoding = get_setting(active_view, 'rbql_encoding', 'latin-1')
+    encoding = get_setting(active_view, 'rbql_encoding', 'utf-8')
     encoding = encoding.lower()
     if encoding not in ['latin-1', 'utf-8']:
         sublime.error_message('RBQL Error. Encoding "{}" is not supported'.format(encoding))
@@ -636,7 +639,7 @@ def calc_column_sizes(view, delim, policy):
 class ShrinkCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         dialect = get_dialect(self.view.settings())
-        if not dialect:
+        if dialect[1] == 'monocolumn':
             sublime.error_message('Error. You need to select a separator first')
             return
         delim, policy = dialect
@@ -665,7 +668,7 @@ class ShrinkCommand(sublime_plugin.TextCommand):
 class AlignCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         dialect = get_dialect(self.view.settings())
-        if not dialect:
+        if dialect[1] == 'monocolumn':
             sublime.error_message('Error. You need to select a separator first')
             return
         delim, policy = dialect
@@ -718,7 +721,7 @@ def csv_lint(view, delim, policy):
 class CsvLintCommand(sublime_plugin.TextCommand):
     def run(self, _edit):
         dialect = get_dialect(self.view.settings())
-        if not dialect:
+        if dialect[1] == 'monocolumn':
             sublime.error_message('Error. You need to select a separator first')
             return
         delim, policy = dialect
@@ -733,16 +736,13 @@ class CsvLintCommand(sublime_plugin.TextCommand):
 class RunQueryCommand(sublime_plugin.TextCommand):
     def run(self, _edit):
         dialect = get_dialect(self.view.settings())
-        if not dialect:
-            sublime.error_message('Error. You need to select a separator first')
-            return
         delim, policy = dialect
         active_window = sublime.active_window()
         previous_query = self.view.settings().get('rbql_previous_query', '')
         backend_language = get_backend_language(self.view)
         pretty_language_name = prettify_language_name(backend_language)
         encoding = get_setting(self.view, 'rbql_encoding', 'latin-1')
-        active_window.show_input_panel('Enter SQL-like RBQL query ({}/{}):'.format(pretty_language_name, encoding), previous_query, on_query_done, None, on_query_cancel)
+        active_window.show_input_panel('Enter SQL-like RBQL query ({}/{}):'.format(pretty_language_name, encoding), previous_query, on_done_query_edit, None, on_query_cancel)
         self.view.settings().set('rbql_mode', True)
         show_column_names(self.view, delim, policy)
 
@@ -823,7 +823,7 @@ def run_rainbow_init(view):
             return
     if file_path is not None:
         if file_path.endswith('.csv'):
-            if enable_autodetection: 
+            if enable_autodetection:
                 csv_dialect = None
                 if get_file_line_count(view) <= min_lines_to_check:
                     csv_dialect = autodetect_content_based(view, autodetection_dialects, 2)
@@ -851,7 +851,7 @@ def hover_hide_cb():
     if not active_view.settings().get('rbql_mode', False):
         return
     dialect = get_dialect(active_view.settings())
-    if not dialect:
+    if dialect[1] == 'monocolumn':
         return
     delim, policy = dialect
     show_column_names(active_view, delim, policy)
@@ -860,12 +860,12 @@ def hover_hide_cb():
 class RainbowHoverListener(sublime_plugin.ViewEventListener):
     @classmethod
     def is_applicable(cls, settings):
-        return get_dialect(settings) is not None
+        return get_dialect(settings)[1] != 'monocolumn'
 
     def on_hover(self, point, hover_zone):
         if hover_zone == sublime.HOVER_TEXT:
             dialect = get_dialect(self.view.settings())
-            if not dialect:
+            if dialect[1] == 'monocolumn':
                 return
             delim, policy = dialect
             # lnum and cnum are 0-based

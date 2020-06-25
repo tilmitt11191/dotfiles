@@ -1,0 +1,21 @@
+;============================================ 
+; Filename    : 
+; Description : SSH Auto login 
+; Author      : 
+; Created     : 
+; modified    : 
+;============================================ 
+HOSTADDR = '192.168.11.242' 
+USERNAME = 'ffffe'
+KEY_FILE = 'C:\Users\tilmi\home\.ssh\id_rsa' 
+;============================================ 
+
+COMMAND = HOSTADDR
+strconcat COMMAND ':22 /ssh /2 /auth=publickey /user=' 
+strconcat COMMAND USERNAME 
+strconcat COMMAND ' /keyfile=' 
+strconcat COMMAND KEY_FILE
+ 
+connect COMMAND
+ 
+end

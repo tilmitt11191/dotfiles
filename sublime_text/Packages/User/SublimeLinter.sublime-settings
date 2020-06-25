@@ -13,8 +13,8 @@
            "env": {
                "PATH": "c://Users/tilmi/Anaconda3/envs/py37/Scripts:$PATH"
            },
-           "executable": ["c://Users/tilmi/Anaconda3/envs/py37/Scripts/flake8"],
-           "args": ["--ignore=W191,E117,E265,E402,E501"],
+           "executable": ["c://Users/tilmi/Anaconda3/envs/py37/Scripts/flake8.exe"],
+           "args": ["--ignore=W191,E117,E128,E265,E402,E501,E702"],
            "excludes": [],
         },
     },

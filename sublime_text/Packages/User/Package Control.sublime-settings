@@ -6,6 +6,7 @@
 	"installed_packages":
 	[
 		"Boxy Theme",
+		"ConvertToUTF8",
 		"Git",
 		"GitGutter",
 		"HTML-CSS-JS Prettify",
