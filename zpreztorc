@@ -62,6 +62,18 @@ case $HOST in
 		#PRETO_THEME="adam2"
 		PREZTO_THEME="fade"
 		;;
+	*msi*) echo "##msi setup"
+		FLAG_PREZTO=true
+		FLAG_PYTHON=true
+		FLAG_HIGHSPEC=""
+		PREZTO_THEME="fade"
+		;;
+	libra* | aries*) echo "##libra | aries setup"
+		FLAG_PREZTO=true
+		FLAG_PYTHON=true
+		FLAG_HIGHSPEC=ture
+		PREZTO_THEME="fade"
+		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
 		PREZTO_THEME="pure"

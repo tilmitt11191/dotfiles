@@ -137,6 +137,34 @@ case $HOST in
 		FLAG_COMMON=true
 		export PATH="${HOME}/local/bin:${PATH}}"
 		;;
+	*msi*) echo "##msi setup"	
+		if [ $IS_CYGWIN ];then
+			FLAG_COMMON=true
+			function code() {
+				if [ -L "$*" ]; then
+					TARGET=$(readlink "$*")
+				else
+					TARGET="$*"
+				fi
+				/cygdrive/c/Users/ozu/AppData/Local/Programs/Microsoft\ VS\ Code/bin/code "$(cygpath -aw "$TARGET")" &
+			}
+			function hidemaru() {
+				if [ -L "$*" ]; then
+					TARGET=$(readlink "$*")
+				else
+					TARGET="$*"
+				fi
+				/cygdrive/c/Program\ Files\ \(x86\)/Hidemaru/Hidemaru.exe  "$(cygpath -aw "$TARGET")" &
+			}
+		fi
+		;;
+	libra* | aries*) echo "##libra | aries setup"
+		FLAG_COMMON=true
+		FLAG_PREZTO=true
+		FLAG_UBUNTU=true
+		FLAG_PYTHON=""
+		FLAG_RUBY=true
+		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
 		;;
