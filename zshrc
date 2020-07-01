@@ -140,6 +140,7 @@ case $HOST in
 	*msi*) echo "##msi setup"	
 		if [ $IS_CYGWIN ];then
 			FLAG_COMMON=true
+			FLAG_PYTHON=""
 			function code() {
 				if [ -L "$*" ]; then
 					TARGET=$(readlink "$*")
