@@ -141,6 +141,7 @@ case $HOST in
 		if [ $IS_CYGWIN ];then
 			FLAG_COMMON=true
 			FLAG_PYTHON=""
+			FLAG_PECO=""
 			function code() {
 				if [ -L "$*" ]; then
 					TARGET=$(readlink "$*")
@@ -166,7 +167,7 @@ case $HOST in
 		FLAG_PYTHON=""
 		FLAG_RUBY=true
 		function code() {
-			
+
 		}
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
