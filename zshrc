@@ -171,7 +171,8 @@ case "$HOST" in
 		FLAG_UBUNTU=true
 		FLAG_PYTHON=""
 		FLAG_RUBY=true
-
+		alias rcode='rmate -p 52700'
+		alias rst='rmate -p 52701'
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
