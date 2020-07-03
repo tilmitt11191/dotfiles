@@ -13,6 +13,7 @@ FLAG_PYTHON=""
 FLAG_RUBY=""
 FLAG_GOLANG=true
 FLAG_GOOGLE_CLOUD_SDK=""
+
 unameOut="$(uname -s)"
 IS_CYGWIN=""
 IS_MAC=""
@@ -24,20 +25,25 @@ case "${unameOut}" in
 	FreeBSD*) echo "##this is FreeBSD" && IS_LINUX=true;;
 	*) echo "##this is neither Cygwin nor Linux. exit 1" && exit 1;;
 esac
+IS_UBUNTU=""
+case "$unameOut" in
+	*Ubuntu*) echo "##this is Ubuntu" && IS_UBUNTU=true;;
+esac
+## check Windows Subsystem for Linux
+[ -e /proc/sys/fs/binfmt_misc/WSLInterop ] && IS_UBUNTU=true
 
-
-case $HOST in
+case "$HOST" in
 	PC | workingtower) echo "##PC or workingtower setup"
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		FLAG_RUBY=""
 		FLAG_HIGHSPEC=true
 		FLAG_GOOGLE_CLOUD_SDK=true
-		if [ $IS_CYGWIN ];then
+		if [ "$IS_CYGWIN" ];then
 			echo "##this is  Cygwin"
 			IS_CYGWIN=true
 			function st() {
-			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe `cygpath -aw $*` &
+			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe "$(cygpath -aw "$*")" &
 			}
 			source /cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/path.zsh.inc
 			export PATH="$HOME/lib/intel_mkl:$PATH"
@@ -54,13 +60,13 @@ case $HOST in
 			#alias python='/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/python.exe'
 			#alias pip=' /cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/pip.exe'
 			#PATH="/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy:/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/:$PATH"
-			echo "which python3: `which python3`"
-			echo "which pip3: `which pip3`"
-			echo "which python: `which python`"
-			echo "which pip: `which pip`"
+			echo "which python3: $(which python3)"
+			echo "which pip3: $(which pip3)"
+			echo "which python: $(which python)"
+			echo "which pip: $(which pip)"
 			
-		elif [ $IS_LINUX ];then
-			echo "##this is Linux"
+		elif [ "$IS_UBUNTU" ];then
+			echo "##this is Ubuntu"
 		fi
 		;;
 	backuptower) echo "##backuptower setup"
@@ -78,11 +84,11 @@ case $HOST in
 		echo "activate py2.7"
 		#source $HOME/.pyenv/versions/anaconda/bin/activate py27
 		export PATH="$ANACONDA_ROOT/envs/py27/bin:$ANACONDA_ROOT/envs/py27/Scripts:$PATH"
-		PATH=$PATH:`chromedriver-path`
-		echo "which python3: `which python3`"
-		echo "which pip3: `which pip3`"
-		echo "which python: `which python`"
-		echo "which pip: `which pip`"
+		PATH=$PATH:$(chromedriver-path)
+		echo "which python3: $(which python3)"
+		echo "which pip3: $(which pip3)"
+		echo "which python: $(which python)"
+		echo "which pip: $(which pip)"
 		export PATH="/usr/local/cuda/bin:${PATH}}"
 		export LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}}"
 		;;
@@ -128,7 +134,7 @@ case $HOST in
 		source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
 		echo "activate py2.7"
 		source $HOME/.pyenv/versions/anaconda/bin/activate py2.7
-		PATH=$PATH:`chromedriver-path`
+		PATH=$PATH:$(chromedriver-path)
 		;;
 	www2271.sakura.ne.jp*) echo "##sakura setup"
 		FLAG_SAKURA=true
@@ -138,10 +144,9 @@ case $HOST in
 		export PATH="${HOME}/local/bin:${PATH}}"
 		;;
 	*msi*) echo "##msi setup"	
-		if [ $IS_CYGWIN ];then
+		if [ "$IS_CYGWIN" ];then
 			FLAG_COMMON=true
 			FLAG_PYTHON=""
-			FLAG_PECO=""
 			function code() {
 				if [ -L "$*" ]; then
 					TARGET=$(readlink "$*")
@@ -166,9 +171,7 @@ case $HOST in
 		FLAG_UBUNTU=true
 		FLAG_PYTHON=""
 		FLAG_RUBY=true
-		function code() {
 
-		}
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
