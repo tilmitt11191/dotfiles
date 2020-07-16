@@ -145,6 +145,7 @@ case "$HOST" in
 		;;
 	*msi*) echo "##msi setup"	
 		if [ "$IS_CYGWIN" ];then
+			echo "##this is Cygwin"
 			FLAG_COMMON=true
 			FLAG_PYTHON=""
 			function code() {
@@ -163,6 +164,22 @@ case "$HOST" in
 				fi
 				/cygdrive/c/Program\ Files\ \(x86\)/Hidemaru/Hidemaru.exe  "$(cygpath -aw "$TARGET")" &
 			}
+		elif [ "$IS_UBUNTU" ];then
+			echo "##this is Ubuntu"
+			compinit -u
+			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_ubuntu"
+			echo "activate py37"
+			export PATH="$ANACONDA_ROOT/envs/py37/bin:$PATH"
+			# echo "activate py27"
+			export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
+			FLAG_PYTHON=""
+			echo "which python3: $(which python3)"
+			echo "which pip3: $(which pip3)"
+			echo "which python: $(which python)"
+			echo "which pip: $(which pip)"
+			## for ns-3 vis
+			export DISPLAY=:0.0
+			export LIBG_ALWAYS_INDIRECT=1
 		fi
 		;;
 	libra* | aries*) echo "##libra | aries setup"
@@ -207,7 +224,7 @@ if [ $FLAG_COMMON ]; then
 fi
 
 
-if [ $FLAG_PYTHON ];then
+if [ "$FLAG_PYTHON" ];then
 	echo "##conf python"
 	export PYENV_ROOT="$HOME/.pyenv"
 	if [ $IS_CYGWIN ];then
