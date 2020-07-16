@@ -186,8 +186,19 @@ case "$HOST" in
 		FLAG_COMMON=true
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
-		FLAG_PYTHON=""
 		FLAG_RUBY=true
+
+		ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
+		echo "activate py37-ns3"
+		export PATH="$ANACONDA_ROOT/envs/py37-ns3/bin:$PATH"
+		# echo "activate py27"
+		export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
+		FLAG_PYTHON=""
+		echo "which python3: $(which python3)"
+		echo "which pip3: $(which pip3)"
+		echo "which python: $(which python)"
+		echo "which pip: $(which pip)"
+
 		alias rcode='rmate -p 52700'
 		alias rst='rmate -p 52701'
 		;;
