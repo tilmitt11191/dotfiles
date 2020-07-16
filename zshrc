@@ -147,7 +147,20 @@ case "$HOST" in
 		if [ "$IS_CYGWIN" ];then
 			echo "##this is Cygwin"
 			FLAG_COMMON=true
+
+			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_win"
+			export PATH="$ANACONDA_ROOT/Library/bin:$PATH"
+			echo "activate py37"
+			export PATH="$ANACONDA_ROOT/envs/py37/:$ANACONDA_ROOT/envs/py37/scripts:$PATH"
+			echo "activate py27"
+			export PATH="$ANACONDA_ROOT/envs/py27/:$ANACONDA_ROOT/envs/py27/scripts:$PATH"
 			FLAG_PYTHON=""
+			echo "which python3: $(which python3)"
+			echo "which pip3: $(which pip3)"
+			echo "which python: $(which python)"
+			echo "which pip: $(which pip)"
+			FLAG_PYTHON=""
+
 			function code() {
 				if [ -L "$*" ]; then
 					TARGET=$(readlink "$*")
@@ -170,7 +183,7 @@ case "$HOST" in
 			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_ubuntu"
 			echo "activate py37"
 			export PATH="$ANACONDA_ROOT/envs/py37/bin:$PATH"
-			# echo "activate py27"
+			echo "activate py27"
 			export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
 			FLAG_PYTHON=""
 			echo "which python3: $(which python3)"
