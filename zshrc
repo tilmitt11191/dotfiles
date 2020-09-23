@@ -1,6 +1,7 @@
 
 echo "####conf my .zshrc"
 FLAG_COMMON=true
+FLAG_MOBAXTERM_COMMON=""
 FLAG_HIGHSPEC=""
 FLAG_PREZTO=true
 FLAG_PECO=true
@@ -31,6 +32,11 @@ case "$unameOut" in
 esac
 ## check Windows Subsystem for Linux
 [ -e /proc/sys/fs/binfmt_misc/WSLInterop ] && IS_UBUNTU=true
+IS_MOBAXTERM=""
+if [ -e /home/mobaxterm ]; then
+	IS_MOBAXTERM=true
+	IS_CYGWIN=""
+fi
 
 case "$HOST" in
 	PC | workingtower) echo "##PC or workingtower setup"
@@ -195,6 +201,86 @@ case "$HOST" in
 			export LIBG_ALWAYS_INDIRECT=1
 		fi
 		;;
+	*-SW*) echo "##-SW setup"	
+		if [ "$IS_CYGWIN" ];then
+			echo "##this is Cygwin"
+			FLAG_COMMON=true
+			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_win"
+			export PATH="$ANACONDA_ROOT/Library/bin:$PATH"
+			echo "activate py38"
+			export PATH="$ANACONDA_ROOT/envs/py38:$ANACONDA_ROOT/envs/py38/scripts:$PATH"
+			FLAG_PYTHON=""
+			echo "which python3: $(which python3)"
+			echo "which pip3: $(which pip3)"
+			FLAG_PREZTO=true
+			function code() {
+				if [ -L "$*" ]; then
+					TARGET=$(readlink "$*")
+				else
+					TARGET="$*"
+				fi
+				/cygdrive/c/Users/ozu/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe "$(cygpath -aw "$TARGET")" &
+			}
+			function hidemaru() {
+				if [ -L "$*" ]; then
+					TARGET=$(readlink "$*")
+				else
+					TARGET="$*"
+				fi
+				/cygdrive/c/Program\ Files\ \(x86\)/Hidemaru/Hidemaru.exe  "$(cygpath -aw "$TARGET")" &
+			}
+
+		elif [ "$IS_MOBAXTERM" ];then
+			echo "##this is MobaXterm"
+			autoload -Uz promptinit
+			promptinit
+			FLAG_COMMON=""
+			FLAG_MOBAXTERM_COMMON=true
+			FLAG_PREZTO=true
+			echo "FLAG_PREZTO: ${FLAG_PREZTO}"
+
+			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_win"
+			export PATH="$ANACONDA_ROOT/Library/bin:$PATH"
+			echo "activate py38"
+			export PATH="$ANACONDA_ROOT/envs/py38:$ANACONDA_ROOT/envs/py38/scripts:$PATH"
+			FLAG_PYTHON=""
+			echo "which python3: $(which python3)"
+			echo "which pip3: $(which pip3)"
+
+			function code() {
+				if [ -L "$*" ]; then
+					TARGET=$(readlink "$*")
+				else
+					TARGET="$*"
+				fi
+				/cygdrive/c/Users/ozu/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe "$(cygpath -w "$TARGET")" &
+			}
+			function hidemaru() {
+				if [ -L "$*" ]; then
+					TARGET=$(readlink "$*")
+				else
+					TARGET="$*"
+				fi
+				/cygdrive/c/Program\ Files\ \(x86\)/Hidemaru/Hidemaru.exe  "$(cygpath -w "$TARGET")" &
+			}
+		elif [ "$IS_UBUNTU" ];then
+			echo "##this is Ubuntu"
+			compinit -u
+			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_ubuntu"
+			echo "activate py37"
+			export PATH="$ANACONDA_ROOT/envs/py37/bin:$PATH"
+			echo "activate py27"
+			export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
+			FLAG_PYTHON=""
+			echo "which python3: $(which python3)"
+			echo "which pip3: $(which pip3)"
+			echo "which python: $(which python)"
+			echo "which pip: $(which pip)"
+			## for ns-3 vis
+			export DISPLAY=:0.0
+			export LIBG_ALWAYS_INDIRECT=1
+		fi
+		;;
 	libra* | aries*) echo "##libra | aries setup"
 		FLAG_COMMON=true
 		FLAG_PREZTO=true
@@ -247,6 +333,28 @@ if [ $FLAG_COMMON ]; then
 	compinit
 fi
 
+if [ $FLAG_MOBAXTERM_COMMON ]; then
+	echo "##conf mobaxterm_common"
+	HISTFILE=~/.zsh_history
+	HISTSIZE=1000000
+	SAVEHIST=1000000
+	export TERM=xterm-256color
+	
+	PATH=$HOME/bin:$PATH
+	
+	alias ls='ls'
+	alias ll='ls -lh'
+	alias lla='ls -alh'
+	alias vi='vim'
+
+	stty stop undef
+
+	bindkey -e
+	#bindkey "^R" history-incremental-search-backward
+
+	autoload -Uz compinit
+	compinit
+fi
 
 if [ "$FLAG_PYTHON" ];then
 	echo "##conf python"

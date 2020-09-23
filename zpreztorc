@@ -16,7 +16,10 @@ case "${unameOut}" in
 	FreeBSD*) IS_LINUX=true;;
 	*) echo "##this is neither Cygwin nor Linux. exit 1" && exit 1;;
 esac
-
+if [ -e /home/mobaxterm ]; then
+	IS_MOBAXTERM=true
+	IS_CYGWIN=""
+fi
 
 case $HOST in
   PC | workingtower) echo "##PC or workingtower setup"
@@ -66,6 +69,13 @@ case $HOST in
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=""
+		PREZTO_THEME="fade"
+		;;
+	*-SW*) echo "###-SW setup"
+		FLAG_COMMON=""
+		FLAG_PREZTO=true
+		FLAG_PYTHON=""
+		FLAG_HIGHSPEC=true
 		PREZTO_THEME="fade"
 		;;
 	libra* | aries*) echo "##libra | aries setup"
