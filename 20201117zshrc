@@ -1,7 +1,6 @@
 
 echo "####conf my .zshrc"
 FLAG_COMMON=true
-FLAG_MOBAXTERM_COMMON=""
 FLAG_HIGHSPEC=""
 FLAG_PREZTO=true
 FLAG_PECO=true
@@ -14,7 +13,6 @@ FLAG_PYTHON=""
 FLAG_RUBY=""
 FLAG_GOLANG=true
 FLAG_GOOGLE_CLOUD_SDK=""
-
 unameOut="$(uname -s)"
 IS_CYGWIN=""
 IS_MAC=""
@@ -26,30 +24,20 @@ case "${unameOut}" in
 	FreeBSD*) echo "##this is FreeBSD" && IS_LINUX=true;;
 	*) echo "##this is neither Cygwin nor Linux. exit 1" && exit 1;;
 esac
-IS_UBUNTU=""
-case "$unameOut" in
-	*Ubuntu*) echo "##this is Ubuntu" && IS_UBUNTU=true;;
-esac
-## check Windows Subsystem for Linux
-[ -e /proc/sys/fs/binfmt_misc/WSLInterop ] && IS_UBUNTU=true
-IS_MOBAXTERM=""
-if [ -e /home/mobaxterm ]; then
-	IS_MOBAXTERM=true
-	IS_CYGWIN=""
-fi
 
-case "$HOST" in
+
+case $HOST in
 	PC | workingtower) echo "##PC or workingtower setup"
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		FLAG_RUBY=""
 		FLAG_HIGHSPEC=true
 		FLAG_GOOGLE_CLOUD_SDK=true
-		if [ "$IS_CYGWIN" ];then
+		if [ $IS_CYGWIN ];then
 			echo "##this is  Cygwin"
 			IS_CYGWIN=true
 			function st() {
-			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe "$(cygpath -aw "$*")" &
+			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe `cygpath -aw $*` &
 			}
 			source /cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/path.zsh.inc
 			export PATH="$HOME/lib/intel_mkl:$PATH"
@@ -66,13 +54,13 @@ case "$HOST" in
 			#alias python='/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/python.exe'
 			#alias pip=' /cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/pip.exe'
 			#PATH="/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy:/cygdrive/c/Users/tilmi/home/.pyenv/versions/anaconda/envs/mypy/Scripts/:$PATH"
-			echo "which python3: $(which python3)"
-			echo "which pip3: $(which pip3)"
-			echo "which python: $(which python)"
-			echo "which pip: $(which pip)"
+			echo "which python3: `which python3`"
+			echo "which pip3: `which pip3`"
+			echo "which python: `which python`"
+			echo "which pip: `which pip`"
 			
-		elif [ "$IS_UBUNTU" ];then
-			echo "##this is Ubuntu"
+		elif [ $IS_LINUX ];then
+			echo "##this is Linux"
 		fi
 		;;
 	backuptower) echo "##backuptower setup"
@@ -90,11 +78,11 @@ case "$HOST" in
 		echo "activate py2.7"
 		#source $HOME/.pyenv/versions/anaconda/bin/activate py27
 		export PATH="$ANACONDA_ROOT/envs/py27/bin:$ANACONDA_ROOT/envs/py27/Scripts:$PATH"
-		PATH=$PATH:$(chromedriver-path)
-		echo "which python3: $(which python3)"
-		echo "which pip3: $(which pip3)"
-		echo "which python: $(which python)"
-		echo "which pip: $(which pip)"
+		PATH=$PATH:`chromedriver-path`
+		echo "which python3: `which python3`"
+		echo "which pip3: `which pip3`"
+		echo "which python: `which python`"
+		echo "which pip: `which pip`"
 		export PATH="/usr/local/cuda/bin:${PATH}}"
 		export LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}}"
 		;;
@@ -140,7 +128,7 @@ case "$HOST" in
 		source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
 		echo "activate py2.7"
 		source $HOME/.pyenv/versions/anaconda/bin/activate py2.7
-		PATH=$PATH:$(chromedriver-path)
+		PATH=$PATH:`chromedriver-path`
 		;;
 	www2271.sakura.ne.jp*) echo "##sakura setup"
 		FLAG_SAKURA=true
@@ -148,158 +136,7 @@ case "$HOST" in
 		FLAG_GOOGLE_CLOUD_SDK=true
 		FLAG_COMMON=true
 		export PATH="${HOME}/local/bin:${PATH}}"
-		;;
-	*msi*) echo "##msi setup"	
-		if [ "$IS_CYGWIN" ];then
-			echo "##this is Cygwin"
-			FLAG_COMMON=true
-
-			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_win"
-			export PATH="$ANACONDA_ROOT/Library/bin:$PATH"
-			echo "activate py37"
-			export PATH="$ANACONDA_ROOT/envs/py37/:$ANACONDA_ROOT/envs/py37/scripts:$PATH"
-			echo "activate py27"
-			export PATH="$ANACONDA_ROOT/envs/py27/:$ANACONDA_ROOT/envs/py27/scripts:$PATH"
-			FLAG_PYTHON=""
-			echo "which python3: $(which python3)"
-			echo "which pip3: $(which pip3)"
-			echo "which python: $(which python)"
-			echo "which pip: $(which pip)"
-			FLAG_PYTHON=""
-
-			function code() {
-				if [ -L "$*" ]; then
-					TARGET=$(readlink "$*")
-				else
-					TARGET="$*"
-				fi
-				/cygdrive/c/Users/ozu/AppData/Local/Programs/Microsoft\ VS\ Code/bin/code "$(cygpath -aw "$TARGET")" &
-			}
-			function hidemaru() {
-				if [ -L "$*" ]; then
-					TARGET=$(readlink "$*")
-				else
-					TARGET="$*"
-				fi
-				/cygdrive/c/Program\ Files\ \(x86\)/Hidemaru/Hidemaru.exe  "$(cygpath -aw "$TARGET")" &
-			}
-		elif [ "$IS_UBUNTU" ];then
-			echo "##this is Ubuntu"
-			compinit -u
-			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_ubuntu"
-			echo "activate py37"
-			export PATH="$ANACONDA_ROOT/envs/py37/bin:$PATH"
-			echo "activate py27"
-			export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
-			FLAG_PYTHON=""
-			echo "which python3: $(which python3)"
-			echo "which pip3: $(which pip3)"
-			echo "which python: $(which python)"
-			echo "which pip: $(which pip)"
-			## for ns-3 vis
-			export DISPLAY=:0.0
-			export LIBG_ALWAYS_INDIRECT=1
-		fi
-		;;
-	*-SW*) echo "##-SW setup"	
-		if [ "$IS_CYGWIN" ];then
-			echo "##this is Cygwin"
-			FLAG_COMMON=true
-			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_win"
-			export PATH="$ANACONDA_ROOT/Library/bin:$PATH"
-			echo "activate py38"
-			export PATH="$ANACONDA_ROOT/envs/py38:$ANACONDA_ROOT/envs/py38/scripts:$PATH"
-			FLAG_PYTHON=""
-			echo "which python3: $(which python3)"
-			echo "which pip3: $(which pip3)"
-			FLAG_PREZTO=true
-			function code() {
-				if [ -L "$*" ]; then
-					TARGET=$(readlink "$*")
-				else
-					TARGET="$*"
-				fi
-				/cygdrive/c/Users/ozu/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe "$(cygpath -aw "$TARGET")" &
-			}
-			function hidemaru() {
-				if [ -L "$*" ]; then
-					TARGET=$(readlink "$*")
-				else
-					TARGET="$*"
-				fi
-				/cygdrive/c/Program\ Files\ \(x86\)/Hidemaru/Hidemaru.exe  "$(cygpath -aw "$TARGET")" &
-			}
-
-		elif [ "$IS_MOBAXTERM" ];then
-			echo "##this is MobaXterm"
-			autoload -Uz promptinit
-			promptinit
-			FLAG_COMMON=""
-			FLAG_MOBAXTERM_COMMON=true
-			FLAG_PREZTO=true
-			echo "FLAG_PREZTO: ${FLAG_PREZTO}"
-
-			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_win"
-			export PATH="$ANACONDA_ROOT/Library/bin:$PATH"
-			echo "activate py38"
-			export PATH="$ANACONDA_ROOT/envs/py38:$ANACONDA_ROOT/envs/py38/scripts:$PATH"
-			FLAG_PYTHON=""
-			echo "which python3: $(which python3)"
-			echo "which pip3: $(which pip3)"
-
-			function code() {
-				if [ -L "$*" ]; then
-					TARGET=$(readlink "$*")
-				else
-					TARGET="$*"
-				fi
-				/cygdrive/c/Users/ozu/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe "$(cygpath -w "$TARGET")" &
-			}
-			function hidemaru() {
-				if [ -L "$*" ]; then
-					TARGET=$(readlink "$*")
-				else
-					TARGET="$*"
-				fi
-				/cygdrive/c/Program\ Files\ \(x86\)/Hidemaru/Hidemaru.exe  "$(cygpath -w "$TARGET")" &
-			}
-		elif [ "$IS_UBUNTU" ];then
-			echo "##this is Ubuntu"
-			compinit -u
-			ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_ubuntu"
-			echo "activate py37"
-			export PATH="$ANACONDA_ROOT/envs/py37/bin:$PATH"
-			echo "activate py27"
-			export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
-			FLAG_PYTHON=""
-			echo "which python3: $(which python3)"
-			echo "which pip3: $(which pip3)"
-			echo "which python: $(which python)"
-			echo "which pip: $(which pip)"
-			## for ns-3 vis
-			export DISPLAY=:0.0
-			export LIBG_ALWAYS_INDIRECT=1
-		fi
-		;;
-	libra* | aries*) echo "##libra | aries setup"
-		FLAG_COMMON=true
-		FLAG_PREZTO=true
-		FLAG_UBUNTU=true
-		FLAG_RUBY=true
-
-		ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
-		echo "activate py37-ns3"
-		export PATH="$ANACONDA_ROOT/envs/py37-ns3/bin:$PATH"
-		# echo "activate py27"
-		export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
-		FLAG_PYTHON=""
-		echo "which python3: $(which python3)"
-		echo "which pip3: $(which pip3)"
-		echo "which python: $(which python)"
-		echo "which pip: $(which pip)"
-
-		alias rcode='rmate -p 52700'
-		alias rst='rmate -p 52701'
+		export LD_LIBRATY_PATH="${HOME}/local/bin:${LD_LIBRARY_PATH}"
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
@@ -333,30 +170,8 @@ if [ $FLAG_COMMON ]; then
 	compinit
 fi
 
-if [ $FLAG_MOBAXTERM_COMMON ]; then
-	echo "##conf mobaxterm_common"
-	HISTFILE=~/.zsh_history
-	HISTSIZE=1000000
-	SAVEHIST=1000000
-	export TERM=xterm-256color
-	
-	PATH=$HOME/bin:$PATH
-	
-	alias ls='ls'
-	alias ll='ls -lh'
-	alias lla='ls -alh'
-	alias vi='vim'
 
-	stty stop undef
-
-	bindkey -e
-	#bindkey "^R" history-incremental-search-backward
-
-	autoload -Uz compinit
-	compinit
-fi
-
-if [ "$FLAG_PYTHON" ];then
+if [ $FLAG_PYTHON ];then
 	echo "##conf python"
 	export PYENV_ROOT="$HOME/.pyenv"
 	if [ $IS_CYGWIN ];then
@@ -443,7 +258,6 @@ if [ $FLAG_SAKURA ];then
 	export MAILCHECK=0
 	export PATH="$HOME/lib/google-cloud-sdk/bin/:$PATH"
 	export PATH="$HOME/local/python-3.8.5/bin:$PATH"
-
 fi
 
 if [ $FLAG_RUBY ];then
