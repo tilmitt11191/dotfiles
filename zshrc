@@ -108,6 +108,10 @@ case "$HOST" in
 		FLAG_PYTHON=true
 		FLAG_RUBY=true
 		FLAG_GOOGLE_CLOUD_SDK="true"
+
+		alias rcode='rmate -p 52400'
+		alias rst='rmate -p 52401'
+
 		;;
 	ubuntusetuptest) echo "##ubuntusetuptest setup"
 		FLAG_PREZTO=true
