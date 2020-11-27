@@ -302,8 +302,8 @@ case "$HOST" in
 		echo "which python: $(which python)"
 		echo "which pip: $(which pip)"
 
-		alias rcode='rmate -p 52700'
-		alias rst='rmate -p 52701'
+		alias rcode='rmate -p 52800'
+		alias rst='rmate -p 52801'
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
