@@ -7,10 +7,12 @@ import sublime
 
 import rainbow_csv.sublime_rbql as sublime_rbql
 import rainbow_csv.rbql.csv_utils as csv_utils
+import rainbow_csv.auto_syntax as auto_syntax
 
 
-table_index_path = None
-table_names_path = None
+table_index_path_cached = None
+table_names_path_cached = None
+
 
 SETTINGS_FILE = 'RainbowCSV.sublime-settings'
 custom_settings = None # Gets auto updated on every SETTINGS_FILE write
@@ -22,68 +24,65 @@ custom_settings = None # Gets auto updated on every SETTINGS_FILE write
 #################################
 
 
-# TODO allow monocolumn tables. This could be complicated because we will need to make sure that F5 button would pass context check
-# Problem with output format in this case - we don't want to use comma because in 99% output would be single column and comma would make it quoted. the optimal way is "lazy" csv: no quoting when output is single column, otherwise regular csv
-
 # TODO consider implementing syntax with newlines-in-fields support. measure performance.
-
 # TODO CSVLint: warn about trailing spaces
-# TODO comments support
+# TODO support comment lines
+# TODO autodetect CSV on copy into empty buffer, just like in VSCode
 
-# TODO support multi-character separators
+# FIXME add special handling of whitespace-separated grammar. Treat consecutive whitespaces as a single separator
 
-
-rainbow_scope_names = [
-    'rainbow1',
-    'keyword.rainbow2',
-    'entity.name.rainbow3',
-    'comment.rainbow4',
-    'string.rainbow5',
-    'entity.name.tag.rainbow6',
-    'storage.type.rainbow7',
-    'support.rainbow8',
-    'constant.language.rainbow9',
-    'variable.language.rainbow10'
-]
+# FIXME in the plugin_loaded() method - check if custom colors were enabled and if they were - create custom settings file, otherwise - delete them
 
 
-naughty_delims_map = {
-    '<': 'less-than',
-    '>': 'greater-than',
-    ':': 'colon',
-    '"': 'double-quote',
-    '/': 'slash',
-    '\\': 'backslash',
-    '|': 'pipe',
-    '?': 'question-mark',
-    '*': 'asterisk',
-    '\t': 'tab',
-    ' ': 'space'
-}
+def get_table_index_path():
+    global table_index_path_cached
+    if table_index_path_cached is None:
+        table_index_path_cached = os.path.join(sublime.packages_path(), 'User', 'rbql_table_index_hex')
+    return table_index_path_cached
 
 
-legacy_syntax_names = {
-    ('\t', 'simple'): 'TSV (Rainbow).sublime-syntax',
-    (',', 'quoted'): 'CSV (Rainbow).sublime-syntax'
-}
+def get_table_names_path():
+    global table_names_path_cached
+    if table_names_path_cached is None:
+        table_names_path_cached = os.path.join(os.path.expanduser('~'), '.rbql_table_names') # TODO move to Package/User after improving RBQL architecture
+    return table_names_path_cached
 
 
-policy_map = {'simple': 'Simple', 'quoted': 'Standard'}
+legacy_syntax_names_inv = {v + '.sublime-syntax': k for k, v in auto_syntax.legacy_syntax_names.items()}
+
+policy_map_inv = {v: k for k, v in auto_syntax.policy_map.items()}
 
 
-naughty_delims_map_inv = {v: k for k, v in naughty_delims_map.items()}
-legacy_syntax_names_inv = {v: k for k, v in legacy_syntax_names.items()}
-policy_map_inv = {v: k for k, v in policy_map.items()}
+def ensure_syntax_file(delim, policy):
+    pregenerated_delims = auto_syntax.get_pregenerated_delims()
+    name = auto_syntax.get_syntax_file_basename(delim, policy)
+    if policy == 'simple' and delim in pregenerated_delims:
+        return (name, True, False)
+    if policy == 'quoted' and delim in [';', ',']:
+        return (name, True, False)
+
+    syntax_path = os.path.join(sublime.packages_path(), 'User', name)
+    syntax_text = auto_syntax.make_sublime_syntax(delim, policy).encode('utf-8')
+    try:
+        with open(syntax_path, 'rb') as f:
+            old_syntax_text = f.read()
+            if old_syntax_text == syntax_text:
+                return (name, False, False)
+    except Exception:
+        pass
+    with open(syntax_path, 'wb') as dst:
+        dst.write(syntax_text)
+    return (name, False, True)
 
 
-def get_field_by_line_position(fields, query_pos):
+def get_field_by_line_position(fields, delim_size, query_pos):
     if not len(fields):
         return None
     col_num = 0
     cpos = len(fields[col_num])
     while query_pos > cpos and col_num + 1 < len(fields):
         col_num += 1
-        cpos = cpos + 1 + len(fields[col_num])
+        cpos = cpos + delim_size + len(fields[col_num])
     return col_num
 
 
@@ -112,21 +111,6 @@ def generate_tab_statusline(tabstop_val, template_fields, max_output_len=None):
     if len(result):
         result[-1] = ''
     return result
-
-
-def init_user_data_paths():
-    global table_index_path
-    global table_names_path
-    if table_index_path is not None and table_names_path is not None:
-        return
-    user_home_dir = os.path.expanduser('~')
-    packages_path = sublime.packages_path()
-    sublime_user_dir = os.path.join(packages_path, 'User')
-    if os.path.exists(sublime_user_dir):
-        table_index_path = os.path.join(sublime_user_dir, 'rbql_table_index')
-    else:
-        table_index_path = os.path.join(user_home_dir, '.rbql_table_index')
-    table_names_path = os.path.join(user_home_dir, '.rbql_table_names') # TODO move to Package/User after improving RBQL architecture
 
 
 def get_user_color_scheme_path():
@@ -212,7 +196,7 @@ def do_adjust_color_scheme(style):
         if key in style:
             color_scheme['globals'][key] = style[key]
 
-    for i, scope_name in enumerate(rainbow_scope_names):
+    for i, scope_name in enumerate(auto_syntax.rainbow_scope_names):
         color_scheme['rules'].append({'name': 'rainbow csv rainbow{}'.format(i + 1), 'scope': scope_name, 'foreground': rainbow_colors[i]})
 
     syntax_data = json.dumps(color_scheme, indent=4, sort_keys=True)
@@ -224,25 +208,11 @@ def do_adjust_color_scheme(style):
         dst.write(syntax_data)
 
 
-
 def adjust_color_scheme(view):
     try:
         do_adjust_color_scheme(view.style())
     except Exception as e:
         print('Unable to auto adjust color scheme. Unexpected Exception: {}'.format(e))
-
-
-
-def index_decode_delim(delim):
-    if delim == 'TAB':
-        return '\t'
-    return delim
-
-
-def index_encode_delim(delim):
-    if delim == '\t':
-        return 'TAB'
-    return delim
 
 
 def try_read_index(index_path):
@@ -263,9 +233,12 @@ def try_read_index(index_path):
 
 
 def write_index(records, index_path):
-    with open(index_path, 'w') as dst:
-        for record in records:
-            dst.write('\t'.join(record) + '\n')
+    try:
+        with open(index_path, 'w') as dst:
+            for record in records:
+                dst.write('\t'.join(record) + '\n')
+    except Exception:
+        pass
 
 
 def get_index_record(index_path, key):
@@ -277,10 +250,12 @@ def get_index_record(index_path, key):
 
 
 def load_rainbow_params(file_path):
-    record = get_index_record(table_index_path, file_path)
+    record = get_index_record(get_table_index_path(), file_path)
     if record is not None and len(record) >= 3:
         delim, policy = record[1:3]
-        delim = index_decode_delim(delim)
+        if policy not in ['simple', 'quoted', 'disabled']:
+            return (None, None)
+        delim = auto_syntax.decode_delim(delim)
         return (delim, policy)
     return (None, None)
 
@@ -294,8 +269,9 @@ def update_records(records, record_key, new_record):
 
 
 def save_rainbow_params(file_path, delim, policy):
+    table_index_path = get_table_index_path()
     records = try_read_index(table_index_path)
-    new_record = [file_path, index_encode_delim(delim), policy, '']
+    new_record = [file_path, auto_syntax.encode_delim(delim), policy, '']
     update_records(records, file_path, new_record)
     if len(records) > 100:
         records.pop(0)
@@ -338,47 +314,25 @@ def get_document_header(view, delim, policy):
 
 def is_plain_text(view):
     syntax = view.settings().get('syntax')
-    return syntax.find('Plain text.tmLanguage') != -1
-
-
-def name_normalize(delim):
-    if delim in naughty_delims_map:
-        return naughty_delims_map[delim]
-    return '[{}]'.format(delim)
-
-
-def name_normalize_inv(name):
-    if name in naughty_delims_map_inv:
-        return naughty_delims_map_inv[name]
-    if name.startswith('[') and name.endswith(']'):
-        return name[1:-1]
-    return None
-
-
-def get_grammar_basename_from_dialect(delim, policy):
-    if (delim, policy) in legacy_syntax_names:
-        return legacy_syntax_names[(delim, policy)]
-    simple_delims = '\t !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
-    standard_delims = '\t|,;'
-    if policy == 'simple' and simple_delims.find(delim) == -1:
-        return None
-    if policy == 'quoted' and standard_delims.find(delim) == -1:
-        return None
-    return 'Rainbow CSV {} {}.sublime-syntax'.format(name_normalize(delim), policy_map[policy])
+    if syntax.find('Plain text.tmLanguage') != -1:
+        return True
+    if syntax.find('Plain Text (CSV).sublime-syntax') != -1: # Provided by "A File Icon" package
+        return True
+    return False
 
 
 def get_dialect_from_grammar_basename(grammar_basename):
     if grammar_basename in legacy_syntax_names_inv:
         return legacy_syntax_names_inv[grammar_basename]
-    start_marker = 'Rainbow CSV '
+    start_marker = 'Rainbow_CSV_hex_'
     end_marker = '.sublime-syntax'
     if not grammar_basename.startswith(start_marker) or not grammar_basename.endswith(end_marker):
         return None
     encoded_dialect = grammar_basename[len(start_marker):-len(end_marker)]
-    wpos = encoded_dialect.rfind(' ')
+    wpos = encoded_dialect.rfind('_')
     if wpos == -1:
         return None
-    delim = name_normalize_inv(encoded_dialect[:wpos])
+    delim = auto_syntax.decode_delim(encoded_dialect[:wpos])
     policy = policy_map_inv.get(encoded_dialect[wpos + 1:], None)
     if delim is None or policy is None:
         return None
@@ -396,24 +350,85 @@ def get_dialect(settings):
     return dialect
 
 
+def get_syntax_settings_file_basename(syntax_file_basename):
+    extension = '.sublime-syntax'
+    assert syntax_file_basename.endswith(extension)
+    return syntax_file_basename[:-len(extension)] + '.sublime-settings'
+
+
+def make_sublime_settings(syntax_settings_path):
+    if not os.path.exists(syntax_settings_path):
+        with open(syntax_settings_path, 'w') as f:
+            f.write('{\n    "color_scheme": "RainbowCSV.sublime-color-scheme"\n}')
+
+
+def remove_sublime_settings(syntax_settings_path):
+    try:
+        os.remove(syntax_settings_path)        
+    except Exception:
+        pass
+
+
+def dbg_log(logging_enabled, msg):
+    if logging_enabled:
+        print(msg)
+        with open(os.path.join(sublime.packages_path(), 'User', 'rainbow_csv_debug.log'), 'a') as f:
+            f.write(msg + '\n')
+
+
 def do_enable_rainbow(view, delim, policy, store_settings):
-    auto_adjust_rainbow_colors = get_setting(view, 'auto_adjust_rainbow_colors', True)
-    if auto_adjust_rainbow_colors:
-        adjust_color_scheme(view)
-    grammar_basename = get_grammar_basename_from_dialect(delim, policy)
-    if grammar_basename is None:
-        if policy == 'quoted':
-            sublime.error_message('Error: Only "Simple" dialect is available for this character')
-        else:
-            sublime.error_message('Error: Unable to use this character as a separator')
+    if not delim or not len(delim):
         return
+    file_path = view.file_name()
+    logging_enabled = get_setting(view, 'enable_debug_logging', False)
+    dbg_log(logging_enabled, '=======================================')
+    dbg_log(logging_enabled, 'Enabling rainbow higlighting for {}: "{}", {}'.format(file_path, delim, policy))
+
+    pre_rainbow_syntax = view.settings().get('syntax')
     if view.settings().get('pre_rainbow_syntax', None) is None:
-        pre_rainbow_syntax = view.settings().get('syntax')
         view.settings().set('pre_rainbow_syntax', pre_rainbow_syntax)
         view.settings().set('rainbow_mode', True) # We use this as F5 key condition
-    view.set_syntax_file('Packages/rainbow_csv/custom_grammars/{}'.format(grammar_basename))
-    file_path = view.file_name()
+
+    syntax_file_basename, pregenerated, created = ensure_syntax_file(delim, policy)
+    dbg_log(logging_enabled, 'Syntax file basename: "{}", Pregenerated: {}, Created: {}'.format(syntax_file_basename, pregenerated, created))
+
+    if pregenerated:
+        syntax_settings_path = os.path.join(sublime.packages_path(), 'rainbow_csv', 'pregenerated_grammars', get_syntax_settings_file_basename(syntax_file_basename))
+    else:
+        syntax_settings_path = os.path.join(sublime.packages_path(), 'User', get_syntax_settings_file_basename(syntax_file_basename))
+
+    use_custom_rainbow_colors = get_setting(view, 'use_custom_rainbow_colors', False)
+
+    if use_custom_rainbow_colors:
+        dbg_log(logging_enabled, 'Using custom rainbow colors')
+        make_sublime_settings(syntax_settings_path)
+        auto_adjust_rainbow_colors = get_setting(view, 'auto_adjust_rainbow_colors', True)
+        if auto_adjust_rainbow_colors:
+            adjust_color_scheme(view)
+    #else: # FIXME enable after fixing #27
+    #    remove_sublime_settings(syntax_settings_path)
+
+    if pregenerated:
+        rainbow_syntax_file = 'Packages/rainbow_csv/pregenerated_grammars/{}'.format(syntax_file_basename)
+    else:
+        rainbow_syntax_file = 'Packages/User/{}'.format(syntax_file_basename)
+    dbg_log(logging_enabled, 'Current syntax file: "{}", New syntax file: "{}"'.format(pre_rainbow_syntax, rainbow_syntax_file))
+    if pre_rainbow_syntax == rainbow_syntax_file:
+        return
+
+    if created:
+        def set_syntax_async():
+            dbg_log(logging_enabled, 'In callback. Setting rainbow syntax file to: "{}"'.format(rainbow_syntax_file))
+            view.set_syntax_file(rainbow_syntax_file)
+        # We use this callback with timeout because otherwise Sublime fails to find the brand new .sublime-syntax file right after it's generation - 
+        # And shows an error (highlighting would work though, but the error is really ugly and confusing)
+        dbg_log(logging_enabled, 'New syntax file created: "{}". Preparing to enable'.format(rainbow_syntax_file))
+        sublime.set_timeout_async(set_syntax_async, 2500) # We can actually decrease this to 1000 and it should be OK too
+    else:
+        dbg_log(logging_enabled, 'Setting existing syntax file: "{}"'.format(rainbow_syntax_file))
+        view.set_syntax_file(rainbow_syntax_file)
     if file_path is not None and store_settings:
+        dbg_log(logging_enabled, 'Saving rainbow params')
         save_rainbow_params(file_path, delim, policy)
 
 
@@ -426,7 +441,7 @@ def do_disable_rainbow(view):
     view.settings().erase('rainbow_mode')
     file_path = view.file_name()
     if file_path is not None:
-        save_rainbow_params(file_path, 'disabled', '')
+        save_rainbow_params(file_path, '', 'disabled')
 
 
 def enable_generic_command(view, policy):
@@ -436,13 +451,25 @@ def enable_generic_command(view, policy):
         return
     region = selection[0]
     selection_text = view.substr(region)
-    if len(selection_text) != 1:
-        sublime.error_message('Error. Exactly one separator character should be selected.')
+    if not selection_text or not len(selection_text):
+        sublime.error_message('Error: Unable to use an empty string as a separator')
+        return
+    if policy == 'auto':
+        if selection_text in [';', ',']:
+            policy = 'quoted'
+        else:
+            policy = 'simple'
+    if policy == 'quoted' and selection_text not in [';', ',']:
+        # TODO We can actually get rid of this check, since the policy is now "auto" by default
+        sublime.error_message('Error: Standard dialect is supported only with comma [,] and semicolon [;] separators')
+        return
+    if selection_text.find('\n') != -1:
+        sublime.error_message('Error: newline can not be a part of field separator')
         return
     do_enable_rainbow(view, selection_text, policy, store_settings=True)
 
 
-class EnableStandardCommand(sublime_plugin.TextCommand):
+class EnableQuotedCommand(sublime_plugin.TextCommand):
     def run(self, _edit):
         enable_generic_command(self.view, 'quoted')
 
@@ -450,6 +477,11 @@ class EnableStandardCommand(sublime_plugin.TextCommand):
 class EnableSimpleCommand(sublime_plugin.TextCommand):
     def run(self, _edit):
         enable_generic_command(self.view, 'simple')
+
+
+class EnableAutoCommand(sublime_plugin.TextCommand):
+    def run(self, _edit):
+        enable_generic_command(self.view, 'auto')
 
 
 class DisableCommand(sublime_plugin.TextCommand):
@@ -477,6 +509,7 @@ def on_set_table_name_done(input_line):
         return
     table_name = input_line.strip()
 
+    table_names_path = get_table_names_path()
     records = try_read_index(table_names_path)
     new_record = [table_name, file_path]
     update_records(records, table_name, new_record)
@@ -515,8 +548,6 @@ def idempotent_enable_rainbow(view, delim, policy, wait_time):
         sublime.set_timeout(done_loading_cb, wait_time)
     else:
         cur_dialect = get_dialect(view.settings())
-        if cur_dialect[1] == 'monocolumn':
-            return
         cur_delim, cur_policy = cur_dialect
         if cur_delim == delim and cur_policy == policy:
             return
@@ -535,9 +566,18 @@ def on_done_query_edit(input_line):
     active_view.hide_popup()
     file_path = active_view.file_name()
     if not file_path:
-        # FIXME create a temp file from unnamed buffer
-        sublime.error_message('RBQL Error. Unable to run query for this buffer')
-        return
+        try:
+            import tempfile
+            import io
+            whole_file_region = sublime.Region(0, active_view.size())
+            file_text = active_view.substr(whole_file_region)
+            tmp_dir = tempfile.gettempdir()
+            file_path = os.path.join(tmp_dir, 'rbql_sublime_scratch_buffer')
+            with io.open(file_path, 'w', encoding='utf-8') as f:
+                f.write(file_text)
+        except Exception as e:
+            sublime.error_message('Unable to run RBQL query for this temporary buffer')
+            return
     input_dialect = get_dialect(active_view.settings())
     input_delim, input_policy = input_dialect
     backend_language = get_backend_language(active_view)
@@ -577,10 +617,14 @@ def on_query_cancel():
 
 
 def get_column_color(view, col_num):
-    color_info = view.style_for_scope(rainbow_scope_names[col_num % 10])
+    color_info = view.style_for_scope(auto_syntax.rainbow_scope_names[col_num % 10])
     if color_info and 'foreground' in color_info:
         return color_info['foreground']
     return '#FF0000' # Error handling, should never happen
+
+
+def html_escape(s):
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
 def show_names_for_line(view, delim, policy, line_region):
@@ -604,7 +648,7 @@ def show_names_for_line(view, delim, policy, line_region):
         hex_color = get_column_color(view, i)
         column_name = status_labels[i * 2]
         space_filling = status_labels[i * 2 + 1].replace(' ', '&nbsp;')
-        html_text += '<span style="color:{}">{}{}</span>'.format(hex_color, column_name, space_filling)
+        html_text += '<span style="color:{}">{}{}</span>'.format(hex_color, html_escape(column_name), space_filling)
     view.show_popup(html_text, location=point, max_width=max_status_width, max_height=100)
 
 
@@ -741,7 +785,7 @@ class RunQueryCommand(sublime_plugin.TextCommand):
         previous_query = self.view.settings().get('rbql_previous_query', '')
         backend_language = get_backend_language(self.view)
         pretty_language_name = prettify_language_name(backend_language)
-        encoding = get_setting(self.view, 'rbql_encoding', 'latin-1')
+        encoding = get_setting(self.view, 'rbql_encoding', 'utf-8')
         active_window.show_input_panel('Enter SQL-like RBQL query ({}/{}):'.format(pretty_language_name, encoding), previous_query, on_done_query_edit, None, on_query_cancel)
         self.view.settings().set('rbql_mode', True)
         show_column_names(self.view, delim, policy)
@@ -792,19 +836,20 @@ def autodetect_frequency_based(view, autodetection_dialects):
     return best_dialect
 
 
-def run_rainbow_init(view):
-    if view.settings().get('rainbow_inited') is not None:
+def run_rainbow_autodetect(view):
+    if view.settings().get('rainbow_checked') is not None:
         return
-    init_user_data_paths()
+    view.settings().set('rainbow_checked', True)
 
     max_file_size = get_setting(view, 'rainbow_csv_max_file_size_bytes', 5000000)
     if max_file_size is not None and view.size() > max_file_size:
         return
-    view.settings().set('rainbow_inited', True)
     file_path = view.file_name()
     if file_path is not None:
         delim, policy = load_rainbow_params(file_path)
-        if delim == 'disabled':
+        if policy == 'disabled':
+            return
+        if delim == 'disabled': # Backward compatibility. TODO remove this condition after July 2021
             return
         if delim is not None:
             do_enable_rainbow(view, delim, policy, store_settings=False)
@@ -840,10 +885,10 @@ def run_rainbow_init(view):
 
 class RainbowAutodetectListener(sublime_plugin.EventListener):
     def on_load(self, view):
-        run_rainbow_init(view)
+        run_rainbow_autodetect(view)
 
     def on_activated(self, view):
-        run_rainbow_init(view)
+        run_rainbow_autodetect(view)
 
 
 def hover_hide_cb():
@@ -872,7 +917,7 @@ class RainbowHoverListener(sublime_plugin.ViewEventListener):
             cnum = self.view.rowcol(point)[1]
             line_text = self.view.substr(self.view.line(point))
             hover_record, warning = csv_utils.smart_split(line_text, delim, policy, True)
-            field_num = get_field_by_line_position(hover_record, cnum)
+            field_num = get_field_by_line_position(hover_record, len(delim), cnum)
             header = get_document_header(self.view, delim, policy)
             ui_text = 'Col #{}'.format(field_num + 1)
             if field_num < len(header):
@@ -886,4 +931,10 @@ class RainbowHoverListener(sublime_plugin.ViewEventListener):
             if warning:
                 ui_text += '; This line has quoting error'
             ui_hex_color = get_column_color(self.view, field_num)
-            self.view.show_popup('<span style="color:{}">{}</span>'.format(ui_hex_color, ui_text), sublime.HIDE_ON_MOUSE_MOVE_AWAY, point, on_hide=hover_hide_cb, max_width=1000)
+            self.view.show_popup('<span style="color:{}">{}</span>'.format(ui_hex_color, html_escape(ui_text)), sublime.HIDE_ON_MOUSE_MOVE_AWAY, point, on_hide=hover_hide_cb, max_width=1000)
+
+
+def plugin_loaded():
+    pass # We can run some code here at the plugin initialization stage
+
+

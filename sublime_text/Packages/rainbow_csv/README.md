@@ -13,14 +13,14 @@
 ![screenshot](https://i.imgur.com/UtGKbEg.png)
 
 ### Usage
-Rainbow CSV has content-based csv/tsv autodetection mechanism. This means that package will analyze plain text files even if they do not have "*.csv" or "*.tsv" extension.  
+Rainbow CSV has content-based csv/tsv autodetection mechanism. This means that the package will analyze plain text files even if they do not have "*.csv" or "*.tsv" extension.  
 
 Rainbow highlighting can also be manually enabled from Sublime context menu (see the demo gif below):  
-1. Select a character that you want to use as a delimiter with mouse. Delimiter can be any non-alphanumeric printable ASCII symbol, e.g. semicolon  
+1. Select a character (or sequence of characters) that you want to use as a delimiter with the cursor
 2. Right mouse click: context menu -> Rainbow CSV -> Enable ...  
 
 You can also disable rainbow highlighting and go back to the original file highlighting using the same context menu.  
-This feature can be used to temporary rainbow-highlight even non-table files.  
+This feature can be used to temporarily rainbow-highlight even non-table files.  
 
 Manual Rainbow Enabling/Disabling demo gif:  
 ![demo](https://i.imgur.com/7lSSMst.gif)
@@ -30,18 +30,22 @@ Rainbow CSV also lets you execute SQL-like queries in RBQL language, see the dem
 
 To Run RBQL query press **F5** or select "Rainbow CSV" -> "Run RBQL query" option from the file context menu.  
 
-#### Difference between "Standard" and "Simple" dialects
-When manually enabling rainbow highlighting from the context menu, you have to choose between "Standard" and "Simple" dialect.  
-* __Standard dialect__ will treat quoted separator as a single field. E.g. line `sell,"15,128",23%` will be treated as 3 columns, because the second comma is quoted. This dialect is used by Excel.  
-* __Simple dialect__ doesn't care about double quotes: the number of highlighted fields is always N + 1 where N is the number of separators.  
 
 ### Key mappings
 
 |Key                       | Action                                             |
 |--------------------------|----------------------------------------------------|
-|**F5**                    | Start query editing for the current csv file       |
+|**F5**                    | Start query editing for the current CSV file       |
 
 ### Commands
+
+#### Rainbow CSV: Enable Simple
+Before running the command you need to select the separator (single or multiple characters) with your cursor
+Set the selected character as the separator and enables syntax highlighting. Sublime will generate the syntax file if it doesn't exist.
+Simple dialect completely ignores double quotes: i.e. separators can not be escaped in double quoted fields
+
+#### Rainbow CSV: Enable Standard
+Same as the _Enable Simple_ command, but separators can be escaped in double quoted fields.
 
 #### Rainbow CSV: CSVLint
 The linter checks the following:  
@@ -68,6 +72,8 @@ To adjust plugin configuration:
 
 ### Configuration parameters
 
+To configure the extension, click "Preferences" -> "Package Settings" -> "Rainbow CSV" -> "Settings"
+
 #### "enable_rainbow_csv_autodetect"
 Enable content-based separator autodetection. 
 Files with ".csv" and ".tsv" extensions are always highlighted no matter what is the value of this option.
@@ -81,16 +87,20 @@ Disable Rainbow CSV for files bigger than the specified size. This can be helpfu
 Manual separator selection will override this setting for the current file.  
 E.g. to disable on files larger than 100 MB, set `"rainbow_csv_max_file_size_bytes": 100000000`  
 
+#### "use_custom_rainbow_colors"
+Use custom high-contrast rainbow colors instead of colors provided by your current color scheme
+
 #### "auto_adjust_rainbow_colors"
 Auto adjust rainbow colors for Packages/User/RainbowCSV.sublime-color-scheme  
 Rainbow CSV will auto-generate color theme with high-contrast colors to make CSV columns more distinguishable.  
 You can disable this setting and manually customize Rainbow CSV color scheme at Packages/User/RainbowCSV.sublime-color-scheme  
 Do not customize Packages/User/RainbowCSV.sublime-color-scheme without disabling the setting, it will be rewritten by the plugin  
+This option has effect only if "use_custom_rainbow_colors" is set to true
 
 #### "rbql_backend_language"
 RBQL backend language.  
 Supported values: _"Python"_, _"JS"_  
-In order to use RBQL with JavaScript (JS) you need to have Node JS installed and added to your system path.  
+To use RBQL with JavaScript (JS) you need to have Node JS installed and added to your system path.  
 
 #### "rbql_output_format"
 Format of RBQL result set tables.  
@@ -113,17 +123,17 @@ Supported values: _"latin-1"_, _"utf-8"_
 
 # RBQL (Rainbow Query Language) Description
 
-RBQL is a technology for (not only) CSV files processing. It provides SQL-like language that supports SELECT queries with Python or JavaScript expressions.  
+RBQL is a technology for (not only) CSV file processing. It provides SQL-like language that supports SELECT queries with Python or JavaScript expressions.  
 RBQL is distributed with CLI apps, text editor plugins, Python and JS libraries and can work in web browsers.  
-RBQL core module is very generic and can process all kind of objects and record formats, but most popular RBQL implementation works with CSV files.  
+RBQL core module is very generic and can process all kinds of objects and record formats, but the most popular RBQL implementation works with CSV files.  
 
 [Official Site](https://rbql.org/)
 
 ### Main Features
 
 * Use Python or JavaScript expressions inside _SELECT_, _UPDATE_, _WHERE_ and _ORDER BY_ statements
-* Result set of any query immediately becomes a first-class table on it's own
-* Supports input tables with inconsistent number of fields per record
+* Result set of any query immediately becomes a first-class table on its own
+* Supports input tables with an inconsistent number of fields per record
 * Output records appear in the same order as in input unless _ORDER BY_ is provided
 * Each record has a unique NR (record number) identifier
 * Supports all main SQL keywords
@@ -170,10 +180,10 @@ RBQL for CSV files provides the following variables which you can use in your qu
    Description: Number of fields in the current record  
 * _a.name_, _b.Person_age_, ... _a.{Good_alphanumeric_column_name}_  
    Variable type: **string**  
-   Description: Value of the field referenced by it's "name". You can use this notation if the field in the first (header) CSV line has a "good" alphanumeric name  
+   Description: Value of the field referenced by its "name". You can use this notation if the field in the first (header) CSV line has a "good" alphanumeric name  
 * _a["object id"]_, _a['9.12341234']_, _b["%$ !! 10 20"]_ ... _a["Arbitrary column name!"]_  
    Variable type: **string**  
-   Description: Value of the field referenced by it's "name". You can use this notation to reference fields by arbitrary values in the first (header) CSV line, even when there is no header at all  
+   Description: Value of the field referenced by its "name". You can use this notation to reference fields by arbitrary values in the first (header) CSV line, even when there is no header at all  
 
 
 #### Notes:
@@ -202,7 +212,7 @@ There is a workaround for the limitation above for _ARRAY_AGG_ function which su
 
 ### JOIN statements
 
-Join table B can be referenced either by it's file path or by it's name - an arbitary string which user should provide before executing the JOIN query.  
+Join table B can be referenced either by its file path or by its name - an arbitrary string which the user should provide before executing the JOIN query.  
 RBQL supports _STRICT LEFT JOIN_ which is like _LEFT JOIN_, but generates an error if any key in left table "A" doesn't have exactly one matching key in the right table "B".  
 Limitation: _JOIN_ statements can't contain Python/JS expressions and must have the following form: _<JOIN\_KEYWORD> (/path/to/table.tsv | table_name ) ON a... == b... [AND a... == b... [AND ... ]]_
 
@@ -259,7 +269,7 @@ You can define custom functions and/or import libraries in two special files:
 
 ### FAQ
 
-#### How do I skip header record in CSV files?
+#### How do I skip the header record in a CSV file?
 
 You can use the following trick: add `... where NR > 1 ...` to your query  
 
@@ -271,11 +281,13 @@ And if you are doing math operation you can modify your query like this, example
 
 RBQL parses SQL-like user query, generates new Python or JavaScript code and executes it.  
 
-Explanation of simplified Python version of RBQL algorithm by example.
-1. User enters the following query, which is stored as a string _Q_:
+Explanation of simplified Python version of RBQL algorithm by example:  
+
+1. The user enters the following query, which is stored as a string _Q_  
 ```
     SELECT a3, int(a4) + 100, len(a2) WHERE a1 != 'SELL'
 ```
+
 2. RBQL replaces all `a{i}` substrings in the query string _Q_ with `a[{i - 1}]` substrings. The result is the following string:
 ```
     Q = "SELECT a[2], int(a[3]) + 100, len(a[1]) WHERE a[0] != 'SELL'"
@@ -315,6 +327,18 @@ Adding support of TOP/LIMIT keywords is trivial and to support "ORDER BY" we can
 
 
 ### References
+
+#### Rainbow CSV and similar plugins in other editors:
+
+* Rainbow CSV extension in [Vim](https://github.com/mechatroner/rainbow_csv)
+* Rainbow CSV extension in [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv)
+* rainbow-csv package in [Atom](https://atom.io/packages/rainbow-csv)
+* rainbow_csv plugin in [gedit](https://github.com/mechatroner/gtk_gedit_rainbow_csv) - doesn't support quoted commas in csv
+* rainbow_csv_4_nedit in [NEdit](https://github.com/DmitTrix/rainbow_csv_4_nedit)
+* CSV highlighting in [Nano](https://github.com/scopatz/nanorc)
+* Rainbow CSV in [IntelliJ IDEA](https://plugins.jetbrains.com/plugin/12896-rainbow-csv/)
+
+#### RBQL:
 
 * [RBQL: Official Site](https://rbql.org/)
 * RBQL is integrated with Rainbow CSV extensions in [Vim](https://github.com/mechatroner/rainbow_csv), [VSCode](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv), [Sublime Text](https://packagecontrol.io/packages/rainbow_csv) and [Atom](https://atom.io/packages/rainbow-csv) editors.

@@ -16,6 +16,7 @@
 	"hot_exit": true,
 	"ignored_packages":
 	[
+		"Package Control",
 		"Vintage"
 	],
 	"match_brackets": true,

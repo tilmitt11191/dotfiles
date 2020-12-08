@@ -7,6 +7,7 @@ FLAG_PREZTO=true
 FLAG_PECO=true
 IS_CYGWIN=""
 FLAG_UBUNTU=""
+FLAG_UBUNTU_CONDA=""
 FLAG_VM=""
 FLAG_SAKURA=""
 FLAG_TMUX=true
@@ -104,6 +105,7 @@ case "$HOST" in
 	ubuntumain*) echo "##ubuntumain setup"
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
+		FLAG_UBUNTU_CONDA=true
 		FLAG_VM=true
 		FLAG_PYTHON=true
 		FLAG_RUBY=true
@@ -478,6 +480,23 @@ if [ $FLAG_GOOGLE_CLOUD_SDK ];then
 	if [ -f '$HOME/lib/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/lib/google-cloud-sdk/completion.zsh.inc'; fi
 fi
 
+if [ $FLAG_UBUNTU_CONDA]; then
+	# >>> conda initialize >>>
+	# !! Contents within this block are managed by 'conda init' !!
+	__conda_setup="$('/home/alladmin/.pyenv/versions/anaconda3-4.3.0/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+	if [ $? -eq 0 ]; then
+		eval "$__conda_setup"
+	else
+		if [ -f "/home/alladmin/.pyenv/versions/anaconda3-4.3.0/etc/profile.d/conda.sh" ]; then
+			. "/home/alladmin/.pyenv/versions/anaconda3-4.3.0/etc/profile.d/conda.sh"
+		else
+			export PATH="/home/alladmin/.pyenv/versions/anaconda3-4.3.0/bin:$PATH"
+		fi
+	fi
+	unset __conda_setup
+	# <<< conda initialize <<<
+fi
+
 echo "welcome to $HOST!!"
 
 : <<'#__CO__'
@@ -485,22 +504,3 @@ if [ $ ];then
 	echo "##"
 fi
 #__CO__
-
-
-
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/alladmin/.pyenv/versions/anaconda3-4.3.0/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/alladmin/.pyenv/versions/anaconda3-4.3.0/etc/profile.d/conda.sh" ]; then
-        . "/home/alladmin/.pyenv/versions/anaconda3-4.3.0/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/alladmin/.pyenv/versions/anaconda3-4.3.0/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
