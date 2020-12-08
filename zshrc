@@ -141,9 +141,9 @@ case "$HOST" in
 		#export PATH="$PYENV_ROOT/versions/anaconda/bin/:$PYENV_ROOT/bin:$PATH"
 		#eval "$(pyenv init -)"
 		echo "activate py3.6"
-		source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
+# source $HOME/.pyenv/versions/anaconda/bin/activate py3.6  # commented out by conda initialize
 		echo "activate py2.7"
-		source $HOME/.pyenv/versions/anaconda/bin/activate py2.7
+# source $HOME/.pyenv/versions/anaconda/bin/activate py2.7  # commented out by conda initialize
 		PATH=$PATH:$(chromedriver-path)
 		;;
 	www2271.sakura.ne.jp*) echo "##sakura setup"
@@ -487,4 +487,20 @@ fi
 #__CO__
 
 
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/alladmin/.pyenv/versions/anaconda3-4.3.0/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/alladmin/.pyenv/versions/anaconda3-4.3.0/etc/profile.d/conda.sh" ]; then
+        . "/home/alladmin/.pyenv/versions/anaconda3-4.3.0/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/alladmin/.pyenv/versions/anaconda3-4.3.0/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 
