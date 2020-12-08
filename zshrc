@@ -52,6 +52,22 @@ case "$HOST" in
 			function st() {
 			    cygstart /cygdrive/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe "$(cygpath -aw "$*")" &
 			}
+			function code() {
+				if [ -L "$*" ]; then
+					TARGET=$(readlink "$*")
+				else
+					TARGET="$*"
+				fi
+				"/cygdrive/c/Users/$(whoami)/AppData/Local/Programs/Microsoft VS Code/bin/code" "$(cygpath -aw "$TARGET")" &
+			}
+			function hidemaru() {
+				if [ -L "$*" ]; then
+					TARGET=$(readlink "$*")
+				else
+					TARGET="$*"
+				fi
+				/cygdrive/c/Program\ Files\ \(x86\)/Hidemaru/Hidemaru.exe  "$(cygpath -aw "$TARGET")" &
+			}
 			source /cygdrive/c/Users/tilmi/AppData/Local/Google/Cloud\ SDK/google-cloud-sdk/path.zsh.inc
 			export PATH="$HOME/lib/intel_mkl:$PATH"
 			ANACONDA_ROOT="/cygdrive/c/Users/$(whoami)/Anaconda3"
@@ -179,7 +195,7 @@ case "$HOST" in
 				else
 					TARGET="$*"
 				fi
-				/cygdrive/c/Users/ozu/AppData/Local/Programs/Microsoft\ VS\ Code/bin/code "$(cygpath -aw "$TARGET")" &
+				"/cygdrive/c/Users/$(whoami)/AppData/Local/Programs/Microsoft VS Code/bin/code" "$(cygpath -aw "$TARGET")" &
 			}
 			function hidemaru() {
 				if [ -L "$*" ]; then
@@ -225,7 +241,7 @@ case "$HOST" in
 				else
 					TARGET="$*"
 				fi
-				/cygdrive/c/Users/ozu/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe "$(cygpath -aw "$TARGET")" &
+				"/cygdrive/c/Users/$(whoami)/AppData/Local/Programs/Microsoft VS Code/bin/code" "$(cygpath -aw "$TARGET")" &
 			}
 			function hidemaru() {
 				if [ -L "$*" ]; then
@@ -259,7 +275,7 @@ case "$HOST" in
 				else
 					TARGET="$*"
 				fi
-				/cygdrive/c/Users/ozu/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe "$(cygpath -w "$TARGET")" &
+				"/cygdrive/c/Users/$(whoami)/AppData/Local/Programs/Microsoft VS Code/bin/code" "$(cygpath -aw "$TARGET")" &
 			}
 			function hidemaru() {
 				if [ -L "$*" ]; then
