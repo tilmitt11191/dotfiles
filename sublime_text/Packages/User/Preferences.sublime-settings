@@ -10,7 +10,7 @@
 	[
 		"directwrite"
 	],
-	"font_size": 10,
+	"font_size": 13,
 	"highlight_line": false,
 	"highlight_modified_tabs": true,
 	"hot_exit": true,
@@ -30,5 +30,5 @@
 	"tab_size": 4,
 	"theme": "Asphalt.sublime-theme",
 	"translate_tabs_to_spaces": false,
-	"word_wrap": true
+	"word_wrap": true,
 }

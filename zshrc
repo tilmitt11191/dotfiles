@@ -72,9 +72,9 @@ case "$HOST" in
 			export PATH="$HOME/lib/intel_mkl:$PATH"
 			ANACONDA_ROOT="/cygdrive/c/Users/$(whoami)/Anaconda3"
 			#export PATH="$ANACONDA_ROOT:$ANACONDA_ROOT/bin:$ANACONDA_ROOT/Scripts:$PATH"
-			echo "activate py38"
-			export PATH="$ANACONDA_ROOT/envs/py38:$ANACONDA_ROOT/envs/py38/Scripts:$PATH"
-			#source $HOME/.pyenv/versions/anaconda/bin/activate py3.6
+			echo "activate py39"
+			export PATH="$ANACONDA_ROOT/envs/py39:$ANACONDA_ROOT/envs/py39/Scripts:$PATH"
+			#source $HOME/.pyenv/versions/anaconda/bin/activate py3.9
 			echo "activate py27"
 			#source $HOME/.pyenv/versions/anaconda/bin/activate py2.7
 			export PATH="$ANACONDA_ROOT/envs/py27:$ANACONDA_ROOT/envs/py27/Scripts:$PATH"
