@@ -43,7 +43,8 @@ case $HOST in
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=true
 		#PREZTO_THEME="powerline"
-		PRETO_THEME="adam2"
+		#PRETO_THEME="adam2"
+		PREZTO_THEME="fade"
 		;;
 	ubuntumain*) echo "ubuntumain setup"
 		PREZTO_THEME="fade"
