@@ -303,7 +303,7 @@ case "$HOST" in
 			export LIBG_ALWAYS_INDIRECT=1
 		fi
 		;;
-	libra* | aries*) echo "##libra | aries setup"
+	libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac*) echo "##libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac*"
 		FLAG_COMMON=true
 		FLAG_PREZTO=true
 		FLAG_UBUNTU=true
