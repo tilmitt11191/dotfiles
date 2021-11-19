@@ -1,3 +1,4 @@
+*.swp
 !.gitignore
 
 /sublime_text/Packages/User/Package\ Control.cache/*
