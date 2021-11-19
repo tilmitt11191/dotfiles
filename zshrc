@@ -310,9 +310,9 @@ case "$HOST" in
 		FLAG_RUBY=true
 
 		ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
-		echo "activate py37-ns3"
-		export PATH="$ANACONDA_ROOT/envs/py37-ns3/bin:$PATH"
-		# echo "activate py27"
+		echo "activate py39"
+		export PATH="$ANACONDA_ROOT/envs/py39/bin:$PATH"
+		echo "activate py27"
 		export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
 		FLAG_PYTHON=""
 		echo "which python3: $(which python3)"
