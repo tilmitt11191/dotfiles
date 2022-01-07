@@ -79,7 +79,7 @@ case $HOST in
 		FLAG_HIGHSPEC=true
 		PREZTO_THEME="fade"
 		;;
-	libra* | aries*) echo "##libra | aries setup"
+	libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac*) echo "##libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac* setup"
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=ture
