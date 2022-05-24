@@ -6,8 +6,7 @@ FLAG_HIGHSPEC=""
 FLAG_PREZTO=true
 FLAG_PECO=true
 IS_CYGWIN=""
-FLAG_UBUNTU=""
-FLAG_UBUNTU_CONDA=""
+FLAG_CONDA=""
 FLAG_VM=""
 FLAG_SAKURA=""
 FLAG_TMUX=true
@@ -94,7 +93,7 @@ case "$HOST" in
         ;;
     backuptower) echo "##backuptower setup"
         FLAG_PREZTO=true
-        FLAG_UBUNTU=true
+        IS_UBUNTU=true
         FLAG_PYTHON=""
         FLAG_RUBY=true
         #FLAG_HIGHSPEC=true
@@ -120,8 +119,8 @@ case "$HOST" in
         ;;
     ubuntumain*) echo "##ubuntumain setup"
         FLAG_PREZTO=true
-        FLAG_UBUNTU=true
-        FLAG_UBUNTU_CONDA=true
+        IS_UBUNTU=true
+        FLAG_CONDA=true
         FLAG_VM=true
         FLAG_PYTHON=true
         FLAG_RUBY=true
@@ -133,14 +132,14 @@ case "$HOST" in
         ;;
     ubuntusetuptest) echo "##ubuntusetuptest setup"
         FLAG_PREZTO=true
-        FLAG_UBUNTU=true
+        IS_UBUNTU=true
         FLAG_VM=true
         FLAG_PYTHON=true
         FLAG_RUBY=true
         ;;
     ubuntu-pcap) echo "##ubuntu-pcap setup"
         FLAG_PREZTO=true
-        FLAG_UBUNTU=true
+        IS_UBUNTU=true
         FLAG_VM=true
         FLAG_PYTHON=true
         FLAG_RUBY=true
@@ -149,7 +148,7 @@ case "$HOST" in
         ;;
     ubuntu-erico*) echo "##ubuntu-erico setup"
         FLAG_PREZTO=true
-        FLAG_UBUNTU=true
+        IS_UBUNTU=true
         FLAG_VM=true
         FLAG_PYTHON=""
         FLAG_RUBY=true
@@ -171,11 +170,12 @@ case "$HOST" in
         FLAG_COMMON=true
         export PATH="${HOME}/local/bin:${PATH}}"
         ;;
-    *msi*) echo "##msi setup"    
+    *-msi*) echo "##-msi setup"    
         if [ "$IS_CYGWIN" ];then
             echo "##this is Cygwin"
             FLAG_COMMON=true
 
+            FLAG_CONDA=true
             ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_win"
             export PATH="$ANACONDA_ROOT/Library/bin:$PATH"
             echo "activate py37"
@@ -207,8 +207,10 @@ case "$HOST" in
             }
         elif [ "$IS_UBUNTU" ];then
             echo "##this is Ubuntu"
-            compinit -u
+            # compinit -u
+            FLAG_CONDA=true
             ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_ubuntu"
+            export PATH="$ANACONDA_ROOT/condabin:$PATH"
             echo "activate py37"
             export PATH="$ANACONDA_ROOT/envs/py37/bin:$PATH"
             echo "activate py27"
@@ -287,7 +289,7 @@ case "$HOST" in
             }
         elif [ "$IS_UBUNTU" ];then
             echo "##this is Ubuntu"
-            compinit -u
+            # compinit -u
             ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda_ubuntu"
             echo "activate py37"
             export PATH="$ANACONDA_ROOT/envs/py37/bin:$PATH"
@@ -306,7 +308,7 @@ case "$HOST" in
     libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac* | leo-ac*) echo "##libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac*"
         FLAG_COMMON=true
         FLAG_PREZTO=true
-        FLAG_UBUNTU=true
+        IS_UBUNTU=true
         FLAG_RUBY=true
 
         ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
@@ -450,7 +452,7 @@ if [ $IS_CYGWIN ];then
     echo "##conf cygwin"
 fi
 
-if [ $FLAG_UBUNTU ];then
+if [ $IS_UBUNTU ];then
     echo "##conf ubuntu"
     [ subl ] && alias st=subl
 fi
@@ -496,21 +498,26 @@ if [ $FLAG_GOOGLE_CLOUD_SDK ];then
     if [ -f '$HOME/lib/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/lib/google-cloud-sdk/completion.zsh.inc'; fi
 fi
 
-if [ $FLAG_UBUNTU_CONDA]; then
-    # >>> conda initialize >>>
-    # !! Contents within this block are managed by 'conda init' !!
-    __conda_setup="$('/home/alladmin/.pyenv/versions/anaconda3-4.3.0/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-    if [ $? -eq 0 ]; then
-        eval "$__conda_setup"
-    else
-        if [ -f "/home/alladmin/.pyenv/versions/anaconda3-4.3.0/etc/profile.d/conda.sh" ]; then
-            . "/home/alladmin/.pyenv/versions/anaconda3-4.3.0/etc/profile.d/conda.sh"
-        else
-            export PATH="/home/alladmin/.pyenv/versions/anaconda3-4.3.0/bin:$PATH"
-        fi
+if [ $FLAG_CONDA ]; then
+    if [ $IS_UBUNTU ]; then
+        # # >>> conda initialize >>>
+        # echo ">>> conda initialize >>>"
+        # # !! Contents within this block are managed by 'conda init' !!
+        # __conda_setup="$($ANACONDA_ROOT/bin/conda 'shell.zsh' 'hook' 2> /dev/null)"
+        # if [ $? -eq 0 ]; then
+        #     eval "$__conda_setup"
+        # else
+        #     if [ -f "$ANACONDA_ROOT/etc/profile.d/conda.sh" ]; then
+        #         # . "$ANACONDA_ROOT/etc/profile.d/conda.sh"  # commented out by conda initialize
+        #     else
+        #         export PATH="$ANACONDA_ROOT/bin:$PATH"
+        #     fi
+        # fi
+        # unset __conda_setup
+        # # <<< conda initialize <<<
+        # . "$ANACONDA_ROOT/etc/profile.d/conda.sh"  # commented out by conda initialize
+        # conda activate base
     fi
-    unset __conda_setup
-    # <<< conda initialize <<<
 fi
 
 echo "welcome to $HOST!!"
