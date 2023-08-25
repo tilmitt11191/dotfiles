@@ -1,6 +1,4 @@
-
 echo "#### zpreztorc"
-####my confs
 FLAG_COMMON=true
 FLAG_PREZTO=true
 IS_CYGWIN=""
@@ -43,7 +41,7 @@ case $HOST in
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=true
 		#PREZTO_THEME="powerline"
-		#PRETO_THEME="adam2"
+		#PREZTO_THEME="adam2"
 		PREZTO_THEME="fade"
 		;;
 	ubuntumain*) echo "ubuntumain setup"
@@ -55,16 +53,17 @@ case $HOST in
 		#PREZTO_THEME="steeef"
 		PREZTO_THEME="pure"
 		;;
-	ubuntu-erico*) echo "##ubuntu-erico setup"
-		FLAG_PREZTO=true
-		PREZTO_THEME="pure"
-		;;
 	www2271.sakura.ne.jp*) echo "##sakura setup"
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		#PREZTO_THEME=powerline
-		#PRETO_THEME="adam2"
+		#PREZTO_THEME="adam2"
 		PREZTO_THEME="fade"
+		;;
+	tilsys*) echo "##tilsys setup"
+		FLAG_PREZTO=true
+		FLAG_PYTHON=true
+		PREZTO_THEME="adam2"
 		;;
 	*msi*) echo "##msi setup"
 		FLAG_PREZTO=true
@@ -90,7 +89,6 @@ case $HOST in
 		PREZTO_THEME="pure"
 		;;
 esac
-
 
 echo "####conf my .zpreztorc"
 if [ $IS_CYGWIN ]; then
@@ -121,13 +119,6 @@ if [ $FLAG_COMMON ]; then
 	zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
 	zstyle ':prezto:module:terminal:multiplexer-title' format '%s'
 fi
-
-: <<'#__CO__'
-if [ $ ]; then
-	echo "##"
-fi
-#__CO__
-
 
 #
 # Sets Prezto options.

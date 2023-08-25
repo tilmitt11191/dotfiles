@@ -1,14 +1,12 @@
-
-echo "####conf my .zshrc"
 FLAG_COMMON=true
-FLAG_MOBAXTERM_COMMON=""
 FLAG_HIGHSPEC=""
 FLAG_PREZTO=true
 FLAG_PECO=true
 IS_CYGWIN=""
+FLAG_MOBAXTERM_COMMON=""
+FLAG_SAKURA=""
 FLAG_CONDA=""
 FLAG_VM=""
-FLAG_SAKURA=""
 FLAG_TMUX=true
 FLAG_PYTHON=""
 FLAG_RUBY=""
@@ -128,7 +126,6 @@ case "$HOST" in
 
         alias rcode='rmate -p 52400'
         alias rst='rmate -p 52401'
-
         ;;
     ubuntusetuptest) echo "##ubuntusetuptest setup"
         FLAG_PREZTO=true
@@ -169,6 +166,13 @@ case "$HOST" in
         FLAG_GOOGLE_CLOUD_SDK=true
         FLAG_COMMON=true
         export PATH="${HOME}/local/bin:${PATH}}"
+        ;;
+    tilsys*) echo "##tilsys setup"
+        FLAG_PREZTO=true
+        FLAG_PECO=true
+        FLAG_COMMON=true
+        FLAG_PYTHON=true
+        FLAG_TMUX=true
         ;;
     *-msi*) echo "##-msi setup"    
         if [ "$IS_CYGWIN" ];then
@@ -457,7 +461,6 @@ if [ $IS_UBUNTU ];then
     [ subl ] && alias st=subl
 fi
 
-
 if [ $FLAG_VM ];then
     echo "##conf VM"
 fi
@@ -467,7 +470,6 @@ if [ $FLAG_SAKURA ];then
     export MAILCHECK=0
     export PATH="$HOME/lib/google-cloud-sdk/bin/:$PATH"
     export PATH="$HOME/local/python-3.8.5/bin:$PATH"
-
 fi
 
 if [ $FLAG_RUBY ];then
@@ -521,9 +523,3 @@ if [ $FLAG_CONDA ]; then
 fi
 
 echo "welcome to $HOST!!"
-
-: <<'#__CO__'
-if [ $ ];then
-    echo "##"
-fi
-#__CO__
