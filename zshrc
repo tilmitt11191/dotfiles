@@ -12,6 +12,7 @@ FLAG_PYTHON=""
 FLAG_RUBY=""
 FLAG_GOLANG=true
 FLAG_GOOGLE_CLOUD_SDK=""
+FLAG_NVM=""
 
 unameOut="$(uname -s)"
 IS_CYGWIN=""
@@ -314,6 +315,7 @@ case "$HOST" in
         FLAG_PREZTO=true
         IS_UBUNTU=true
         FLAG_RUBY=true
+				FLAG_NVM=true
 
         ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
         echo "activate py39"
@@ -522,4 +524,12 @@ if [ $FLAG_CONDA ]; then
     fi
 fi
 
+if [ $FLAG_NVM ];then
+    echo "##conf nvm"
+		export NVM_DIR="$HOME/.nvm"
+		[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+		[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+
 echo "welcome to $HOST!!"
+

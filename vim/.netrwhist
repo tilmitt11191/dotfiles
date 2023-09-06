@@ -1,5 +1,5 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_cnt =9
 let g:netrw_dirhist_1='/media/sf_f/program/atr/secai/unspecified_crawler_secai/log'
 let g:netrw_dirhist_2='/home/ozu/program/ns-3/workspace/ns-3-allinone/ns-3.30/src/queue/model'
 let g:netrw_dirhist_3='/home/ozu/program/ns-3/20211001/ATRACR_FlowGroupCtrl/scenario/performance_step1/01_prio_high/001_DASH100_UDP010_high'
@@ -8,3 +8,4 @@ let g:netrw_dirhist_5='/home/ozu/.dotfiles/vim/conf'
 let g:netrw_dirhist_6='/usr/local/WDS100T1X0E-00AFY0/ozu/program/ns-3/simulation_kit/performance_step4/11_ploss_th020'
 let g:netrw_dirhist_7='/mnt/WDMyBookDuo20TB'
 let g:netrw_dirhist_8='/mnt/Samsung_980_PRO/ozu/program/secai/twitter/.git'
+let g:netrw_dirhist_9='/mnt/Samsung_980_PRO/ozu/program/mylib'
