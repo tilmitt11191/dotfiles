@@ -82,7 +82,9 @@ case $HOST in
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=ture
-		PREZTO_THEME="fade"
+		PREZTO_THEME="bart"
+		PREZTO_THEME="clint"
+		# PREZTO_THEME="fade"
 		;;
 	*) echo "##not registerd host. apply COMMON settings"
 		FLAG_COMMON=true
