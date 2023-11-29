@@ -82,7 +82,7 @@ case $HOST in
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=ture
-		PREZTO_THEME="bart"
+		# PREZTO_THEME="bart"
 		PREZTO_THEME="clint"
 		# PREZTO_THEME="fade"
 		;;
