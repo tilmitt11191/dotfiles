@@ -318,8 +318,8 @@ case "$HOST" in
 				FLAG_NVM=true
 
         ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
-        echo "activate py39"
-        export PATH="$ANACONDA_ROOT/envs/py39/bin:$PATH"
+        echo "activate py310"
+        export PATH="$ANACONDA_ROOT/envs/py310/bin:$PATH"
         echo "activate py27"
         export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
         FLAG_PYTHON=""
