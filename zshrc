@@ -310,7 +310,7 @@ case "$HOST" in
             export LIBG_ALWAYS_INDIRECT=1
         fi
         ;;
-    libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac* | leo-ac*) echo "##libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac*"
+    leo-ac*) echo "## leo-ac*"
         FLAG_COMMON=true
         FLAG_PREZTO=true
         IS_UBUNTU=true
@@ -320,6 +320,30 @@ case "$HOST" in
         ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
         echo "activate py310"
         export PATH="$ANACONDA_ROOT/envs/py310/bin:$PATH"
+        echo "activate py27"
+        export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
+        FLAG_PYTHON=""
+        echo "which python3: $(which python3)"
+        echo "which pip3: $(which pip3)"
+        echo "which python: $(which python)"
+        echo "which pip: $(which pip)"
+
+				export PATH=/usr/local/cuda/bin:$PATH
+        export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+
+        # alias rcode='rmate -p 52800'
+        # alias rst='rmate -p 52801'
+        ;;
+    libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac*) echo "##libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac*"
+        FLAG_COMMON=true
+        FLAG_PREZTO=true
+        IS_UBUNTU=true
+        FLAG_RUBY=true
+				FLAG_NVM=true
+
+        ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
+        echo "activate py37"
+        export PATH="$ANACONDA_ROOT/envs/py37/bin:$PATH"
         echo "activate py27"
         export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
         FLAG_PYTHON=""
