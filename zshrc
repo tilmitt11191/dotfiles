@@ -331,6 +331,8 @@ case "$HOST" in
 				export PATH=/usr/local/cuda/bin:$PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
+				PROMPT_COMMAND='history -a'
+
         # alias rcode='rmate -p 52800'
         # alias rst='rmate -p 52801'
         ;;
@@ -352,7 +354,9 @@ case "$HOST" in
         echo "which python: $(which python)"
         echo "which pip: $(which pip)"
 
-        alias rcode='rmate -p 52800'
+				PROMPT_COMMAND='history -a'
+
+				alias rcode='rmate -p 52800'
         alias rst='rmate -p 52801'
         ;;
     *) echo "##not registerd host. apply COMMON settings"
