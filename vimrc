@@ -22,7 +22,13 @@ elseif hostname() == "www2271.sakura.ne.jp"
 	let FLAG_USE_PACKAGE = "False"
 	let COLORSCHEME = "railscasts"
 
+else
+	let FLAG_USE_PACKAGE = "False"
+	let COLORSCHEME = "molokai"
+  let FLAG_CURSORLINE = "True"
+
 endif
+
 "default base16-railscasts.vim  hybrid  jellybeans  lucius  molokai  railscasts  twilight
 
 
