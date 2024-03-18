@@ -1,5 +1,6 @@
 *.swp
 !.gitignore
+.code-workspace
 
 /sublime_text/Packages/User/Package\ Control.cache/*
 /sublime_text/Packages/User/Package\ Control.last-run

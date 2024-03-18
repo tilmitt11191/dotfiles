@@ -23,7 +23,7 @@ case "${unameOut}" in
     Darwin*) echo "##this is macos" && IS_MAC=true;;
     Linux*) echo "##this is Linux" && IS_LINUX=true;;
     FreeBSD*) echo "##this is FreeBSD" && IS_LINUX=true;;
-    *) echo "##this is neither Cygwin nor Linux. exit 1" && exit 1;;
+    *) echo "##this is neither Cygwin nor Linux.";;
 esac
 IS_UBUNTU=""
 case "$unameOut" in
@@ -38,6 +38,28 @@ if [ -e /home/mobaxterm ]; then
 fi
 
 case "$HOST" in
+    mba-a*) echo "## MacBook Air setup"
+        FLAG_PREZTO=true
+        FLAG_PECO=true
+        FLAG_PYTHON=""
+        FLAG_HIGHSPEC=true
+        FLAG_COMMON=true
+        FLAG_TMUX=true
+
+        export PATH="$HOME/.anyenv/bin:$PATH"
+        HISTTIMEFORMAT='%Y%m%d-%H%M%S %a '
+        HISTFILESIZE=1000000
+        PROMPT_COMMAND='history -a'
+        PS1="\[\e[1;32m\][\D{%Y%m%d-%H%M%S %a} \!] \u@\h:\w$ \[\e[m\]"
+        export LSCOLORS=gxcxcxdxcxexexaxaxaxgx
+        export LS_COLORS='di=4;32;32:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+        zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+        # alias cp='cp -vi'
+        alias rm='rm -vi'
+        # alias mv='mv -vi'
+        # alias lla='ls -la'
+        ;;
     PC | workingtower) echo "##PC or workingtower setup"
         FLAG_PREZTO=true
         FLAG_PYTHON=true
@@ -341,7 +363,7 @@ case "$HOST" in
         FLAG_PREZTO=true
         IS_UBUNTU=true
         FLAG_RUBY=true
-				FLAG_NVM=true
+		FLAG_NVM=true
 
         ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
         echo "activate py37"
@@ -437,7 +459,7 @@ if [ $FLAG_PREZTO ];then
     if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
         source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
     fi
-    [ `alias | grep rm=` ] && unalias rm
+    # [ `alias | grep rm=` ] && unalias rm
     setopt CLOBBER
     unsetopt alwaystoend
 fi

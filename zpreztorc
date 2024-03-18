@@ -9,10 +9,11 @@ unameOut="$(uname -s)"
 IS_CYGWIN=""
 IS_LINUX=""
 case "${unameOut}" in
-	CYGWIN*) IS_CYGWIN=true;;
-	Linux*) IS_LINUX=true;;
-	FreeBSD*) IS_LINUX=true;;
-	*) echo "##this is neither Cygwin nor Linux. exit 1" && exit 1;;
+    CYGWIN*) echo "##this is Cygwin" && IS_CYGWIN=true;;
+    Darwin*) echo "##this is macos" && IS_MAC=true;;
+    Linux*) echo "##this is Linux" && IS_LINUX=true;;
+    FreeBSD*) echo "##this is FreeBSD" && IS_LINUX=true;;
+    *) echo "##this is neither Cygwin nor Linux.";;
 esac
 if [ -e /home/mobaxterm ]; then
 	IS_MOBAXTERM=true
@@ -20,7 +21,18 @@ if [ -e /home/mobaxterm ]; then
 fi
 
 case $HOST in
-  PC | workingtower) echo "##PC or workingtower setup"
+	mba-a*) echo "## MacBook Air setup"
+		FLAG_PREZTO=true
+		FLAG_PYTHON=true
+		FLAG_HIGHSPEC=true
+		# PREZTO_THEME="powerline"
+		# PREZTO_THEME="adam2"
+		# PREZTO_THEME="fade"
+		# PREZTO_THEME="sorin"
+		PREZTO_THEME="clint"
+
+	;;
+	PC | workingtower) echo "##PC or workingtower setup"
 		if [ $IS_CYGWIN ];then
 			echo "##this is Cygwin"
 			IS_CYGWIN=true
@@ -159,7 +171,11 @@ zstyle ':prezto:load' pmodule \
   'spectrum' \
   'utility' \
   'completion' \
-  'prompt'
+  'prompt' \
+  'history-substring-search' \
+  'syntax-highlighting' \
+  'autosuggestions' \
+  'tmux'
 
 #
 # Autosuggestions
