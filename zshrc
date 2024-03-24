@@ -60,6 +60,9 @@ case "$HOST" in
         # alias mv='mv -vi'
         # alias lla='ls -la'
         alias history='history -i'
+				alias vi='vim'
+				alias st="open $1 -a /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
+				alias re-shell="exec $SHELL -l"
         ;;
     PC | workingtower) echo "##PC or workingtower setup"
         FLAG_PREZTO=true
