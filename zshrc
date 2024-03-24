@@ -59,6 +59,7 @@ case "$HOST" in
         alias rm='rm -vi'
         # alias mv='mv -vi'
         # alias lla='ls -la'
+        alias history='history -i'
         ;;
     PC | workingtower) echo "##PC or workingtower setup"
         FLAG_PREZTO=true
