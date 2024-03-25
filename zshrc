@@ -9,6 +9,7 @@ FLAG_SAKURA=""
 FLAG_CONDA=""
 FLAG_VM=""
 FLAG_TMUX=true
+FLAG_TMUXSSH_CHANGEBG=""
 FLAG_PYTHON=""
 FLAG_RUBY=""
 FLAG_GOLANG=true
@@ -46,6 +47,7 @@ case "$HOST" in
         FLAG_HIGHSPEC=true
         FLAG_COMMON=true
         FLAG_TMUX=true
+        FLAG_TMUXSSH_CHANGEBG=true
 
         export PATH="$HOME/.anyenv/bin:$PATH"
         HISTTIMEFORMAT='%Y%m%d-%H%M%S %a '
@@ -62,9 +64,37 @@ case "$HOST" in
         # alias lla='ls -la'
 				# unalias history
         alias hist='noglob history -i 1'
-				alias vi='vim'
-				alias st="open $1 -a /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
-				alias re-shell="exec $SHELL -l"
+        alias vi='vim'
+        alias st="open $1 -a /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
+        alias re-shell="exec $SHELL -l"
+        ;;
+    leo-ac*) echo "## leo-ac* setup"
+        FLAG_COMMON=true
+        FLAG_PREZTO=true
+        FLAG_TMUX=true
+        FLAG_TMUXSSH_CHANGEBG=true
+        IS_UBUNTU=true
+        FLAG_RUBY=true
+        FLAG_NVM=true
+
+        ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
+        echo "activate py310"
+        export PATH="$ANACONDA_ROOT/envs/py310/bin:$PATH"
+        echo "activate py27"
+        export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
+        FLAG_PYTHON=""
+        echo "which python3: $(which python3)"
+        echo "which pip3: $(which pip3)"
+        echo "which python: $(which python)"
+        echo "which pip: $(which pip)"
+
+				export PATH=/usr/local/cuda/bin:$PATH
+        export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+
+				PROMPT_COMMAND='history -a'
+
+        # alias rcode='rmate -p 52800'
+        # alias rst='rmate -p 52801'
         ;;
     PC | workingtower) echo "##PC or workingtower setup"
         FLAG_PREZTO=true
@@ -338,32 +368,6 @@ case "$HOST" in
             export LIBG_ALWAYS_INDIRECT=1
         fi
         ;;
-    leo-ac*) echo "## leo-ac*"
-        FLAG_COMMON=true
-        FLAG_PREZTO=true
-        IS_UBUNTU=true
-        FLAG_RUBY=true
-				FLAG_NVM=true
-
-        ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
-        echo "activate py310"
-        export PATH="$ANACONDA_ROOT/envs/py310/bin:$PATH"
-        echo "activate py27"
-        export PATH="$ANACONDA_ROOT/envs/py27/bin:$PATH"
-        FLAG_PYTHON=""
-        echo "which python3: $(which python3)"
-        echo "which pip3: $(which pip3)"
-        echo "which python: $(which python)"
-        echo "which pip: $(which pip)"
-
-				export PATH=/usr/local/cuda/bin:$PATH
-        export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-
-				PROMPT_COMMAND='history -a'
-
-        # alias rcode='rmate -p 52800'
-        # alias rst='rmate -p 52801'
-        ;;
     libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac*) echo "##libra-ac* | pisces-ac* | aquarius-ac* | taurus-ac* | aries-ac*"
         FLAG_COMMON=true
         FLAG_PREZTO=true
@@ -501,7 +505,7 @@ if [ $FLAG_PECO ];then
 fi
 
 if [ $FLAG_TMUX ];then
-    echo "##conf tmux"
+    echo "## Setup tmux"
     function precmd() {
         if [ ! -z $TMUX ]; then
         tmux refresh-client -S
@@ -523,6 +527,56 @@ if [ $FLAG_TMUX ];then
                 git_info=""
             fi
         fi
+    }
+fi
+
+# if [ $FLAG_TMUXSSH_CHANGEBG ];then
+#     echo "## Setup tmux change background"
+#     function ssh() {
+#         # tmux起動時
+#         if [[ -n $(printenv TMUX) ]] ; then
+#             # 現在のペインIDを記録
+#             local pane_id=$(tmux display -p '#{pane_id}')
+
+#             # 接続先ホスト名に応じて背景色を切り替え
+#             if [[ `echo $1 | grep -E 'localhost'` ]] ; then
+#                 # tmux select-pane -P 'bg=colour52,fg=white'
+#                 tmux select-pane -t $pane_id -P 'default'
+#             elif [[ `echo $1 | grep 'leo'` ]] ; then
+#                 tmux select-pane -P 'bg=colour25,fg=white'
+#             fi
+
+#             # 通常通りssh続行
+#             command ssh $@
+
+#             # # デフォルトの背景色に戻す
+#             # tmux select-pane -t $pane_id -P 'default'
+#         else
+#             command ssh $@
+#         fi
+#     }
+# fi
+
+if [ $FLAG_TMUXSSH_CHANGEBG ];then
+    echo "## Setup tmux change background"
+
+    function ssh() {
+        # tmux起動時
+        if [[ -n $(printenv TMUX) ]] ; then ## TODO: ここでzsh分岐する
+            # 現在のペインIDを記録
+            local pane_id=$(tmux display -p '#{pane_id}')
+
+            # 接続先ホスト名に応じて背景色を切り替え
+            # if [[ `echo $SHELL | grep 'zsh'` ]] ; then
+            if [[ `echo $1 | grep -E 'localhost'` ]] ; then
+                tmux select-pane -t $pane_id -P 'default'
+            else
+                tmux select-pane -P 'bg=colour234'
+            fi
+        fi
+
+        command ssh $@
+
     }
 fi
 
