@@ -9,7 +9,7 @@ FLAG_SAKURA=""
 FLAG_CONDA=""
 FLAG_VM=""
 FLAG_TMUX=true
-FLAG_TMUXSSH_CHANGEBG=""
+FLAG_TMUX_CHANGEBG=""
 FLAG_PYTHON=""
 FLAG_RUBY=""
 FLAG_GOLANG=true
@@ -47,7 +47,8 @@ case "$HOST" in
         FLAG_HIGHSPEC=true
         FLAG_COMMON=true
         FLAG_TMUX=true
-        FLAG_TMUXSSH_CHANGEBG=true
+        # FLAG_TMUX_CHANGEBG=true
+        # FLAG_SSH_CHANGEBG=true
 
         export PATH="$HOME/.anyenv/bin:$PATH"
         HISTTIMEFORMAT='%Y%m%d-%H%M%S %a '
@@ -58,6 +59,9 @@ case "$HOST" in
         export LS_COLORS='di=4;32;32:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
         zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
+        # for iTerm2 Shell Integration
+        test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh" || true
+
         # alias cp='cp -vi'
         alias rm='rm -vi'
         # alias mv='mv -vi'
@@ -67,12 +71,17 @@ case "$HOST" in
         alias vi='vim'
         alias st="open $1 -a /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
         alias re-shell="exec $SHELL -l"
+
+        # function ssh() {
+        #     tmux select-pane -P 'bg=colour234'
+        #     command ssh $@
+        # }
+
         ;;
     leo-ac*) echo "## leo-ac* setup"
         FLAG_COMMON=true
         FLAG_PREZTO=true
         FLAG_TMUX=true
-        FLAG_TMUXSSH_CHANGEBG=true
         IS_UBUNTU=true
         FLAG_RUBY=true
         FLAG_NVM=true
@@ -532,7 +541,7 @@ if [ $FLAG_TMUX ];then
     }
 fi
 
-# if [ $FLAG_TMUXSSH_CHANGEBG ];then
+# if [ $FLAG_TMUX_CHANGEBG ];then
 #     echo "## Setup tmux change background"
 #     function ssh() {
 #         # tmux起動時
@@ -559,27 +568,11 @@ fi
 #     }
 # fi
 
-if [ $FLAG_TMUXSSH_CHANGEBG ];then
+if [ $FLAG_TMUX_CHANGEBG ];then
     echo "## Setup tmux change background"
 
-    function ssh() {
-        # tmux起動時
-        if [[ -n $(printenv TMUX) ]] ; then ## TODO: ここでzsh分岐する
-            # 現在のペインIDを記録
-            local pane_id=$(tmux display -p '#{pane_id}')
-
-            # 接続先ホスト名に応じて背景色を切り替え
-            # if [[ `echo $SHELL | grep 'zsh'` ]] ; then
-            if [[ `echo $1 | grep -E 'localhost'` ]] ; then
-                tmux select-pane -t $pane_id -P 'default'
-            else
-                tmux select-pane -P 'bg=colour234'
-            fi
-        fi
-
-        command ssh $@
-
-    }
+    # if [[ -n $(printenv TMUX) ]] ; then
+    # fi
 fi
 
 if [ $IS_CYGWIN ];then
