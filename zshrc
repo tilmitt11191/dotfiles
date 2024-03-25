@@ -88,13 +88,8 @@ case "$HOST" in
         echo "which python: $(which python)"
         echo "which pip: $(which pip)"
 
-				export PATH=/usr/local/cuda/bin:$PATH
+        export PATH=/usr/local/cuda/bin:$PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-
-				PROMPT_COMMAND='history -a'
-
-        # alias rcode='rmate -p 52800'
-        # alias rst='rmate -p 52801'
         ;;
     PC | workingtower) echo "##PC or workingtower setup"
         FLAG_PREZTO=true
@@ -421,6 +416,13 @@ if [ $FLAG_COMMON ]; then
 
     # autoload -Uz compinit
     # compinit
+    PROMPT_COMMAND='history -a'
+    HISTTIMEFORMAT='%Y%m%d-%H%M%S %a '
+    HISTFILESIZE=1000000
+    alias rm='rm -vi'
+    alias hist='noglob history -i 1'
+    alias vi='vim'
+    alias re-shell="exec $SHELL -l"
 fi
 
 if [ $FLAG_MOBAXTERM_COMMON ]; then
