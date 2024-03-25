@@ -1,6 +1,7 @@
 FLAG_COMMON=true
 FLAG_HIGHSPEC=""
 FLAG_PREZTO=true
+FLAG_ZSH_COMPLETIONS=true
 FLAG_PECO=true
 IS_CYGWIN=""
 FLAG_MOBAXTERM_COMMON=""
@@ -59,7 +60,8 @@ case "$HOST" in
         alias rm='rm -vi'
         # alias mv='mv -vi'
         # alias lla='ls -la'
-        alias history='history -i'
+				# unalias history
+        alias hist='noglob history -i 1'
 				alias vi='vim'
 				alias st="open $1 -a /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
 				alias re-shell="exec $SHELL -l"
@@ -111,7 +113,7 @@ case "$HOST" in
             echo "which pip3: $(which pip3)"
             echo "which python: $(which python)"
             echo "which pip: $(which pip)"
-            
+
         elif [ "$IS_UBUNTU" ];then
             echo "##this is Ubuntu"
         fi
@@ -201,7 +203,7 @@ case "$HOST" in
         FLAG_PYTHON=true
         FLAG_TMUX=true
         ;;
-    *-msi*) echo "##-msi setup"    
+    *-msi*) echo "##-msi setup"
         if [ "$IS_CYGWIN" ];then
             echo "##this is Cygwin"
             FLAG_COMMON=true
@@ -256,7 +258,7 @@ case "$HOST" in
             export LIBG_ALWAYS_INDIRECT=1
         fi
         ;;
-    *-SW*) echo "##-SW setup"    
+    *-SW*) echo "##-SW setup"
         if [ "$IS_CYGWIN" ];then
             echo "##this is Cygwin"
             FLAG_COMMON=true
@@ -400,9 +402,9 @@ if [ $FLAG_COMMON ]; then
     HISTSIZE=1000000
     SAVEHIST=1000000
     export TERM=xterm-256color
-    
+
     PATH=$HOME/bin:$PATH
-    
+
     alias ls='ls -G'
     alias ll='ls -lhG'
     alias lla='ls -alhG'
@@ -413,8 +415,8 @@ if [ $FLAG_COMMON ]; then
     bindkey -e
     #bindkey "^R" history-incremental-search-backward
 
-    autoload -Uz compinit
-    compinit
+    # autoload -Uz compinit
+    # compinit
 fi
 
 if [ $FLAG_MOBAXTERM_COMMON ]; then
@@ -423,9 +425,9 @@ if [ $FLAG_MOBAXTERM_COMMON ]; then
     HISTSIZE=1000000
     SAVEHIST=1000000
     export TERM=xterm-256color
-    
+
     PATH=$HOME/bin:$PATH
-    
+
     alias ls='ls'
     alias ll='ls -lh'
     alias lla='ls -alh'
@@ -436,8 +438,8 @@ if [ $FLAG_MOBAXTERM_COMMON ]; then
     bindkey -e
     #bindkey "^R" history-incremental-search-backward
 
-    autoload -Uz compinit
-    compinit
+    # autoload -Uz compinit
+    # compinit
 fi
 
 if [ "$FLAG_PYTHON" ];then
@@ -459,13 +461,29 @@ fi
 
 
 if [ $FLAG_PREZTO ];then
-    echo "##conf prezto"
+    echo "## setup prezto"
     if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
         source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
     fi
     # [ `alias | grep rm=` ] && unalias rm
     setopt CLOBBER
     unsetopt alwaystoend
+fi
+
+if [ $FLAG_ZSH_COMPLETIONS ];then
+    echo "## setup zsh-completions"
+    if type brew &>/dev/null; then
+      FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+      autoload -Uz compinit
+      compinit
+
+#       Additionally, if you receive "zsh compinit: insecure directories" warnings when attempting
+# to load these completions, you may need to run these commands:
+#
+#       chmod go-w '/opt/homebrew/share'
+#       chmod -R go-w '/opt/homebrew/share/zsh'
+    fi
 fi
 
 if [ $FLAG_PECO ];then
@@ -586,4 +604,3 @@ if [ $FLAG_NVM ];then
 fi
 
 echo "welcome to $HOST!!"
-
