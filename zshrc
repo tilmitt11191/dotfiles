@@ -50,7 +50,7 @@ case "$HOST" in
         # FLAG_TMUX_CHANGEBG=true
         # FLAG_SSH_CHANGEBG=true
 
-        export PATH="$HOME/.anyenv/bin:$PATH"
+        export PATH="$HOME/bin:$PATH"
         HISTTIMEFORMAT='%Y%m%d-%H%M%S %a '
         HISTFILESIZE=1000000
         PROMPT_COMMAND='history -a'
@@ -61,6 +61,10 @@ case "$HOST" in
 
         # for iTerm2 Shell Integration
         test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh" || true
+
+        # for anyenv
+        export PATH="$HOME/.anyenv/bin:$PATH"
+        eval "$(anyenv init -)"
 
         # alias cp='cp -vi'
         alias rm='rm -vi'
