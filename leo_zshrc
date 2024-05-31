@@ -15,22 +15,21 @@ FLAG_RUBY=""
 FLAG_GOLANG=true
 FLAG_GOOGLE_CLOUD_SDK=""
 FLAG_NVM=""
-FLAG_ANYENV=""
 
 unameOut="$(uname -s)"
 IS_CYGWIN=""
 IS_MAC=""
 IS_LINUX=""
 case "${unameOut}" in
-    CYGWIN*) echo "## This is Cygwin" && IS_CYGWIN=true;;
-    Darwin*) echo "## This is macos" && IS_MAC=true;;
-    Linux*) echo "## This is Linux" && IS_LINUX=true;;
-    FreeBSD*) echo "## This is FreeBSD" && IS_LINUX=true;;
-    *) echo "## This is neither Cygwin nor Linux.";;
+    CYGWIN*) echo "##this is Cygwin" && IS_CYGWIN=true;;
+    Darwin*) echo "##this is macos" && IS_MAC=true;;
+    Linux*) echo "##this is Linux" && IS_LINUX=true;;
+    FreeBSD*) echo "##this is FreeBSD" && IS_LINUX=true;;
+    *) echo "##this is neither Cygwin nor Linux.";;
 esac
 IS_UBUNTU=""
 case "$unameOut" in
-    *Ubuntu*) echo "## This is Ubuntu" && IS_UBUNTU=true;;
+    *Ubuntu*) echo "##this is Ubuntu" && IS_UBUNTU=true;;
 esac
 ## check Windows Subsystem for Linux
 [ -e /proc/sys/fs/binfmt_misc/WSLInterop ] && IS_UBUNTU=true
@@ -48,12 +47,10 @@ case "$HOST" in
         FLAG_HIGHSPEC=true
         FLAG_COMMON=true
         FLAG_TMUX=true
-        FLAG_ANYENV=true
         # FLAG_TMUX_CHANGEBG=true
         # FLAG_SSH_CHANGEBG=true
 
-        export PATH="$HOME/bin:$PATH"
-
+        export PATH="$HOME/.anyenv/bin:$PATH"
         HISTTIMEFORMAT='%Y%m%d-%H%M%S %a '
         HISTFILESIZE=1000000
         PROMPT_COMMAND='history -a'
@@ -69,7 +66,7 @@ case "$HOST" in
         alias rm='rm -vi'
         # alias mv='mv -vi'
         # alias lla='ls -la'
-        # unalias history
+				# unalias history
         alias hist='noglob history -i 1'
         alias vi='vim'
         alias st="open $1 -a /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
@@ -88,7 +85,6 @@ case "$HOST" in
         IS_UBUNTU=true
         FLAG_RUBY=true
         FLAG_NVM=true
-        FLAG_ANYENV=true
 
         ANACONDA_ROOT="$HOME/.pyenv/versions/anaconda"
         echo "activate py310"
@@ -103,6 +99,10 @@ case "$HOST" in
 
         export PATH=/usr/local/cuda/bin:$PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+				
+				echo "## Setup anyenv"
+				export PATH="$HOME/.anyenv/bin:$PATH"
+				eval "$(anyenv init -)"
         ;;
     PC | workingtower) echo "##PC or workingtower setup"
         FLAG_PREZTO=true
@@ -405,8 +405,11 @@ case "$HOST" in
 esac
 
 
+
+####
+
 if [ $FLAG_COMMON ]; then
-    echo "## Setup common settings"
+    echo "##conf common"
     HISTFILE=~/.zsh_history
     HISTSIZE=1000000
     SAVEHIST=1000000
@@ -616,7 +619,7 @@ if [ $FLAG_HIGHSPEC ];then
 fi
 
 if [ $FLAG_GOOGLE_CLOUD_SDK ];then
-    echo "## Setup google clud sdk"
+    echo "##setup google clud sdk"
     # The next line updates PATH for the Google Cloud SDK.
     if [ -f '$HOME/lib/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/lib/google-cloud-sdk/path.zsh.inc'; fi
 
@@ -646,17 +649,11 @@ if [ $FLAG_CONDA ]; then
     fi
 fi
 
-if [ $FLAG_NVM ]; then
+if [ $FLAG_NVM ];then
     echo "##conf nvm"
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
-
-if [ $FLAG_ANYENV ]; then
-    echo "## Setup anyenv"
-    export PATH="$HOME/.anyenv/bin:$PATH"
-    eval "$(anyenv init -)"
+		export NVM_DIR="$HOME/.nvm"
+		[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+		[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
 
 echo "welcome to $HOST!!"
