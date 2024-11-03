@@ -65,15 +65,10 @@ case "$HOST" in
         # for iTerm2 Shell Integration
         test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh" || true
 
-        # alias cp='cp -vi'
-        alias rm='rm -vi'
-        # alias mv='mv -vi'
-        # alias lla='ls -la'
-        # unalias history
         alias hist='noglob history -i 1'
-        alias vi='vim'
         alias st="open $1 -a /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
-        alias re-shell="exec $SHELL -l"
+        alias dlhead="ls -lnt ${HOME}/Downloads | head -n 3 | tail -n 1 | awk '{print $9}'"
+        alias mvhead="TARGET=${HOME}/Downloads; echo ${TARGET}/$(ls -lnt ${target} | head -n 3 | tail -n 1 | awk '{print $9}') ."
 
         # function ssh() {
         #     tmux select-pane -P 'bg=colour234'
@@ -409,7 +404,10 @@ if [ $FLAG_COMMON ]; then
     echo "## Setup common settings"
     HISTFILE=~/.zsh_history
     HISTSIZE=1000000
+    HISTFILESIZE=1000000
     SAVEHIST=1000000
+    HISTTIMEFORMAT='%Y%m%d-%H%M%S %a '
+
     export TERM=xterm-256color
 
     PATH=$HOME/bin:$PATH
@@ -418,6 +416,9 @@ if [ $FLAG_COMMON ]; then
     alias ll='ls -lhG'
     alias lla='ls -alhG'
     alias vi='vim'
+    alias rm='rm -vi'
+    alias hist='noglob history -i 1'
+    alias re-shell="exec $SHELL -l"
 
     stty stop undef
 
@@ -427,12 +428,6 @@ if [ $FLAG_COMMON ]; then
     # autoload -Uz compinit
     # compinit
     PROMPT_COMMAND='history -a'
-    HISTTIMEFORMAT='%Y%m%d-%H%M%S %a '
-    HISTFILESIZE=1000000
-    alias rm='rm -vi'
-    alias hist='noglob history -i 1'
-    alias vi='vim'
-    alias re-shell="exec $SHELL -l"
 fi
 
 if [ $FLAG_MOBAXTERM_COMMON ]; then
