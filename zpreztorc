@@ -21,7 +21,7 @@ if [ -e /home/mobaxterm ]; then
 fi
 
 case $HOST in
-	mba-a*) echo "## MacBook Air setup"
+	mb*-a*) echo "## MacBook Air setup"
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true
 		FLAG_HIGHSPEC=true
