@@ -65,6 +65,9 @@ case "$HOST" in
         # for iTerm2 Shell Integration
         test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh" || true
 
+        # for marktext
+        export mtimg="$HOME/Pictures/marktext"
+
         alias hist='noglob history -i 1'
         alias st="open $1 -a /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
         alias dlhead="ls -lnt ${HOME}/Downloads | head -n 3 | tail -n 1 | awk '{print $9}'"
