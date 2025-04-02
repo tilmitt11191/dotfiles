@@ -53,7 +53,6 @@ case "$HOST" in
         # FLAG_SSH_CHANGEBG=true
 
         export PATH="$HOME/bin:$PATH"
-
         HISTTIMEFORMAT='%Y%m%d-%H%M%S %a '
         HISTFILESIZE=1000000
         PROMPT_COMMAND='history -a'
@@ -77,6 +76,10 @@ case "$HOST" in
         #     tmux select-pane -P 'bg=colour234'
         #     command ssh $@
         # }
+
+        export PATH="/opt/homebrew/opt/openjdk/bin:$HOME/.anyenv/bin:$PATH"
+        eval "$(anyenv init -)"
+        # export PATH="$HOME/.anyenv/envs/Renv/bin:$PATH"
 
         ;;
     leo-ac*) echo "## leo-ac* setup"
