@@ -71,7 +71,7 @@ case "$HOST" in
         alias st="open $1 -a /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
         alias dlhead="ls -lnt ${HOME}/Downloads | head -n 3 | tail -n 1 | awk '{print $9}'"
         alias mvhead="TARGET=${HOME}/Downloads; echo ${TARGET}/$(ls -lnt ${target} | head -n 3 | tail -n 1 | awk '{print $9}') ."
-
+        alias inkscape='/Applications/Inkscape.app/Contents/MacOS/inkscape'
         # function ssh() {
         #     tmux select-pane -P 'bg=colour234'
         #     command ssh $@
@@ -80,6 +80,9 @@ case "$HOST" in
         export PATH="/opt/homebrew/opt/openjdk/bin:$HOME/.anyenv/bin:$PATH"
         eval "$(anyenv init -)"
         # export PATH="$HOME/.anyenv/envs/Renv/bin:$PATH"
+
+				# for LM Studio
+				export PATH="$PATH:/Users/ozu/.lmstudio/bin"
 
         ;;
     leo-ac*) echo "## leo-ac* setup"
@@ -661,3 +664,42 @@ if [ $FLAG_ANYENV ]; then
 fi
 
 echo "welcome to $HOST!!"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
