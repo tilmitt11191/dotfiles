@@ -41,6 +41,47 @@ if [ -e /home/mobaxterm ]; then
 fi
 
 case "$HOST" in
+    m4cmini*) echo "## m4cmini setup"
+        FLAG_PREZTO=true
+        FLAG_PECO=true
+        FLAG_PYTHON=""
+        FLAG_HIGHSPEC=true
+        FLAG_COMMON=true
+        FLAG_TMUX=true
+        FLAG_ANYENV=""
+        # FLAG_TMUX_CHANGEBG=true
+        # FLAG_SSH_CHANGEBG=true
+        FLAG_ZSH_COMPLETIONS=""
+
+        export PATH="$HOME/bin:$PATH"
+        HISTTIMEFORMAT='%Y%m%d-%H%M%S %a '
+        HISTFILESIZE=1000000
+        PROMPT_COMMAND='history -a'
+
+        # PS1="\[\e[1;32m\][\D{%Y%m%d-%H%M%S %a} \!] \u@\h:\w$ \[\e[m\]"
+        # export LSCOLORS=gxcxcxdxcxexexaxaxaxgx
+        # export LS_COLORS='di=4;32;32:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+        # zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+        # for iTerm2 Shell Integration
+        test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh" || true
+
+        alias hist='noglob history -i 1'
+        alias st="open $1 -a /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
+        alias dlhead="ls -lnt ${HOME}/Downloads | head -n 3 | tail -n 1 | awk '{print $9}'"
+        alias mvhead="TARGET=${HOME}/Downloads; echo ${TARGET}/$(ls -lnt ${target} | head -n 3 | tail -n 1 | awk '{print $9}') ."
+        alias inkscape='/Applications/Inkscape.app/Contents/MacOS/inkscape'
+
+        # export PATH="/opt/homebrew/opt/openjdk/bin:$HOME/.anyenv/bin:$PATH"
+        # eval "$(anyenv init -)"
+        # export PATH="$HOME/.anyenv/envs/Renv/bin:$PATH"
+
+        # for LM Studio
+        export PATH="$PATH:/Users/ozu/.lmstudio/bin"
+
+        # Added by Antigravity
+        export PATH="/Users/tilmi/.antigravity/antigravity/bin:$PATH"
+        ;;
     mb*-a*) echo "## MacBook setup"
         FLAG_PREZTO=true
         FLAG_PECO=true
@@ -507,7 +548,7 @@ if [ $FLAG_ZSH_COMPLETIONS ];then
 fi
 
 if [ $FLAG_PECO ];then
-    echo "##conf peco"
+    echo "## Setup peco"
     function peco-src () {
         local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
         if [ -n "$selected_dir" ]; then
@@ -581,33 +622,33 @@ if [ $FLAG_TMUX_CHANGEBG ];then
 fi
 
 if [ $IS_CYGWIN ];then
-    echo "##conf cygwin"
+    echo "## Setup cygwin"
 fi
 
 if [ $IS_UBUNTU ];then
-    echo "##conf ubuntu"
+    echo "## Setup ubuntu"
     [ subl ] && alias st=subl
 fi
 
 if [ $FLAG_VM ];then
-    echo "##conf VM"
+    echo "## Setup VM"
 fi
 
 if [ $FLAG_SAKURA ];then
-    echo "##conf sakura"
+    echo "## Setup sakura"
     export MAILCHECK=0
     export PATH="$HOME/lib/google-cloud-sdk/bin/:$PATH"
     export PATH="$HOME/local/python-3.8.5/bin:$PATH"
 fi
 
 if [ $FLAG_RUBY ];then
-    echo "##conf ruby"
+    echo "## Setup ruby"
     export PATH="$HOME/.rbenv/bin:$PATH"
     eval "$(rbenv init -)"
 fi
 
 if [ $FLAG_GOLANG ];then
-    echo "##conf golang"
+    echo "## Setup golang"
     # for go lang
     if [ -x "`which go`" ]; then
         export GOPATH=$HOME/go
@@ -616,7 +657,7 @@ if [ $FLAG_GOLANG ];then
 fi
 
 if [ $FLAG_HIGHSPEC ];then
-    echo "##conf highspec"
+    echo "## Setup highspec"
 fi
 
 if [ $FLAG_GOOGLE_CLOUD_SDK ];then
@@ -651,7 +692,7 @@ if [ $FLAG_CONDA ]; then
 fi
 
 if [ $FLAG_NVM ]; then
-    echo "##conf nvm"
+    echo "## Setup nvm"
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -663,43 +704,4 @@ if [ $FLAG_ANYENV ]; then
     eval "$(anyenv init -)"
 fi
 
-echo "welcome to $HOST!!"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/ozu/.antigravity/antigravity/bin:$PATH"
+echo "Welcome to $HOST!!"
