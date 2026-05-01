@@ -21,6 +21,16 @@ if [ -e /home/mobaxterm ]; then
 fi
 
 case $HOST in
+	m4cmini*) echo "## m4cmini setup"
+		FLAG_PREZTO=true
+		FLAG_PYTHON=true
+		FLAG_HIGHSPEC=true
+		# PREZTO_THEME="powerline"
+		# PREZTO_THEME="adam2"
+		# PREZTO_THEME="fade"
+		# PREZTO_THEME="sorin"
+		PREZTO_THEME="clint"
+	;;
 	mb*-a*) echo "## MacBook Air setup"
 		FLAG_PREZTO=true
 		FLAG_PYTHON=true

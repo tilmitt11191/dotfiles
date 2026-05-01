@@ -58,10 +58,10 @@ case "$HOST" in
         HISTFILESIZE=1000000
         PROMPT_COMMAND='history -a'
 
-        # PS1="\[\e[1;32m\][\D{%Y%m%d-%H%M%S %a} \!] \u@\h:\w$ \[\e[m\]"
-        # export LSCOLORS=gxcxcxdxcxexexaxaxaxgx
-        # export LS_COLORS='di=4;32;32:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-        # zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+        PS1="\[\e[1;32m\][\D{%Y%m%d-%H%M%S %a} \!] \u@\h:\w$ \[\e[m\]"
+        export LSCOLORS=gxcxcxdxcxexexaxaxaxgx
+        export LS_COLORS='di=4;32;32:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+        zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
         # for iTerm2 Shell Integration
         test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh" || true
