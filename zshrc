@@ -705,3 +705,6 @@ if [ $FLAG_ANYENV ]; then
 fi
 
 echo "Welcome to $HOST!!"
+
+# Added by Antigravity IDE
+export PATH="/Users/ozu/.antigravity-ide/antigravity-ide/bin:$PATH"
