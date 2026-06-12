@@ -81,6 +81,9 @@ case "$HOST" in
 
         # Added by Antigravity
         export PATH="/Users/tilmi/.antigravity/antigravity/bin:$PATH"
+
+        # for claude code
+        export PATH="$HOME/.local/bin:$PATH"
         ;;
     mb*-a*) echo "## MacBook setup"
         FLAG_PREZTO=true
